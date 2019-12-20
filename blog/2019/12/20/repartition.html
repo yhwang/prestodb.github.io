@@ -1,0 +1,230 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>5 design choices—and 1 weird trick — to get 2x efficiency gains in Presto repartitioning · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Ying Su, Masha Basmanova, Orri Erling, Tim Meehan, Sahar Massachi, Bhavani Hari"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="5 design choices—and 1 weird trick — to get 2x efficiency gains in Presto repartitioning · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2019/12/20/repartition"/><meta property="og:description" content="Ying Su, Masha Basmanova, Orri Erling, Tim Meehan, Sahar Massachi, Bhavani Hari"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2019/12/20/repartition">5 design choices—and 1 weird trick — to get 2x efficiency gains in Presto repartitioning</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/12/16/growing-the-presto-foundation">Join Us! Growing the Presto Foundation in 2020 and Beyond</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/09/26/tablescan-structs">Table Scan: Doing The Right Thing With Structured Types</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/09/23/linux-foundation">Presto now hosted under the Linux Foundation</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/08/19/memory-tracking">Memory Management in Presto</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/12/20/repartition">5 design choices—and 1 weird trick — to get 2x efficiency gains in Presto repartitioning</a></h1><p class="post-meta">December 20, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/ying-su-b00b81107/" target="_blank" rel="noreferrer noopener">Ying Su</a></p><div class="authorPhoto"><a href="https://www.linkedin.com/in/ying-su-b00b81107/" target="_blank" rel="noreferrer noopener"><img src="https://graph.facebook.com/656599427/picture/?height=200&amp;width=200" alt="Ying Su"/></a></div></div></header><div><span><p>Ying Su, Masha Basmanova, Orri Erling, Tim Meehan, Sahar Massachi, Bhavani Hari</p>
+<p>We like Presto. We like it a lot — so much we want to make it better in every way. Here's an example: we just optimized the PartitionedOutputOperator. It's now 2-3x more CPU efficient, which, when measured against Facebook's production workload, translates to 6% gains overall. That's huge.</p>
+<p>The optimized repartitioning is in use on some production Presto clusters right now, and available for use as of release 0.229.</p>
+<p>In this note, let's go over how we did it, what optimizations we unlocked specifically, and a case study of how we approached opportunity sizing whether this was worth doing at all.</p>
+<!--truncate-->
+<h2><a class="anchor" aria-hidden="true" id="what-is-the-partitioned-output-operator-anyway"></a><a href="#what-is-the-partitioned-output-operator-anyway" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What is the Partitioned Output Operator, anyway?</h2>
+<p>In a distributed query engine data needs to be shuffled between workers so that each worker only has to process a fraction of the total data. Because rows are usually not pre-ordered based on the hash of the partition key for an operation (for example join columns, or group by columns), repartitioning is needed to send the rows to the right workers. PartitionedOutputOperator is responsible for this process: it takes a stream of data that is not partitioned, and divide the stream into a series of output data ready to be sent to other workers.</p>
+<p>The PartitionedOutputOperator takes about 10% of the total CPU of all Facebook warehouse workload. That's a lot! We can cut it down to 3-5%.</p>
+<p>The legacy PartionedOutputOperator works as follows:</p>
+<ol>
+<li>Building step: Each destination partition has a PageBuilder. When a page comes in, the destination of each row is calculated using a hash function (xxHash64) on the partitioning columns which may be pre-computed. The rows are appended to each destination’s PageBuilder.</li>
+<li>Serialization step: If any PageBuilder's size is larger than configured max page size then it will be split into several pages that fit into the limit.  Then each of these pages will be serialized to a SerializedPage which is enqueued to the OutputBuffer for the destination.</li>
+</ol>
+<p>In the new implementation we removed the build step and directly append the data to buffers. Then we concatenate these buffers to form a SerializedPage, and then send it out. The new one looks like this:</p>
+<pre><code class="hljs css language-text">For each incoming page
+    Populate the top level row numbers for each destination partition
+    Decode the blocks by peeling off the Dictionary or RLE wrappings
+        For each partition
+            Populate nested level row numbers for nested blocks like ArrayBlock
+            Calculate row sizes
+            Calculate how many rows can fit the buffers before reaching the limit. This is based on the result of step 1 and 2.
+            Append the rows to the buffers block by block
+            If the size limit is reached (e.g. 1MB for a destination), flush the buffer
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="results-things-are-easier-faster-stronger-better"></a><a href="#results-things-are-easier-faster-stronger-better" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Results: Things are easier, faster, stronger, better</h2>
+<p>Optimized repartitioning has been enabled on several Facebook clusters. A substantial improvement in CPU utilization for PartitionedOutputOperator has been observed in all regions. The percentage of CPU consumed by PartitionedOutputOperator dropped from approximately 10% to about 4%. TPCH SF3000 benchmark on 22 read only queries show an overall 13% gain in CPU reduction. Certain queries improved by over 30%:</p>
+<p><img src="/img/blog/2019-12-20-repartition.md/tpch_sf3000_repartition.png" alt="Remote Exchange"></p>
+<h2><a class="anchor" aria-hidden="true" id="opportunity-sizing-how-we-decided-to-make-these-changes"></a><a href="#opportunity-sizing-how-we-decided-to-make-these-changes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Opportunity Sizing: How we decided to make these changes</h2>
+<p>A key part of our work is making sure we choose the right projects. To butcher a saying, there will always be fruit on the tree. How did we choose this low hanging fruit? Here's an example of how we started:</p>
+<p>First, we looked at all the operators in production, and realized that PartionedOutputOperator took up a nice chunk of total CPU. We took the CPU profiles for some of the queries with high PartionedOutputOperator cost, and found the cost of the PageBuilder is on top of the profiles. This step can be skipped in fact, and we just need to write the data directly into buffers that conforms to the serialized format and concatenate them before putting them on the wire. Now we need to find an efficient way to do this memory copying and serialization.</p>
+<p>We performed a few experiments to game out the performance differences between different options for reading data from the pages and blocks, and writing data into memory.</p>
+<h3><a class="anchor" aria-hidden="true" id="experiment-1-reading-blocks"></a><a href="#experiment-1-reading-blocks" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Experiment 1: Reading blocks</h3>
+<p>Our first experiment helped us decide between two different ways of reading data. Which did we prefer?</p>
+<ol>
+<li>Directly access the raw arrays at specified positions</li>
+<li>Access the values through the Block.getXXX() interface</li>
+</ol>
+<p>Directly accessing arrays would in theory be faster. Compilers can do all sorts of tricks like loop unrolling and auto-vectorization, but, in Presto, the Block interface does not expose the raw arrays, just the getXXX() methods to access a single value. To access the raw arrays directly, the Block interface would have to be changed — and we generally want to avoid that. Block.getXXX() methods are virtual interface functions. In C++, virtual calls are mostly expensive, because it’s AOT compilation and cannot devirtualize the virtual function calls at run time. Each call involves a vtable lookup and a jump.</p>
+<p>How well can JVM optimize the code? This is the first experiment we needed to do. Can we achieve similar performance of accessing raw arrays in Java without modifying the Block interface? Theoretically yes, if the number of types is not more than 2.</p>
+<p>In the first experiment, we read one type (BIGINT) from a LongArrayBlock. We compared it to reading from a raw array. The destination for both cases are byte arrays with same size. The raw array was up to 33% faster. Was it due to virtual function dispatch or something else?</p>
+<p>We verified the functions were being optimized by C2 in level 4 and were inlined properly. We then got the async-profiler and perf-asm results and found the difference was coming from the boundary check in the getLong() implementation:</p>
+<pre><code class="hljs css language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">getLong</span><span class="hljs-params">(<span class="hljs-keyword">int</span> position)</span>
+</span>{
+    checkReadablePosition(position);
+    <span class="hljs-keyword">return</span> getLongUnchecked(position + arrayOffset);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">checkReadablePosition</span><span class="hljs-params">(<span class="hljs-keyword">int</span> position)</span>
+</span>{
+    <span class="hljs-keyword">if</span> (position &lt; <span class="hljs-number">0</span> || position &gt;= getPositionCount()) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> IllegalArgumentException(<span class="hljs-string">"position is not valid"</span>);
+    }
+}
+</code></pre>
+<p>The code in checkReadablePosition() was compiled to two tests and jumps. Applying this to every row has a negative impact on performance. By removing this boundary check the performance of the getXXX() loop is as fast as accessing the raw arrays!</p>
+<p>In fact, for some operators like the PartitionedOutputOperator, the positions for a given batch of rows are known in advance and this range check can be hoisted out and performed only once per batch. We introduced UncheckedBlock with getXxxUnchecked methods that don’t include the boundary checks to allow this approach to be used.</p>
+<p>There were no virtual function dispatch costs, and the generated assembly from the two tests are the same, both in  a tight loop, inlined,  and unrolled. This is because Java uses JIT compilation and has complete information about the classes loaded that implement an interface. So for a given call site, if only one class implements a given interface (monomorphic), then the calls can be de-virtualized to direct calls, and inlined if the function is small enough.</p>
+<p>We also expect most calls to be monomorphic for this operator because we copy the values one block at a time in a tight loop and there is only one implementation invoked at each call site.</p>
+<p>Next, we verified that the addition of arrayOffset in the getLong call didn’t incur additional cost. We checked how it was compiled. Instead of a standalone add instruction, It was a mov instruction with indirect addressing with displacement and scaled-index as follows:</p>
+<pre><code class="hljs css language-text">getByteUnchecked(position + *arrayOffset*) -> mov 0x20(%r8,%r10,8),%rax  ;*laload
+</code></pre>
+<p>On Intel and AMD CPUs the different varieties of mov instructions have similar cost in terms of CPU cycles. It seems the JVM did an awesome job in optimizing this loop so we decided to go through the UncheckedBlock getters.</p>
+<h3><a class="anchor" aria-hidden="true" id="experiment-2-writing-to-buffers"></a><a href="#experiment-2-writing-to-buffers" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Experiment 2: Writing to buffers</h3>
+<p>Our next experiment helped us decide between a few different ways of <em>writing</em>:</p>
+<ol>
+<li>Raw byte array</li>
+<li>SliceOutput in Airlift (BasicSliceOutput or DynamicSliceOutput)</li>
+<li>A custom SliceOutput that wraps a raw byte array</li>
+</ol>
+<p>We tried 3 different ways of writing buffers: A byte array, basic slice, and dynamic slice. (All were patched with the &quot;cmov&quot; fix we'll talk about later).</p>
+<p>Long story short, all SliceOutput implementations were much slower than raw byte arrays. That is because SliceOutput contains lots of sanity checks like boundary checks and null checks. If we used byte arrays to avoid those checks, we could get a 1.5x to 3x win on writes.</p>
+<h3><a class="anchor" aria-hidden="true" id="experiment-3-partitions-first-or-columns-first"></a><a href="#experiment-3-partitions-first-or-columns-first" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Experiment 3: Partitions first or columns first?</h3>
+<p>We also studied the performance for two different ways to add values to the buffer:</p>
+<ol>
+<li>Loop over columns, and then partitions</li>
+<li>Loop over partitions, and then columns.</li>
+</ol>
+<p>For 1) the reads are local i.e. reading from the same array/block over and over while the writes are scattered. For 2) the reads are scattered but the writes are local. We didn't see enough difference to make us favor one over another.</p>
+<p>After all that impact scoping, we were ready to make the changes.</p>
+<h2><a class="anchor" aria-hidden="true" id="our-5-design-choices-and-1-weird-trick-that-got-this-working"></a><a href="#our-5-design-choices-and-1-weird-trick-that-got-this-working" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Our 5 design choices (and 1 weird trick) that got this working:</h2>
+<ol>
+<li>Process data column-by-column, not row-by-row</li>
+<li>Use unchecked blocks and unchecked getters (for speed)</li>
+<li>Avoid SliceOutput, use byte arrays as destination buffers</li>
+<li>Avoid branches and jumps by optimizing the if checks for the null case</li>
+<li>Avoid copying in page serialization / deserialization</li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="1-read-columns-not-rows"></a><a href="#1-read-columns-not-rows" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1. Read columns, not rows</h3>
+<p>You can think of the operator as a pipeline that takes in pages of input, does a hash on each row of input, and then writes to output.</p>
+<p>In the legacy implementation, the input was read row by row. Kind of like this:</p>
+<pre><code class="hljs css language-text">for each row
+    for each column
+        call the type.appendTo to write the value into a BlockBuilder
+</code></pre>
+<p>This is inefficient for a few reasons:</p>
+<ol>
+<li>Type is megamorphic. That means that the Type.appendTo() call and Block.getLong(), getDouble(), etc could be implemented by many different subclasses. (RowBlock, IntArrayBlock, MapBlock, etc). So each time we call getXXX the JVM has to search for the right method.</li>
+<li>You can't unroll this loop. Relatedly, since each column in a row might be different, the compiler can't unroll or parallelize this loop.</li>
+</ol>
+<p>In our new implementation, we do something like this:</p>
+<pre><code class="hljs css language-text">for each column
+    cast to the correct subclass of block
+    for each row
+        call XXXBlock.getYYY
+</code></pre>
+<p>Winning!</p>
+<h3><a class="anchor" aria-hidden="true" id="2-arrays-are-better-than-sliceoutput"></a><a href="#2-arrays-are-better-than-sliceoutput" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2. Arrays are better than SliceOutput</h3>
+<p><em>See the discussion around <a href="http://localhost:3000/blog/2019/12/20/repartition#opportunity-sizing-how-we-decided-to-make-these-changes">Opportunity Sizing: How we decided to make these changes</a></em>.</p>
+<p>We need a thing we'll call buffers. These will be used to, well, buffer the data after we calculate its destination partition. We used to use SliceOutput. But now, we use a thin wrapper around byte arrays instead. This wrapper has fewer checks. But with careful coding, we don't need them.</p>
+<p>Here's an example: We have to check the buffer's size ourselves, and deal with problems if the data we write is too large for the buffer. There're two ways for checking the buffer size and make sure they're not over the limit. One way is to calculate the row sizes in advance, and add to the buffer only for the rows that fit. The other way is to check if the buffers need to be flushed for every row it adds. We chose the first method because 1) the second way requires us to do a size check for every value added inside of the loop. 2) calculating row sizes can be done fairly fast. For fixed length types this can be simplified to a simple division. If all columns are fixed length, we can get the size really fast. For variable width columns, we need to calculate the row sizes. To do this efficiently, we pass in an int array to the block in recursive manner, so that no new memory is allocated in each nested block.</p>
+<h3><a class="anchor" aria-hidden="true" id="3-uncheckedblock-is-best-block"></a><a href="#3-uncheckedblock-is-best-block" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3. UncheckedBlock is best block</h3>
+<p>Reading blocks is slow. Why? Because of all those pesky checks. Null checks. Boundary checks. etc.</p>
+<p>UncheckedBlock is a new superclass of Block. It gives us a set of getXXXUnchecked methods. (Like getLongUnchecked()). These methods don't check to see if you're writing to an index outside the size of the array. That small change gives us an ~10% speed boost -- comparable to raw array handling.</p>
+<p>UncheckedBlock exists right now, and Presto developers can feel free to use it in the future for their code.</p>
+<h3><a class="anchor" aria-hidden="true" id="4-rewrite-if-statements-to-avoid-jumpsbranches"></a><a href="#4-rewrite-if-statements-to-avoid-jumpsbranches" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>4. Rewrite if statements to avoid jumps/branches</h3>
+<p>Look at this code:</p>
+<pre><code class="hljs css language-java"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; positionCount; j++) {
+    <span class="hljs-keyword">int</span> position = positions[j];
+        <span class="hljs-keyword">if</span> (!block.isNull(position)) {
+               <span class="hljs-keyword">long</span> longValue = block.getLong(position);
+               ByteArrayUtils.setLong(longValueBuffer, longBufferIndex, longValue);
+               longBufferIndex += ARRAY_LONG_INDEX_SCALE;
+        }
+    }
+</code></pre>
+<p>There's a problem here. Can you see it? That if statement is pretty hefty, and that means that it compiles down to a <code>jump</code> or <code>jmp</code> command. The condition contains several statements, and it's necessary for the complier to create different branches. This forces the CPU to speculate and potentially throw away work if the branch is mispredicted.</p>
+<p>If only we could do an atomic if statement. This would allow us to avoid the whole mess of a jump and branch. Could such a thing be possible?</p>
+<p>Yes! The assembly call we want is cmov or cmovne. We can induce it through careful rewriting:</p>
+<pre><code class="hljs css language-java"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; positionCount; j++) {
+    <span class="hljs-keyword">int</span> position = positions[j];
+    <span class="hljs-keyword">long</span> longValue = block.getLong(position);
+    ByteArrayUtils.setLong(longValueBuffer, longBufferIndex, longValue);
+    <span class="hljs-keyword">if</span> (!block.isNull(position)) {
+           longBufferIndex += ARRAY_LONG_INDEX_SCALE;
+    }
+</code></pre>
+<p>That gives us an up to 2.6x performance improvement. Nice!</p>
+<h3><a class="anchor" aria-hidden="true" id="5-avoid-unnecessary-copying-in-pagesserde"></a><a href="#5-avoid-unnecessary-copying-in-pagesserde" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>5. Avoid unnecessary copying in PagesSerde</h3>
+<p>Context: PagesSerde stands for Pages Serialization / Deserialization. The method wrapSlice is what we care about right now.</p>
+<p>We did the following things to make the wrapSlice method better:</p>
+<ol>
+<li>Avoid copying a buffer when the slice is already compact. Added a check -- If the slice you're using as input is already compact, don't bother compacting/copying it.</li>
+<li>Materialize a compression buffer in this class instead of creating it every time.</li>
+</ol>
+<p>Our version of a Slice is always compact, so that's nice. (We skip the copy!). How?</p>
+<ol>
+<li>We estimate the size of the buffer beforehand, and we only write that much for each batch</li>
+<li>We only allocate that number of bytes. How can we estimate the size of a slice? Type size * num rows.</li>
+<li>Bonus -- we don't need to check that the buffer is full after adding data to it!</li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="bonus-one-weird-trick--bitshift-for-range-reduction-when-calculating-partitions"></a><a href="#bonus-one-weird-trick--bitshift-for-range-reduction-when-calculating-partitions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Bonus: One weird trick — bitshift for range reduction when calculating partitions</h3>
+<p>This part is really good. Think about the basic concept of the operator: we take pages of data, look at the hash of the partitioning columns of that data, and then output data to different places depending on the modulus of that hash.</p>
+<p>Modulus, the method, is pretty expensive. Luckily, there's a faster way.</p>
+<p>We can use bitwise arithmetic to quickly implement the method that takes a hash and outputs a destination. This, by itself, improves CPU by 35% for the operator from end to end. And it can be easily used in other parts of the code.</p>
+<p>Curious? Here’s all it takes:</p>
+<pre><code class="hljs css language-java"><span class="hljs-comment">// This function reduces the 64 bit hashcode to [0, hashTableSize) uniformly. It first reduces the hashcode to 32 bit</span>
+<span class="hljs-comment">// integer x then normalize it to x / 2^32 * hashSize to reduce the range of x from [0, 2^32) to [0, hashTableSize)</span>
+<span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">computePosition</span><span class="hljs-params">(<span class="hljs-keyword">long</span> hashcode, <span class="hljs-keyword">int</span> hashTableSize)</span>
+</span>{
+    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">int</span>) ((Integer.toUnsignedLong(Long.hashCode(hashcode)) * hashTableSize) &gt;&gt; <span class="hljs-number">32</span>);
+}
+</code></pre>
+<p>Note that the &gt;&gt; operator can be replaced by direct division of 2^32, the JVM would optimize it to bit shifting anyways.</p>
+<p>See this PR for details: <a href="https://github.com/prestodb/presto/pull/11832">https://github.com/prestodb/presto/pull/11832</a></p>
+<h2><a class="anchor" aria-hidden="true" id="try-optimized-repartitioning"></a><a href="#try-optimized-repartitioning" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Try Optimized Repartitioning</h2>
+<p>The optimization is available in mainline Presto and can be enabled using the <code>optimized_repartitioning</code> session property or the <code>experimental.optimized-repartitioning</code> configuration property. You are welcome to try it out and give us feedback.</p>
+<h2><a class="anchor" aria-hidden="true" id="further-reading"></a><a href="#further-reading" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Further reading</h2>
+<ul>
+<li>Here is the original issue explaining the plan <a href="https://github.com/prestodb/presto/issues/13015">https://github.com/prestodb/presto/issues/13015</a></li>
+<li>Here is an (internal) note going into benchmarking and wins <a href="https://fb.workplace.com/notes/ying-su/how-fast-can-we-serialize-blocks/471975263562084/">https://fb.workplace.com/notes/ying-su/how-fast-can-we-serialize-blocks/471975263562084/</a></li>
+<li>Here is the main pull request that made it all happen <a href="https://github.com/prestodb/presto/pull/13183">https://github.com/prestodb/presto/pull/13183</a></li>
+<li>Here’s the commit for huge improvements in hashing dispatch by using modular arithmetic. <a href="https://github.com/prestodb/presto/pull/11832">https://github.com/prestodb/presto/pull/11832</a></li>
+</ul>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#what-is-the-partitioned-output-operator-anyway">What is the Partitioned Output Operator, anyway?</a></li><li><a href="#results-things-are-easier-faster-stronger-better">Results: Things are easier, faster, stronger, better</a></li><li><a href="#opportunity-sizing-how-we-decided-to-make-these-changes">Opportunity Sizing: How we decided to make these changes</a><ul class="toc-headings"><li><a href="#experiment-1-reading-blocks">Experiment 1: Reading blocks</a></li><li><a href="#experiment-2-writing-to-buffers">Experiment 2: Writing to buffers</a></li><li><a href="#experiment-3-partitions-first-or-columns-first">Experiment 3: Partitions first or columns first?</a></li></ul></li><li><a href="#our-5-design-choices-and-1-weird-trick-that-got-this-working">Our 5 design choices (and 1 weird trick) that got this working:</a><ul class="toc-headings"><li><a href="#1-read-columns-not-rows">1. Read columns, not rows</a></li><li><a href="#2-arrays-are-better-than-sliceoutput">2. Arrays are better than SliceOutput</a></li><li><a href="#3-uncheckedblock-is-best-block">3. UncheckedBlock is best block</a></li><li><a href="#4-rewrite-if-statements-to-avoid-jumpsbranches">4. Rewrite if statements to avoid jumps/branches</a></li><li><a href="#5-avoid-unnecessary-copying-in-pagesserde">5. Avoid unnecessary copying in PagesSerde</a></li><li><a href="#bonus-one-weird-trick--bitshift-for-range-reduction-when-calculating-partitions">Bonus: One weird trick — bitshift for range reduction when calculating partitions</a></li></ul></li><li><a href="#try-optimized-repartitioning">Try Optimized Repartitioning</a></li><li><a href="#further-reading">Further reading</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2013-2019 Presto Foundation</section></footer></div></body></html>

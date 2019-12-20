@@ -2,12 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2019-12-16T06:00:00.000Z</updated>
+    <updated>2019-12-20T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
     <rights>Copyright © 2013-2019 Presto Foundation</rights>
+    <entry>
+        <title type="html"><![CDATA[5 design choices—and 1 weird trick — to get 2x efficiency gains in Presto repartitioning]]></title>
+        <id>https://prestodb.io/blog/2019/12/20/repartition.html</id>
+        <link href="https://prestodb.io/blog/2019/12/20/repartition.html"/>
+        <updated>2019-12-20T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>Ying Su, Masha Basmanova, Orri Erling, Tim Meehan, Sahar Massachi, Bhavani Hari</p>
+<p>We like Presto. We like it a lot — so much we want to make it better in every way. Here's an example: we just optimized the PartitionedOutputOperator. It's now 2-3x more CPU efficient, which, when measured against Facebook's production workload, translates to 6% gains overall. That's huge.</p>
+<p>The optimized repartitioning is in use on some production Presto clusters right now, and available for use as of release 0.229.</p>
+<p>In this note, let's go over how we did it, what optimizations we unlocked specifically, and a case study of how we approached opportunity sizing whether this was worth doing at all.</p>
+]]></summary>
+        <author>
+            <name>Ying Su</name>
+            <email/>
+            <uri>https://www.linkedin.com/in/ying-su-b00b81107/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Join Us! Growing the Presto Foundation in 2020 and Beyond]]></title>
         <id>https://prestodb.io/blog/2019/12/16/growing-the-presto-foundation.html</id>
