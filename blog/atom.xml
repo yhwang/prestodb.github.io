@@ -2,12 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2019-12-20T06:00:00.000Z</updated>
+    <updated>2019-12-23T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
     <rights>Copyright © 2013-2019 Presto Foundation</rights>
+    <entry>
+        <title type="html"><![CDATA[Improving the Presto planner for better push down and data federation]]></title>
+        <id>https://prestodb.io/blog/2019/12/23/improve-presto-planner.html</id>
+        <link href="https://prestodb.io/blog/2019/12/23/improve-presto-planner.html"/>
+        <updated>2019-12-23T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p><strong>Alibaba:</strong> Yuan Mei</p>
+<p><strong>Facebook:</strong> James Sun, Maria Basmanova, Rongrong Zhong, Jiexi Lin, Saksham Sachdev</p>
+<p><strong>Pinterest:</strong> Yi He</p>
+<p><strong>University of Waterloo:</strong> Akshay Pall</p>
+<p>Presto defines a connector API that allows Presto to query any data source that has a connector implementation. The existing connector API provides basic predicate pushdown functionality allowing connectors to perform filtering at the underlying data source.</p>
+<p>However, there are certain limitations with the existing predicate pushdown functionality that limits what connectors can do. The expressiveness of what can be pushed down is limited and the connectors can't change the structure of the plan at all.</p>
+]]></summary>
+        <author>
+            <name>Yi He</name>
+            <email/>
+            <uri>https://www.linkedin.com/in/yi-he-69aa9723/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[5 design choices—and 1 weird trick — to get 2x efficiency gains in Presto repartitioning]]></title>
         <id>https://prestodb.io/blog/2019/12/20/repartition.html</id>
