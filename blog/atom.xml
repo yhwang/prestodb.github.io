@@ -7,7 +7,7 @@
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
-    <rights>Copyright © 2013-2019 Presto Foundation</rights>
+    <rights>Copyright © 2013-2020 Presto Foundation</rights>
     <entry>
         <title type="html"><![CDATA[Improving the Presto planner for better push down and data federation]]></title>
         <id>https://prestodb.io/blog/2019/12/23/improve-presto-planner.html</id>
