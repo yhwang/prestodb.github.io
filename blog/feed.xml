@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Mon, 23 Dec 2019 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 13 Feb 2020 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -13,6 +13,13 @@
             <link>https://prestodb.io/blog</link>
         </image>
         <copyright>Copyright © 2013-2020 Presto Foundation</copyright>
+        <item>
+            <title><![CDATA[Announcing PrestoCon 2020: Advancing the Big Data Ecosystem with Presto]]></title>
+            <link>https://prestodb.io/blog/2020/02/13/prestocon-announcement.html</link>
+            <guid>https://prestodb.io/blog/2020/02/13/prestocon-announcement.html</guid>
+            <pubDate>Thu, 13 Feb 2020 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>On March 24, 2020 in San Mateo, the Presto Foundation, in partnership with The Linux Foundation, will be hosting the organization’s first-ever <a href="https://events.linuxfoundation.org/prestocon/">PrestoCon</a>. The event, one of the first Presto-focused full-day conferences ever held, will feature speakers...</p>]]></description>
+        </item>
         <item>
             <title><![CDATA[Improving the Presto planner for better push down and data federation]]></title>
             <link>https://prestodb.io/blog/2019/12/23/improve-presto-planner.html</link>
