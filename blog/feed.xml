@@ -12,7 +12,6 @@
             <url>https://prestodb.io/img/presto.png</url>
             <link>https://prestodb.io/blog</link>
         </image>
-        <copyright>Copyright © 2013-2020 Presto Foundation</copyright>
         <item>
             <title><![CDATA[Announcing PrestoCon 2020: Advancing the Big Data Ecosystem with Presto]]></title>
             <link>https://prestodb.io/blog/2020/02/13/prestocon-announcement.html</link>
