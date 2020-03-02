@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Querying Nested Data with Lambda Functions · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Denormalized data with nested values (e.g. array/map) have become omnipresent in this Big Data era, as a lot of data naturally conforms to a nested representation [1, 2]. As a result it is important to provide an efficient and convenient way to query nested data. SQL traditionally does not include support for this."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Querying Nested Data with Lambda Functions · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2020/03/02/presto-lambda"/><meta property="og:description" content="Denormalized data with nested values (e.g. array/map) have become omnipresent in this Big Data era, as a lot of data naturally conforms to a nested representation [1, 2]. As a result it is important to provide an efficient and convenient way to query nested data. SQL traditionally does not include support for this."/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2020/03/02/presto-lambda">Querying Nested Data with Lambda Functions</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/02/13/prestocon-announcement">Announcing PrestoCon 2020: Advancing the Big Data Ecosystem with Presto</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/12/23/improve-presto-planner">Improving the Presto planner for better push down and data federation</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/12/20/repartition">5 design choices—and 1 weird trick — to get 2x efficiency gains in Presto repartitioning</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/12/16/growing-the-presto-foundation">Join Us! Growing the Presto Foundation in 2020 and Beyond</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2020/03/02/presto-lambda">Querying Nested Data with Lambda Functions</a></h1><p class="post-meta">March 2, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/wenleix/" target="_blank" rel="noreferrer noopener">Wenlei Xie</a></p><div class="authorPhoto"><a href="https://www.linkedin.com/in/wenleix/" target="_blank" rel="noreferrer noopener"><img src="https://graph.facebook.com/681470066/picture/?height=200&amp;width=200" alt="Wenlei Xie"/></a></div></div></header><div><span><p>Denormalized data with nested values (e.g. array/map) have become omnipresent in this Big Data era, as a lot of data naturally conforms to a nested representation [1, 2]. As a result it is important to provide an efficient and convenient way to query nested data. SQL traditionally does not include support for this.</p>
+<p>The pioneering work of Dremel proposed an extension to SQL based on recursive relational algebra to allow querying nested records [1], and is now available in BigQuery and the SQL:2016 standard. The following example shows how to transform array elements with this (adapted from <a href="https://cloud.google.com/bigquery/docs/reference/standard-sql/arrays#creating-arrays-from-subqueries">BigQuery Docs</a>):</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span> elements,
+    <span class="hljs-built_in">ARRAY</span>(<span class="hljs-keyword">SELECT</span> v * <span class="hljs-number">2</span>
+          <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">UNNEST</span>(elements) <span class="hljs-keyword">AS</span> v) <span class="hljs-keyword">AS</span> multiplied_elements
+<span class="hljs-keyword">FROM</span> (
+    <span class="hljs-keyword">VALUES</span>
+        (<span class="hljs-built_in">ARRAY</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]),
+        (<span class="hljs-built_in">ARRAY</span>[<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">9</span>]),
+        (<span class="hljs-built_in">ARRAY</span>[<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">16</span>, <span class="hljs-number">64</span>])
+) <span class="hljs-keyword">AS</span> t(elements)
+
+    elements    | multiplied_elements
+<span class="hljs-comment">----------------+---------------------</span>
+ [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]         | [<span class="hljs-number">2</span>, <span class="hljs-number">4</span>]
+ [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">9</span>]      | [<span class="hljs-number">2</span>, <span class="hljs-number">6</span>, <span class="hljs-number">18</span>]
+ [<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">16</span>, <span class="hljs-number">64</span>] | [<span class="hljs-number">2</span>, <span class="hljs-number">8</span>, <span class="hljs-number">32</span>, <span class="hljs-number">128</span>]
+(<span class="hljs-number">3</span> <span class="hljs-keyword">rows</span>)
+</code></pre>
+<p>While nested relational algebra provides an elegant and unified approach to query nested data, we found it could be challenging for users to track the “unnest stack” in mind when writing the query. In our experience, users are more comfortable to apply a given function (e.g lambda) to each element in the collection. This motivates us to introduce lambda expressions into Presto to help query nested data, as illustrated below:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span> elements, 
+transform(elements, v -&gt; v * <span class="hljs-number">2</span>) <span class="hljs-keyword">as</span> multiplied_elements
+<span class="hljs-keyword">FROM</span> (
+    <span class="hljs-keyword">VALUES</span>
+        (<span class="hljs-built_in">ARRAY</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]),
+        (<span class="hljs-built_in">ARRAY</span>[<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">9</span>]),
+        (<span class="hljs-built_in">ARRAY</span>[<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">16</span>, <span class="hljs-number">64</span>])
+) <span class="hljs-keyword">AS</span> t(elements)
+</code></pre>
+<p>In Presto, a lambda expression consists of an argument list and lambda body, separated by <code>-&gt;</code>:</p>
+<pre><code class="hljs css language-sql">x -&gt; x + 1
+(x, y) -&gt; x + y
+x -&gt; regexp_like(x, 'a+')
+x -&gt; x[1] / x[2]
+x -&gt; IF(x &gt; 0, x, -x)
+x -&gt; COALESCE(x, 0)
+x -&gt; CAST(x AS JSON)
+x -&gt; x + TRY(1 / 0)
+</code></pre>
+<p>Note there is no type annotation in a lambda expression. The type of a lambda expression (e.g. <code>function(integer, integer)</code>) thus has to be inferred from the context of function call. As a result, standalone lambda expressions are not allowed since their types cannot be determined.</p>
+<!--truncate-->
+<h2><a class="anchor" aria-hidden="true" id="lambda-type-inference"></a><a href="#lambda-type-inference" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Lambda Type Inference</h2>
+<p>The initial lambda support in Presto was added in <a href="https://github.com/prestodb/presto/pull/6198">Presto#6198</a> with basic compilation and execution. One of the major challenges this pull request addressed was type inference for lambda, as there is no type annotation in lambda expressions. Consider the following expression contains lambda:</p>
+<pre><code class="hljs css language-sql">transform(elements, v -&gt; v * 2)
+</code></pre>
+<p>where <code>elements</code> is with type <code>array(integer)</code>.</p>
+<p>Presto allows function overloading, and the exact function match is resolved by looking up the function name and argument types. This is infeasible for higher-order functions as the type for <code>v -&gt; v * 2</code> cannot be resolved without context.</p>
+<p><img src="/img/blog/2020-03-02-presto-lambda/lambda-type-inference.png" alt="Lambda Type Inference"></p>
+<p>As a result, Presto doesn’t allow function overloading for higher-order functions, thus it can still resolve the function <code>transform</code> just by the name. <code>ExpresionAnalyzer</code> will have the following information:</p>
+<ul>
+<li>The generic type for <code>transform</code> is <code>(array(T), function(T, U)) -&gt; array(U)</code>.</li>
+<li>The first argument type is <code>array(integer)</code>.</li>
+<li>The exact type for the second argument <code>v -&gt; v * 2</code> is unknown since it’s a lambda expression. However, its type can be uniquely determined once the input parameter type is bound. This is done by the <a href="https://github.com/prestodb/presto/blob/5833338c127c380f505873614d25862921437e75/presto-main/src/main/java/com/facebook/presto/sql/analyzer/TypeSignatureProvider.java#L27">TypeSignatureProvider</a> class.</li>
+</ul>
+<p>The type parameter <code>T</code> and <code>U</code> needs to be determined to resolve the expression type. This is done by <a href="https://github.com/prestodb/presto/blob/5833338c127c380f505873614d25862921437e75/presto-main/src/main/java/com/facebook/presto/metadata/SignatureBinder.java#L92">SignaturerBinder#bind</a> method. <a href="https://github.com/prestodb/presto/blob/5833338c127c380f505873614d25862921437e75/presto-main/src/main/java/com/facebook/presto/metadata/SignatureBinder.java#L289-L300">SignaturerBinder#appendConstraintSolvers</a> is called under the hood to iteratively solve this constraint satisfaction problem. A new <a href="https://github.com/prestodb/presto/blob/5833338c127c380f505873614d25862921437e75/presto-main/src/main/java/com/facebook/presto/metadata/SignatureBinder.java#L541-L544">TypeConstraintSolver</a> called <a href="https://github.com/prestodb/presto/blob/5833338c127c380f505873614d25862921437e75/presto-main/src/main/java/com/facebook/presto/metadata/SignatureBinder.java#L720-L721">FunctionSolver</a> was added for updating type constraints related to lambda expressions.</p>
+<h2><a class="anchor" aria-hidden="true" id="lambda-capture"></a><a href="#lambda-capture" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Lambda Capture</h2>
+<p>Lambda capture allows users to refer to other columns in the lambda function, for example:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span> elements, 
+    transform(elements, v -&gt; v * factor) <span class="hljs-keyword">as</span> multiplied_elements
+<span class="hljs-keyword">FROM</span> (
+    <span class="hljs-keyword">VALUES</span>
+        (<span class="hljs-built_in">ARRAY</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], <span class="hljs-number">2</span>),
+        (<span class="hljs-built_in">ARRAY</span>[<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">9</span>], <span class="hljs-number">3</span>),
+        (<span class="hljs-built_in">ARRAY</span>[<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">16</span>, <span class="hljs-number">64</span>], <span class="hljs-number">4</span>)
+) <span class="hljs-keyword">AS</span> t(elements, factor)
+
+    elements    | multiplied_elements
+<span class="hljs-comment">----------------+---------------------</span>
+ [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]         | [<span class="hljs-number">2</span>, <span class="hljs-number">4</span>]
+ [<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">9</span>]      | [<span class="hljs-number">3</span>, <span class="hljs-number">9</span>, <span class="hljs-number">27</span>]
+ [<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">16</span>, <span class="hljs-number">64</span>] | [<span class="hljs-number">4</span>, <span class="hljs-number">16</span>, <span class="hljs-number">64</span>, <span class="hljs-number">256</span>]
+(<span class="hljs-number">3</span> <span class="hljs-keyword">rows</span>)
+</code></pre>
+<p>Lambda capture supported is added in <a href="https://github.com/prestodb/presto/pull/7210">Presto#7210</a>. It rewrites the captured lambda into non-capture lambda via <a href="https://en.wikipedia.org/wiki/Partial_application">partial function application</a>. A special internal higher order function <code>BIND</code> is introduced to partially apply captured arguments to the lambda.</p>
+<p>Take the above example, the captured lambda call</p>
+<pre><code class="hljs css language-sql">transform(elements, v -&gt; v * factor)
+</code></pre>
+<p>is rewritten to</p>
+<pre><code class="hljs css language-sql">transform(
+    elements, 
+    BIND(factor, (captured_factor, e) -&gt; e * captured_factor)
+)
+</code></pre>
+<p>The original unary lambda with capture <code>e -&gt; e * factor</code> is rewritten into a binary lambda without capture: <code>(captured_factor, e) -&gt; e * captured_factor</code>. The <code>BIND</code> call takes <code>factor</code> and this binary lambda as input, returns the partially applied function that multiplies the input by <code>captured_factor</code> (Note the <code>captured_factor</code> will be different for each row!). This partially applied function is a unary function and is provided as the second parameter to <code>transform</code> call.</p>
+<h2><a class="anchor" aria-hidden="true" id="lambda-execution"></a><a href="#lambda-execution" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Lambda Execution</h2>
+<p>In this section we are going to discuss how a lambda is executed during runtime. The original implementation used <code>MethodHandle</code> objects to represent lambdas on the stack. Consider the same example:</p>
+<pre><code class="hljs css language-sql">transform(
+    elements, 
+    BIND(factor, (captured_factor, v) -&gt; v * captured_factor)
+)
+</code></pre>
+<p>Each invocation of <code>transform</code> works in the following way:</p>
+<ol>
+<li>Push the Java object representing elements on the stack. When <code>elements</code> is <code>array(integer)</code>, the corresponding Java stack type is <code>IntArrayBlock</code>.</li>
+<li>Push the <code>MethodHandle</code> object representing captured lambda to the stack, i.e. binding <code>factor</code> to <code>(captured_factor, v) -&gt; v * captured_factor</code>. To this end:
+<ol>
+<li>Push the <code>MethodHandle</code> object represents <code>v -&gt; v * captured_factor</code> onto the stack.</li>
+<li>Push <code>captured_factor</code> on the stack.</li>
+<li>Invoke <code>MethodHandle#bindTo</code> to get a <code>BoundMethodHandle</code> representing captured lambda on the top of stack.</li>
+</ol></li>
+<li>Invoke <code>transform</code>.</li>
+</ol>
+<p>Unfortunately, this implementation causes Java to generate a separate customized LambdaForm class for every <code>MethodHandle#bindTo</code> call (i.e. per each row). Such excessive runtime class generation quickly fills the Metaspace and causes full GC, see <a href="https://github.com/prestodb/presto/issues/7935">Presto#7935</a> for reproduction and details. JDK developers have confirmed that each <code>BoundMethodHandle</code> should be customized independently, and <code>MethodHandle#bindTo</code> <a href="http://mail.openjdk.java.net/pipermail/mlvm-dev/2017-May/006755.html">is not a good fit for implementing lambda capturing</a>.</p>
+<p>To fix this, we redesigned Presto lambda execution via <a href="https://github.com/prestodb/presto/pull/8031">Presto #8031</a>. The key observations are:</p>
+<ul>
+<li>Lambda capture has to be performed per invocation, as different value will be captured for each row.</li>
+<li>However, we should use the same class representing captured lambda for every <code>BIND</code> call, otherwise we will generate too many classes.</li>
+</ul>
+<p>We use the same approach as Java uses to handle lambda and capture [3, 4]:</p>
+<ul>
+<li>A lambda is represented as an object whose type is a functional interface (a.k.a. Single Abstract Method class)</li>
+<li>The <code>invokedynamic</code> instruction is used to perform lambda capture:
+<ul>
+<li>During the first <code>invokedynamic</code> call, the class representing the captured lambda (which is a functional interface) is created and a method to perform the capture is generated in it. This step is also called linkage and will only be done once.</li>
+<li>Every <code>invokedynamic</code> call performs capture and returns an instance of the desired functional interface.</li>
+</ul></li>
+</ul>
+<p>With this design, <code>BIND</code> function will always be fused together with the lambda generation step to generate a captured lambda in a single step -- we cannot first generate an object representing the uncaptured lambda, and then perform a separate partial application step. Note this implementation also doesn't allow more general higher-order functions that return a function as result.</p>
+<h2><a class="anchor" aria-hidden="true" id="lambda-in-aggregation"></a><a href="#lambda-in-aggregation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Lambda in Aggregation</h2>
+<p>While lambda was originally introduced to help query nested data with scalar functions, we also noted it can be used in aggregation functions to allow more flexible analytics. The initial support for lambda in aggregation was added in <a href="https://github.com/prestodb/presto/pull/12084">Presto#12084</a>, with a <a href="https://prestodb.io/docs/current/functions/aggregate.html#reduce_agg">reduce_agg</a> function for demonstration purposes. <code>reduce_agg</code> <em>conceputally</em> allows the creation of User-Defined Aggregation Function (UDAF) by making the input and combine functions lambdas. The following example shows how to use <code>reduce_agg</code> to compute group-wise product (instead of sum):</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">id</span>, 
+reduce_agg(<span class="hljs-keyword">value</span>, <span class="hljs-number">1</span>, (a, b) -&gt; a * b, (a, b) -&gt; a * b) prod
+<span class="hljs-keyword">FROM</span> (
+    <span class="hljs-keyword">VALUES</span>
+        (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>),
+        (<span class="hljs-number">1</span>, <span class="hljs-number">3</span>),
+        (<span class="hljs-number">1</span>, <span class="hljs-number">4</span>),
+        (<span class="hljs-number">2</span>, <span class="hljs-number">20</span>),
+        (<span class="hljs-number">2</span>, <span class="hljs-number">30</span>),
+        (<span class="hljs-number">2</span>, <span class="hljs-number">40</span>)
+) <span class="hljs-keyword">AS</span> t(<span class="hljs-keyword">id</span>, <span class="hljs-keyword">value</span>)
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> <span class="hljs-keyword">id</span>;
+
+ id | prod
+<span class="hljs-comment">----+-------</span>
+  2 | 24000
+  1 |    24
+(2 rows)
+</code></pre>
+<p>Unfortunately, due to <a href="https://bugs.openjdk.java.net/browse/JDK-8017163">JDK-8017163</a>, aggregation state with <code>Slice</code> or <code>Block</code> as a native container type is intentionally not supported yet. It can result in excessive JVM remembered set memory usage. This is because aggregation state requires updates in unpredictable order, resulting in a huge amount of cross-region references when each state is a separate object. This issue is also reported in <a href="https://github.com/prestodb/presto/issues/9553">Presto#9553</a>. This makes this function not yet practically useful. Once <a href="https://bugs.openjdk.java.net/browse/JDK-8017163">JDK-8017163</a> is fixed in later versions of the JVM, we are looking forward to enabling it with more general types to allow more flexible analytics in aggregations!</p>
+<h2><a class="anchor" aria-hidden="true" id="reference"></a><a href="#reference" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reference</h2>
+<p>[1] <a href="https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36632.pdf">Dremel: Interactive Analysis of Web-Scale Datasets</a></p>
+<p>[2] <a href="https://prestodb.io/blog/2019/06/29/everything-you-always-wanted-to-do-in-a-table-scan">Everything You Always Wanted To Do in Table Scan</a></p>
+<p>[3] <a href="http://chariotsolutions.com/wp-content/uploads/presentation/2014/04/Brian-Goetz-Lambda-Under-The-Hood.pdf">Lambda: A peek under the hood</a></p>
+<p>[4] <a href="https://cr.openjdk.java.net/~briangoetz/lambda/lambda-state-final.html">State of the Lambda</a></p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#lambda-type-inference">Lambda Type Inference</a></li><li><a href="#lambda-capture">Lambda Capture</a></li><li><a href="#lambda-execution">Lambda Execution</a></li><li><a href="#lambda-in-aggregation">Lambda in Aggregation</a></li><li><a href="#reference">Reference</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page. Linux is a registered trademark of Linus Torvalds. <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> and <a href="http://www.linuxfoundation.org/terms">Terms of Use</a>.</section></footer></div></body></html>
