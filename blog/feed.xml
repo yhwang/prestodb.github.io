@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Mon, 02 Mar 2020 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 18 Mar 2020 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,19 @@
             <url>https://prestodb.io/img/presto.png</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Engineering SQL Support on Apache Pinot at Uber]]></title>
+            <link>https://prestodb.io/blog/2020/03/18/uber-pinot.html</link>
+            <guid>https://prestodb.io/blog/2020/03/18/uber-pinot.html</guid>
+            <pubDate>Wed, 18 Mar 2020 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>The article,  <a href="https://eng.uber.com/engineering-sql-support-on-apache-pinot/">Engineering SQL Support on Apache Pinot at Uber</a>, was originally published by Uber on the Uber Engineering Blog on January 15, 2020. Check out <a href="https://eng.uber.com/">eng.uber.com</a> for more articles about Uber's engineering work and follow Uber Engineering at <a href="https://twitter.com/UberEng">@UberEng</a> and Uber Open Source at <a href="https://twitter.com/UberOpenSource">@UberOpenSouce</a> on Twitter for updates from our teams.</p>
+<p><img src="/img/blog/2020-03-18-uber-pinot/shiny-thing.png" alt=""></p>
+<p>Uber leverages real-time analytics on aggregate data to improve the user experience across our products, from <a href="https://eng.uber.com/uber-eats-risk-team/">fighting fraudulent behavior</a> on Uber Eats to <a href="https://eng.uber.com/forecasting-introduction/">forecasting demand</a> on our platform.</p>
+<p>As Uber’s operations became more complex and we offered additional features and services through our platform, we needed a way to generate more timely analytics on our aggregated marketplace data to better understand how our products were being used. Specifically, we needed our Big Data stack to support cross-table queries as well as nested queries, both requirements that would enable us to write more flexible ad hoc queries to keep up with the growth of our business.</p>
+<p>To resolve these issues, we built a solution that linked <a href="http://prestodb.github.io/">Presto</a>, a query engine that supports full ANSI SQL, and <a href="https://pinot.apache.org/">Pinot</a>, a real-time OLAP (online analytical processing) datastore. This married solution allows users to write ad-hoc SQL queries, empowering teams to unlock significant analysis capabilities.</p>
+<p>By engineering full SQL support on Apache Pinot, users of our Big Data stack can now write complex SQL queries as well as join different tables in Pinot with those in other datastores at Uber. This new solution enables operations teams with basic SQL knowledge to build dashboards for quick analysis and reporting on aggregated data without having to spend extra time working with engineers on data modelling or building data pipelines, leading to efficiency gains and resource savings across the company.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Querying Nested Data with Lambda Functions]]></title>
             <link>https://prestodb.io/blog/2020/03/02/presto-lambda.html</link>
