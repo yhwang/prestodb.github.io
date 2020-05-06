@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Spatial Joins 1: Local Spatial Joins · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="A common type of spatial query involves relating one table of geometric"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Spatial Joins 1: Local Spatial Joins · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2020/05/07/local-spatial-joins"/><meta property="og:description" content="A common type of spatial query involves relating one table of geometric"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2020/05/07/local-spatial-joins">Spatial Joins 1: Local Spatial Joins</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/03/18/uber-pinot">Engineering SQL Support on Apache Pinot at Uber</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/03/02/presto-lambda">Querying Nested Data with Lambda Functions</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/02/13/prestocon-announcement">Announcing PrestoCon 2020: Advancing the Big Data Ecosystem with Presto</a></li><li class="navListItem"><a class="navItem" href="/blog/2019/12/23/improve-presto-planner">Improving the Presto planner for better push down and data federation</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2020/05/07/local-spatial-joins">Spatial Joins 1: Local Spatial Joins</a></h1><p class="post-meta">May 7, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/jagill/" target="_blank" rel="noreferrer noopener">James Gill</a></p></div></header><div><span><p>A common type of spatial query involves relating one table of geometric
+objects (e.g., a table <code>population_centers</code> with columns
+<code>population, latitude, longitude</code>) with another such table (e.g., a table
+<code>counties</code> with columns <code>county_name, boundary_wkt</code>), such as calculating
+for each county the population sum of all population centers contained
+within it. These kinds of calculations are called <em>spatial joins</em>. While
+doing it for a single row each from <code>population_centers</code> and <code>counties</code> is
+manageable, doing it efficiently for two large tables is challenging. In this
+post, we'll talk about the machinery that Presto has built to make these
+queries blazingly fast.</p>
+<!-- truncate -->
+<h2><a class="anchor" aria-hidden="true" id="prologue-point-in-polygon"></a><a href="#prologue-point-in-polygon" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Prologue: Point in Polygon</h2>
+<p>How do you test if a point is inside a polygon? A classic algorithm is the
+<a href="https://en.wikipedia.org/wiki/Point_in_polygon">winding-number test</a> which tests if a ray from the
+point to <code>x = +infinity</code> intersects the polygon an even or odd number of
+times. For example, the ray from a point inside a circle would intersect a
+circle once, while a ray from a point outside would intersect either 0 or 2
+times. The even-odd rule holds for more complex polygons as
+well.<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p><img src="/img/blog/2020-05-07-local-spatial-joins/windingNumberTest.svg" alt="Winding number rule" title="Illustration of winding number rule"></p>
+<p>We'll skip the details of the algorithm, but the runtime complexity is
+important. Without a preprocessing step, we need to check if each side of the
+polygon intersects the ray. Since the number of sides is equal to the number
+of vertices, the algorithm runs in <code>O(V)</code> time where <code>V</code> is the number of
+vertices in the polygon.</p>
+<h2><a class="anchor" aria-hidden="true" id="take-1-double-loop"></a><a href="#take-1-double-loop" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Take 1: Double Loop</h2>
+<p>A correct but very inefficient way of calculating a spatial join is a nested
+<code>for</code> loop, checking each row of <code>population_centers</code> if it is contained
+in each row of <code>county</code>. The algorithm will look something like this:</p>
+<pre><code class="hljs css language-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">spatial_join</span><span class="hljs-params">(population_centers, counties)</span>:</span>
+  results = {}
+  <span class="hljs-keyword">for</span> pop <span class="hljs-keyword">in</span> population_centers:
+    <span class="hljs-keyword">for</span> county <span class="hljs-keyword">in</span> counties:
+      <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> county.boundary.contains(pop.latitude, pop.longitude):
+        <span class="hljs-keyword">continue</span>
+      <span class="hljs-keyword">if</span> county.county_name <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> results:
+        results[county.county_name] = <span class="hljs-number">0.0</span>
+      results[county.county_name] += p.population
+  <span class="hljs-keyword">return</span> results
+</code></pre>
+<p>If <code>P</code> is the number of points, and <code>C</code> is the number of counties, then this
+algorithm will run in <code>O(P * C * V)</code> time, where <code>V</code> is the maximum number of
+vertices of any polygon. This is very expensive! Detailed polygons can easily
+contain millions of vertices, some polygon sets (e.g., neighborhoods) can have
+millions of entries, and some geospatial datasets have billions of points.</p>
+<p>Below are the polygons for all 3108 counties in the continental United States.
+They are comprised of almost 70k vertices.</p>
+<p><img src="/img/blog/2020-05-07-local-spatial-joins/usCounties.svg" alt="US Counties" title="US Counties"></p>
+<p>Running this on <a href="https://github.com/jagill/presto_spatial_join_blog">some test data</a>
+takes 652.1 seconds to check ~1.5 million points against 3481 county polygons
+(some counties have multiple polygons).</p>
+<h2><a class="anchor" aria-hidden="true" id="take-2-envelopes"></a><a href="#take-2-envelopes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Take 2: Envelopes</h2>
+<p>As humans, often we can quickly look at a point and see it is outside a
+polygon. For example, consider this point and the polygon of Beaverhead County:</p>
+<p><img src="/img/blog/2020-05-07-local-spatial-joins/complexCountyMap.svg" alt="Point and County" title="Beaverhead County"></p>
+<p>It is far outside the polygon, so we don't have to check each side of the
+polygon. In fact, the polygon can be arbitrarily complex: as long as the
+point is far away from the polygon, we can discard it as a possibility
+quickly. We can teach the computer to do this by using an <em>envelope</em>, which
+is an axis-oriented rectangle specified by minimum and maximum <code>x</code> and <code>y</code>
+values:</p>
+<p><img src="/img/blog/2020-05-07-local-spatial-joins/complexCountyMapWithBox.svg" alt="Point and County with envelope" title="Beaverhead County with Envelope"></p>
+<p>The envelope can be calculated in <code>O(V)</code> time, and can be done almost for
+free when you are deserializing a geometry. Checking if a point is in an
+envelope is <code>O(1)</code>:</p>
+<pre><code class="hljs">envelope.contains(point) ==
+                envelope<span class="hljs-selector-class">.min_x</span> &lt;= point<span class="hljs-selector-class">.x</span> &lt;= envelope<span class="hljs-selector-class">.max_x</span>
+                and envelope<span class="hljs-selector-class">.min_y</span> &lt;= point<span class="hljs-selector-class">.y</span> &lt;= envelope<span class="hljs-selector-class">.max_y</span>
+</code></pre>
+<p>We can modify our algorithm above to take advantage of this fact:</p>
+<pre><code class="hljs css language-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">spatial_join</span><span class="hljs-params">(population_centers, counties)</span>:</span>
+  results = {}
+  <span class="hljs-keyword">for</span> pop <span class="hljs-keyword">in</span> population_centers:
+    <span class="hljs-keyword">for</span> county <span class="hljs-keyword">in</span> counties:
+      <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> county.envelope.contains(pop.latitude, pop.longitude):
+        <span class="hljs-comment"># Bail quickly!</span>
+        <span class="hljs-keyword">continue</span>
+      <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> county.boundary.contains(pop.latitude, pop.longitude):
+        <span class="hljs-keyword">continue</span>
+      <span class="hljs-keyword">if</span> county.county_name <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> results:
+        results[county.county_name] = <span class="hljs-number">0.0</span>
+      results[county.county_name] += p.population
+  <span class="hljs-keyword">return</span> results
+</code></pre>
+<p>While this does not change our worst-case runtime, it drastically reduces the
+average runtime (since it removes the dependence on <code>V</code> for most checks).
+Using county envelopes for our test data reduces the time to 13.8 seconds, an
+almost 50x improvement!</p>
+<p>Using an envelope is so cheap and effective that almost all geometric
+libraries do an envelope pre-check before any relation check (containment,
+intersection, etc).</p>
+<h2><a class="anchor" aria-hidden="true" id="take-3-hierarchical-envelopes"></a><a href="#take-3-hierarchical-envelopes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Take 3: Hierarchical Envelopes</h2>
+<p>Using envelopes makes the check for a given polygon cheaper on average, but
+we still need to check each polygon. We can do better.</p>
+<p>As humans, if we have polygons for each county, and a point in Massachusetts,
+we know immediately that the point won't be in any county in California,
+Ohio, or Florida. A computer version of this is to have a super-envelope for
+each of the states: for each state, find the maximum and minimum <code>x</code> and <code>y</code>.
+Since each county already has its envelope, the super-envelope can just be
+the envelope of the envelopes. For our point in Massachusetts, we can first
+check the envelope for each state. If only the Massachusetts envelope
+contains the point, we can then do an envelope check for each county in
+Massachusetts. Only for those counties that pass their envelope check do we
+need to do the full containment check. This reduces our total envelope checks
+from 3108 (counties in the continental US) to 50 (states) plus 14 (counties
+in Massachusetts).</p>
+<p><img src="/img/blog/2020-05-07-local-spatial-joins/usCountiesAndStatesWithBoxes.svg" alt="US States and Counties with Envelope" title="US Counties and States with Envelopes"></p>
+<p>Adding a check for states improves our performance to 3.4 seconds, about
+4x better than using county envelopes alone (and ~200x better than the
+brute force calculation).</p>
+<p>While this is a great improvement, it leads to more questions. Since
+Massachussetts is in the far northeast of the USA, so why do we have to check
+each western and southern state? Why not also have envelopes for southern,
+western, central, eastern, and northern USA? Why stop at three levels? Maybe
+we can even make envelopes for regions in Massachussetts. What about other
+data sets without concepts like states and countries? Is there a programmatic
+way to generate the groups and levels?</p>
+<p>R-trees provide an answer for these questions.</p>
+<h2><a class="anchor" aria-hidden="true" id="take-4-r-trees"></a><a href="#take-4-r-trees" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Take 4: R-trees</h2>
+<p>Given a set of geometries, R-trees (Rectangle Trees) provide a programmatic
+way to construct an efficient set of hierarchical envelopes. R-trees start
+with an envelope for each polygon in the data set. It groups sets of
+neighboring polygons, constructing an envelope for each group. The original
+polygons are leaf nodes in the tree, and the groups are their parent nodes.
+The maximum group size depends on a parameter called the <em>branching factor</em>.
+The grouping algorithm then recurses, making parent groups of child groups,
+constructing an envelope for each, and so on until there is only one node,
+which encompasses all of our original geometries.</p>
+<p>In the case of our counties, first we group them into groups of 9,
+calculating the bounding box:</p>
+<p><img src="/img/blog/2020-05-07-local-spatial-joins/usCountiesWithRtreeBoxes1.svg" alt="US Counties with level 1 Rtree boxes" title="US Counties with level 1 Rtree boxes"></p>
+<p>Then we group each of these level 1 boxes into groups of 9, calculating
+<em>their</em> bounding box:</p>
+<p><img src="/img/blog/2020-05-07-local-spatial-joins/usCountiesWithRtreeBoxes12.svg" alt="US Counties with level 2 Rtree boxes" title="US Counties with level 2 Rtree boxes"></p>
+<p>Finally, we repeat this again to create the level 3 boxes:</p>
+<p><img src="/img/blog/2020-05-07-local-spatial-joins/usCountiesWithRtreeBoxes23.svg" alt="US Counties with level 3 Rtree boxes" title="US Counties with level 3 Rtree boxes"></p>
+<p>The final node contains the bounding box for the whole continental USA.</p>
+<p>In the example above, if we make an R-tree of the counties of the USA, we'd
+first check if the point is in the envelope of the root node. If not, the
+point can't possibly be in any county, and we're done. If it is contained, we
+can iterate through that node's children, recursing into any whose envelope
+contains the point. Eventually we will have a (perhaps empty) subset of leaf
+nodes whose envelopes contain the point, and we can check those counties for
+proper containment.</p>
+<p>While the worst-case time complexity is actually worse than a linear scan
+through the geometries' envelopes, average complexity is <code>O(log C + M)</code>,
+where <code>C</code> is again the number of counties and <code>M</code> is the number of matching
+counties (ie, counties whose envelopes contain the point). Then the time
+complexity for all <code>P</code> points is <code>O(P * log C + M * V)</code>, where <code>M</code> is total
+number of point-envelope matches, and <code>V</code> is the maximum number of vertices
+per polygon. This is a significant improvement when <code>C</code> is large.</p>
+<p>Using an R-tree on the counties in our test data reduces the calculation to
+just 1.3s, which is ~2.5x better than the state envelopes, and about 500x
+faster than the brute force calculation!</p>
+<p>R-trees can also help many other spatial queries about proximity. For example,
+if you want to check which polygons are within a certain distance of a point,
+instead of querying the R-tree with a point, you can expand the point to an
+envelope of the appropriate radius, and query the R-tree for envelope-envelope
+intersections, instead of point-envelope containment.</p>
+<h2><a class="anchor" aria-hidden="true" id="local-spatial-joins"></a><a href="#local-spatial-joins" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Local Spatial Joins</h2>
+<p>When Presto executes a query like</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span> county_name, <span class="hljs-keyword">SUM</span>(population) <span class="hljs-keyword">AS</span> total_population
+<span class="hljs-keyword">FROM</span> population_centers
+<span class="hljs-keyword">JOIN</span> counties
+<span class="hljs-keyword">ON</span> ST_Contains(ST_GeometryFromWkt(boundary_wkt), ST_Point(longitude, latitude))
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> county_name
+</code></pre>
+<p>it will create an R-tree of the <code>counties</code> boundary geometries, and stream
+the rows from <code>population_center</code>. For each row, it will query the R-tree for
+counties whose envelopes contain the row's point, and for those candidates
+it will do a proper containment check against the boundary geometries. It
+will then emit a row <code>county_name, population</code> for each match, to be later
+aggregated over <code>county_name</code>.</p>
+<p>This procedure works on a single machine, but how do we parallelize spatial
+joins? We'll examine that in a separate post on distributed spatial joins.</p>
+<h2><a class="anchor" aria-hidden="true" id="acknowledgements"></a><a href="#acknowledgements" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Acknowledgements</h2>
+<p>These visualizations were done in collaboration with
+<a href="https://about.me/jsundram">Jason Sundram</a> in Facebook Boston's World AI team.
+The starting point for our visualizations was
+<a href="https://bost.ocks.org/mike/">Mike Bostock</a>'s
+<a href="https://observablehq.com/@d3/u-s-map">D3 US map</a>.
+For the R-tree visualizations, I used
+<a href="https://agafonkin.com/">Vladimir Agafonkin</a>'s
+<a href="https://github.com/mourner/rbush">RBush</a>,
+using colors from <a href="https://carto.com/carto-colors/">Carto</a>.
+Spatial joins in Presto were primarily implemented by
+<a href="https://github.com/mbasmanova">Maria Basmanova</a>.</p>
+<p>Code for the performance profiling can be <a href="https://github.com/jagill/presto_spatial_join_blog">found on GitHub</a>.</p>
+<!-- Links -->
+<!-- Images -->
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1"  class="footnote-item"><p>There are many edge cases -- such as a ray that's tangent to
+a polygon -- as well as important concepts of validity and simplicity in
+polygons, as well as more robust algorithms, that we are omitting for
+brevity. <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#prologue-point-in-polygon">Prologue: Point in Polygon</a></li><li><a href="#take-1-double-loop">Take 1: Double Loop</a></li><li><a href="#take-2-envelopes">Take 2: Envelopes</a></li><li><a href="#take-3-hierarchical-envelopes">Take 3: Hierarchical Envelopes</a></li><li><a href="#take-4-r-trees">Take 4: R-trees</a></li><li><a href="#local-spatial-joins">Local Spatial Joins</a></li><li><a href="#acknowledgements">Acknowledgements</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page. Linux is a registered trademark of Linus Torvalds. <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> and <a href="http://www.linuxfoundation.org/terms">Terms of Use</a>.</section></footer></div></body></html>

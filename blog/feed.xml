@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Wed, 18 Mar 2020 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 07 May 2020 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,23 @@
             <url>https://prestodb.io/img/presto.png</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Spatial Joins 1: Local Spatial Joins]]></title>
+            <link>https://prestodb.io/blog/2020/05/07/local-spatial-joins.html</link>
+            <guid>https://prestodb.io/blog/2020/05/07/local-spatial-joins.html</guid>
+            <pubDate>Thu, 07 May 2020 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>A common type of spatial query involves relating one table of geometric
+objects (e.g., a table <code>population_centers</code> with columns
+<code>population, latitude, longitude</code>) with another such table (e.g., a table
+<code>counties</code> with columns <code>county_name, boundary_wkt</code>), such as calculating
+for each county the population sum of all population centers contained
+within it. These kinds of calculations are called <em>spatial joins</em>. While
+doing it for a single row each from <code>population_centers</code> and <code>counties</code> is
+manageable, doing it efficiently for two large tables is challenging. In this
+post, we'll talk about the machinery that Presto has built to make these
+queries blazingly fast.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Engineering SQL Support on Apache Pinot at Uber]]></title>
             <link>https://prestodb.io/blog/2020/03/18/uber-pinot.html</link>
