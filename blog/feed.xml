@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Thu, 07 May 2020 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 16 Jun 2020 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,19 @@
             <url>https://prestodb.io/img/presto.png</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Improving Presto Latencies with Alluxio Data Caching]]></title>
+            <link>https://prestodb.io/blog/2020/06/16/alluxio-datacaching.html</link>
+            <guid>https://prestodb.io/blog/2020/06/16/alluxio-datacaching.html</guid>
+            <pubDate>Tue, 16 Jun 2020 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><strong>Facebook:</strong> Rohit Jain, James Sun, Ke Wang, Shixuan Fan, Biswapesh Chattopadhyay, Baldeep Hira</p>
+<p><strong>Alluxio:</strong> Bin Fan, Calvin Jia, Haoyuan Li</p>
+<p>The Facebook Presto team has been collaborating with <a href="https://www.alluxio.io/">Alluxio</a> on an open source data caching solution for Presto.
+This is required for multiple Facebook use-cases to improve query latency for queries that scan data from remote sources such as HDFS.
+We have observed significant improvements in query latencies and IO scans in our experiments.
+<br><br></p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Spatial Joins 1: Local Spatial Joins]]></title>
             <link>https://prestodb.io/blog/2020/05/07/local-spatial-joins.html</link>

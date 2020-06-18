@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Improving Presto Latencies with Alluxio Data Caching · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="**Facebook:** Rohit Jain, James Sun, Ke Wang, Shixuan Fan, Biswapesh Chattopadhyay, Baldeep Hira"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Improving Presto Latencies with Alluxio Data Caching · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2020/06/16/alluxio-datacaching"/><meta property="og:description" content="**Facebook:** Rohit Jain, James Sun, Ke Wang, Shixuan Fan, Biswapesh Chattopadhyay, Baldeep Hira"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2020/06/16/alluxio-datacaching">Improving Presto Latencies with Alluxio Data Caching</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/05/07/local-spatial-joins">Spatial Joins 1: Local Spatial Joins</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/03/18/uber-pinot">Engineering SQL Support on Apache Pinot at Uber</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/03/02/presto-lambda">Querying Nested Data with Lambda Functions</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/02/13/prestocon-announcement">Announcing PrestoCon 2020: Advancing the Big Data Ecosystem with Presto</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2020/06/16/alluxio-datacaching">Improving Presto Latencies with Alluxio Data Caching</a></h1><p class="post-meta">June 16, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/jain-rohit/" target="_blank" rel="noreferrer noopener">Rohit Jain</a></p><div class="authorPhoto"><a href="https://www.linkedin.com/in/jain-rohit/" target="_blank" rel="noreferrer noopener"><img src="https://graph.facebook.com/514987722/picture/?height=200&amp;width=200" alt="Rohit Jain"/></a></div></div></header><div><span><p><strong>Facebook:</strong> Rohit Jain, James Sun, Ke Wang, Shixuan Fan, Biswapesh Chattopadhyay, Baldeep Hira</p>
+<p><strong>Alluxio:</strong> Bin Fan, Calvin Jia, Haoyuan Li</p>
+<p>The Facebook Presto team has been collaborating with <a href="https://www.alluxio.io/">Alluxio</a> on an open source data caching solution for Presto.
+This is required for multiple Facebook use-cases to improve query latency for queries that scan data from remote sources such as HDFS.
+We have observed significant improvements in query latencies and IO scans in our experiments.
+<br><br></p>
+<!-- truncate -->
+<p>We found Alluxio data caching to be useful for multiple use-cases in the Facebook environment.
+For one of the Facebook internal use cases we observed query latencies improved by <strong>33%</strong> (P50), <strong>54%</strong> (P75), and <strong>48%</strong> (P95).
+We also recorded <strong>57%</strong> improvement in IO for remote data source scans.</p>
+<h2><a class="anchor" aria-hidden="true" id="presto-architecture"></a><a href="#presto-architecture" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Presto Architecture</h2>
+<p>Presto's architecture allows storage and computation to scale independently. However, scanning data from remote storage can be a costly operation,
+and it makes achieving interactive query latency a challenge.</p>
+<p>Presto workers are responsible for executing query plan fragments on the data scanned from the independent and typically remote data sources.
+Presto workers do not store any data for remote data sources which enables the computation to grow elastically.
+<br><br>
+The architecture diagram below highlights the data read paths from a remote HDFS source.
+Each worker independently reads data from the remote data source. In this blog we will be only talking about optimizations done in the read
+operations from the remote data source.
+<br><br></p>
+<p><img src="/img/blog/2020-06-16-alluxio-datacaching/presto_worker.jpg" alt=""></p>
+<p><br></p>
+<h2><a class="anchor" aria-hidden="true" id="presto--data-caching-architecture"></a><a href="#presto--data-caching-architecture" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Presto + Data Caching Architecture</h2>
+<p>To solve sub-second latency use cases, we decided to implement various optimizations.  One important optimization was to implement a data cache.
+Data caching has been a traditional optimization technique to bring the working dataset closer to the compute nodes and reduce trips to remote
+storage to save latencies and IO.</p>
+<p>The challenge was to make the data caching effective when petabytes of data get scanned from the remote data sources with no fixed pattern.
+Another requirement for data caching to be effective was to achieve data affinity in a distributed environment like Presto.
+<br><br>
+With the addition of data caching, the Presto architecture looks like the following:
+<br><br></p>
+<p><img src="/img/blog/2020-06-16-alluxio-datacaching/presto_worker_datacache.jpg" alt="">
+<br></p>
+<p>More on this is covered in later sections.</p>
+<h3><a class="anchor" aria-hidden="true" id="soft-affinity-scheduling"></a><a href="#soft-affinity-scheduling" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Soft Affinity scheduling</h3>
+<p>Presto’s current scheduler takes the worker load into account when distributing the splits, such scheduling strategy keeps the workload distribution uniform among workers.
+But from the data locality perspective, it distributes splits randomly and not necessarily guarantees any affinity, which is required for any meaningful data caching effectiveness.
+It is critical for the coordinator to leverage the same worker for a split which may contain the data for it in its cache.
+<br></p>
+<p><img src="/img/blog/2020-06-16-alluxio-datacaching/presto_affinity_scheduler.jpg" alt="">
+<br></p>
+<p>The above diagram illustrates how affinity scheduling distributes various splits among the workers.
+<br><br></p>
+<p>Soft affinity scheduling makes the best attempt to assign the same split to the same worker when doing the scheduling. The soft affinity scheduler uses the hash of a split to
+choose a preferred worker for the split. Soft affinity scheduler:</p>
+<ol>
+<li>Computes a preferred worker for a split. If the preferred worker has resources available then it is assigned the split.</li>
+<li>If the preferred worker is busy then the coordinator chooses a secondary preferred worker, and assigns the split if resources are available.</li>
+<li>If the secondary preferred worker is also busy then the coordinator assigns the split to the least busy worker.</li>
+</ol>
+<p><img src="/img/blog/2020-06-16-alluxio-datacaching/presto_affinity_scheduler_algo.jpg" alt=""></p>
+<p>The definition of a busy node is defined by two configs:</p>
+<ol>
+<li>Max splits per node:  <em>node-scheduler.max-splits-per-node</em></li>
+<li>Max pending splits per task: <em>node-scheduler.max-pending-splits-per-task</em></li>
+</ol>
+<p>Once the number of splits on one node exceeds one of the above configured limitations, this node would be treated as a busy node.
+<br><br>
+As it can be observed, node affinity is absolutely critical for cache effectiveness. Without node affinity, the same split may be processed by
+different workers at different times, which can make caching the split data redundant.
+<br><br>
+Due to this, if the affinity scheduler fails to assign the split to a preferred worker (because it was busy), it signals the assigned worker
+to not cache the split data. It means the worker would only cache the split data if it is the primary or secondary preferred worker for the split.</p>
+<h3><a class="anchor" aria-hidden="true" id="alluxio-data-cache"></a><a href="#alluxio-data-cache" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Alluxio data cache</h3>
+<p>Alluxio file system is an open-source data orchestration system that is often used as a distributed caching service to Presto.
+To achieve sub-second query latencies in our architecture, we want to further reduce the communication overhead between Presto and Alluxio.
+As a result, core teams from Alluxio and Presto collaborated to carve out a single-node, embedded cache library from the Alluxio service.
+<br><br>
+In particular, a Presto worker queries this Alluxio local cache inside the same JVM through a standard HDFS interface.
+On a cache hit, Alluxio local cache directly reads data from the local disk and returns the cached data to Presto;
+otherwise, it retrieves data from the remote data source, and caches the data on the local disk for followup queries.
+This cache is completely transparent to Presto. In case the cache runs into issues (e.g., local disk failures), the Presto reads
+fall back to the remote data source. This workflow is shown as the figure below.</p>
+<p><br><br>
+<img src="/img/blog/2020-06-16-alluxio-datacaching/presto_alluxio_caching.jpg" alt="">
+<br><br></p>
+<h3><a class="anchor" aria-hidden="true" id="cache-internals-and-configuration"></a><a href="#cache-internals-and-configuration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Cache internals and configuration</h3>
+<p>Our Alluxio data cache is a library residing in the Presto worker. It provides an HDFS-compatible interface “AlluxioCachingFileSystem” as the
+main interface to Presto workers for all data access operations.
+<br>
+These are some design choices under the hood:</p>
+<h4><a class="anchor" aria-hidden="true" id="basic-caching-unit"></a><a href="#basic-caching-unit" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Basic Caching Unit</h4>
+<p>Both Alluxio experience and earlier experiments from the Facebook team suggested that reading, writing and evicting data in a fixed block size is most efficient.
+In the Alluxio system the default caching block size is 64MB. This is fairly large mostly to reduce the storage and service pressure on the metadata service.
+We significantly reduce the caching granularity because our adaptation of the Alluxio data cache keep track of data and metadata locally.
+We default the cache granularity to units of 1MB &quot;pages&quot;.</p>
+<h4><a class="anchor" aria-hidden="true" id="cache-location-and-hierarchy"></a><a href="#cache-location-and-hierarchy" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Cache location and hierarchy</h4>
+<p>By default, Alluxio local cache stores data into the local filesystem. Each caching page is stored as a separate file under a directory structure as
+follows:
+<br><br>
+<em><code>&lt;BASE_DIR&gt;/LOCAL/1048576/&lt;BUCKET&gt;/&lt;PAGE&gt;</code></em>
+<br><br>
+Here:<br></p>
+<ol>
+<li>BASE_DIR is the root directory of the cache storage and is set by Presto configuration “cache.base-directory”.</li>
+<li>LOCAL means the cache storage type is LOCAL. Alluxio also supports RocksDB as the cache storage.</li>
+<li>1048576: represents the 1MB block size.</li>
+<li>BUCKET represents a directory serving as buckets for various page files. They are created to make sure one single directory does not have too many
+files which often leads to really bad performance.</li>
+<li>PAGE represents the file named after the page ID. In presto the ID is the md5 hash of the filename.</li>
+</ol>
+<h4><a class="anchor" aria-hidden="true" id="thread-concurrency"></a><a href="#thread-concurrency" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Thread Concurrency</h4>
+<p>Each Presto worker keeps a set of threads, each executing different query tasks, but sharing the same data cache. Thus this Alluxio data cache
+is required to be highly concurrent across threads to deliver high throughput. Namely, this data cache allows multiple threads to fetch the
+same page concurrently, while still ensuring thread-safety for evictions.</p>
+<h4><a class="anchor" aria-hidden="true" id="cache-recovery"></a><a href="#cache-recovery" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Cache Recovery</h4>
+<p>Alluxio local cache attempts to reuse cache data present in the local cache directory when a worker starts up (or restarts).
+If the cache directory structure is compatible, it reuses the cache data.</p>
+<h4><a class="anchor" aria-hidden="true" id="monitoring"></a><a href="#monitoring" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Monitoring</h4>
+<p>Alluxio exports various JMX metrics while performing various caching related operations. System admins can also monitor the cache usage across the cluster easily.</p>
+<h2><a class="anchor" aria-hidden="true" id="prestoalluxio-benchmark"></a><a href="#prestoalluxio-benchmark" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Presto+Alluxio Benchmark</h2>
+<p>We benchmarked with queries from one of our production clusters, which was shadowed to the test cluster.
+<br><br>
+<strong>Query Count</strong>: 17320
+<br>
+<strong>Cluster size</strong>: 600 nodes
+<br>
+<strong>Max cache capacity per node</strong>: 460GB
+<br>
+<strong>Eviction policy</strong>: LRU
+<br>
+<strong>Cache data block size</strong>: 1MB, meaning data is read, stored, and evicted in the 1 MB size.
+<br><br></p>
+<p><strong>Query Execution time improvement (in milliseconds)</strong>:</p>
+<p><img src="/img/blog/2020-06-16-alluxio-datacaching/query_latency.jpg" alt=""></p>
+<p>As you can see, we observed significant improvements in the query latencies.
+We observed 33% improvement in P50, 54% improvement in P75, and 48% improvement in P95.
+<br><br></p>
+<p><strong>IO Savings</strong>
+<br>
+Data Size read for master branch run: <strong>582 T Bytes</strong>
+<br>
+Data Size read for caching branch run: <strong>251 T Bytes</strong>
+<br>
+Savings in Scans: <strong>57%</strong>
+<br><br></p>
+<p><strong>Cache hit rate</strong>:</p>
+<p><img src="/img/blog/2020-06-16-alluxio-datacaching/cache_hitrate.jpg" alt=""></p>
+<p>Cache hit rate was pretty consistent and good during the experiment run. It remained mostly between 0.9 and 1.
+There were a few dips that could be noticed, these can be the result of a new query scanning lots of new data.
+We need to implement additional algorithms to prevent less frequent data blocks to get
+cached over more frequent data.</p>
+<h2><a class="anchor" aria-hidden="true" id="how-to-use-it"></a><a href="#how-to-use-it" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>How to use it?</h2>
+<p>In order to use data caching the first thing we need to do is to enable soft affinity.
+Data caching is not supported with random node scheduling.
+<br>
+Set following configuration in the coordinator to enable soft affinity:
+<br>
+<em><code>&quot;hive.node-selection-strategy&quot;, &quot;SOFT_AFFINITY”</code></em>
+<br>
+To use the default (random) node scheduling, set it to
+<br>
+<em><code>&quot;hive.node-selection-strategy&quot;, &quot;NO_PREFERENCE”</code></em>
+<br><br>
+Use the following configuration in the workers to enable Alluxio data caching</p>
+<ol>
+<li>Enable data caching in the worker =&gt; &quot;cache.enabled&quot;, &quot;true&quot;</li>
+<li>Set the data caching type to Alluxio =&gt; &quot;cache.type&quot;, &quot;ALLUXIO&quot;</li>
+<li>Set the base directory where the cache data would be stored =&gt; &quot;cache.base-directory&quot;, &quot;file:///cache&quot;</li>
+<li>Set the max data capacity to be used by the cache per worker: &quot;cache.alluxio.max-cache-size&quot;, &quot;500GB&quot;</li>
+</ol>
+<p>Here are some other configurations which can useful:
+<br>
+Coordinator configuration (useful to configure the definition of a busy worker):</p>
+<ol>
+<li>Set max pending splits per task: node-scheduler.max-pending-splits-per-task</li>
+<li>Set max splits per node: node-scheduler.max-splits-per-node
+<br><br></li>
+</ol>
+<p>Worker configuration:</p>
+<ol>
+<li>Enable metrics for alluxio caching(default: true): cache.alluxio.metrics-enabled</li>
+<li>JMX class name used by the alluxio caching for metrics(default: alluxio.metrics.sink.JmxSink): cache.alluxio.metrics-enabled</li>
+<li>Metrics domain name used by the alluxio caching (default: com.facebook.alluxio): cache.alluxio.metrics-domain</li>
+<li>If alluxio caching should write to cache asynchronously(default: false): cache.alluxio.async-write-enabled</li>
+<li>If the alluxio caching should validate the provided configuration(default: false): cache.alluxio.config-validation-enabled</li>
+</ol>
+<p>Alluxio data caching exports various JMX metrics for its caching operations. A full list of metrics names can be found
+<a href="https://github.com/Alluxio/alluxio/blob/e4adac3f5ca402760da757921b168b9846d2a280/core/common/src/main/java/alluxio/metrics/MetricKey.java#L1065">here</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="what-is-next"></a><a href="#what-is-next" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What is next?</h2>
+<ol>
+<li>Implement rate limiter to control cache write operations to avoid flash endurance issues.</li>
+<li>Implement semantic aware caching for better efficiency.</li>
+<li>Mechanism to clean cache directories for maintenance or a clean start.</li>
+<li>Ability to execute in dry run mode.</li>
+<li>Ability to enforce various capacity specifications, e.g. cache quota limit per table, cache quota limit per partition or cache quota limit per schema.</li>
+<li>More robust worker node scheduling mechanism.</li>
+<li>Implement additional algorithms to prevent less frequent data blocks to get cached over more frequent data.</li>
+<li>Fault tolerance: The current hash based node scheduling algorithm can run into issues when node count changes in a cluster. We are working on building more robust algorithms, such as consistent hashing.</li>
+<li>Better load balancing: When we take other more factors into account like split size, node resources, then we can better define a “busy” node and thus make more comprehensive decisions when it comes to load balancing.</li>
+<li>Affinity Criteria: Current affinity granularity is file level inside one presto cluster. If we are not able to achieve optimal performance under such a granularity standard, we might adjust our affinity criteria to be more fine-grained and find the balance between load balancing and good cache hit rate to achieve better overall performance.</li>
+<li>Improving resource utilization of Alluxio cache library.</li>
+</ol>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#presto-architecture">Presto Architecture</a></li><li><a href="#presto--data-caching-architecture">Presto + Data Caching Architecture</a><ul class="toc-headings"><li><a href="#soft-affinity-scheduling">Soft Affinity scheduling</a></li><li><a href="#alluxio-data-cache">Alluxio data cache</a></li><li><a href="#cache-internals-and-configuration">Cache internals and configuration</a></li></ul></li><li><a href="#prestoalluxio-benchmark">Presto+Alluxio Benchmark</a></li><li><a href="#how-to-use-it">How to use it?</a></li><li><a href="#what-is-next">What is next?</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page. Linux is a registered trademark of Linus Torvalds. <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> and <a href="http://www.linuxfoundation.org/terms">Terms of Use</a>.</section></footer></div></body></html>
