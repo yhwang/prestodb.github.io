@@ -2,11 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2020-06-16T06:00:00.000Z</updated>
+    <updated>2020-07-17T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
+    <entry>
+        <title type="html"><![CDATA[Running Presto in a Hybrid Cloud Architecture]]></title>
+        <id>https://prestodb.io/blog/2020/07/17/alluxio-hybrid-cloud.html</id>
+        <link href="https://prestodb.io/blog/2020/07/17/alluxio-hybrid-cloud.html"/>
+        <updated>2020-07-17T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>Migrating SQL workloads from a fully on-premise environment to cloud infrastructure has numerous benefits, including alleviating resource contention and reducing costs by paying for computation resources on an on-demand basis. In the case of Presto running on data stored in HDFS, the separation of compute in the cloud and storage on-premises is apparent since Presto’s architecture enables the storage and compute components to operate independently. The critical issue in this hybrid environment of Presto in the cloud retrieving HDFS data from an on-premise environment is the network latency between the two clusters.</p>
+<p>This crucial bottleneck severely limits performance of any workload since a significant portion of its time is spent transferring the requested data between networks that could be residing in geographically disparate locations. As a result, most companies copy their data into a cloud environment and maintain that duplicate data, also known as Lift and Shift. Companies with compliance and data sovereignty requirements may even prevent organizations from copying data into the cloud. This approach is not scalable and requires introducing a lot of manual effort to achieve reasonable results. This article introduces <a href="https://www.alluxio.io/">Alluxio</a> to serve as a <a href="https://www.alluxio.io/data-orchestration/">data orchestration</a> layer to help serve data to Presto efficiently, as opposed to either directly querying the distant HDFS cluster or manually providing a localized copy of the data to Presto in a cloud cluster.</p>
+]]></summary>
+        <author>
+            <name>Adit Madan</name>
+            <uri>https://www.linkedin.com/in/aditm/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Improving Presto Latencies with Alluxio Data Caching]]></title>
         <id>https://prestodb.io/blog/2020/06/16/alluxio-datacaching.html</id>

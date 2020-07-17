@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Running Presto in a Hybrid Cloud Architecture · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Migrating SQL workloads from a fully on-premise environment to cloud infrastructure has numerous benefits, including alleviating resource contention and reducing costs by paying for computation resources on an on-demand basis. In the case of Presto running on data stored in HDFS, the separation of compute in the cloud and storage on-premises is apparent since Presto’s architecture enables the storage and compute components to operate independently. The critical issue in this hybrid environment of Presto in the cloud retrieving HDFS data from an on-premise environment is the network latency between the two clusters."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Running Presto in a Hybrid Cloud Architecture · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2020/07/17/alluxio-hybrid-cloud"/><meta property="og:description" content="Migrating SQL workloads from a fully on-premise environment to cloud infrastructure has numerous benefits, including alleviating resource contention and reducing costs by paying for computation resources on an on-demand basis. In the case of Presto running on data stored in HDFS, the separation of compute in the cloud and storage on-premises is apparent since Presto’s architecture enables the storage and compute components to operate independently. The critical issue in this hybrid environment of Presto in the cloud retrieving HDFS data from an on-premise environment is the network latency between the two clusters."/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2020/07/17/alluxio-hybrid-cloud">Running Presto in a Hybrid Cloud Architecture</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/06/16/alluxio-datacaching">Improving Presto Latencies with Alluxio Data Caching</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/05/07/local-spatial-joins">Spatial Joins 1: Local Spatial Joins</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/03/18/uber-pinot">Engineering SQL Support on Apache Pinot at Uber</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/03/02/presto-lambda">Querying Nested Data with Lambda Functions</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2020/07/17/alluxio-hybrid-cloud">Running Presto in a Hybrid Cloud Architecture</a></h1><p class="post-meta">July 17, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/aditm/" target="_blank" rel="noreferrer noopener">Adit Madan</a></p></div></header><div><span><p>Migrating SQL workloads from a fully on-premise environment to cloud infrastructure has numerous benefits, including alleviating resource contention and reducing costs by paying for computation resources on an on-demand basis. In the case of Presto running on data stored in HDFS, the separation of compute in the cloud and storage on-premises is apparent since Presto’s architecture enables the storage and compute components to operate independently. The critical issue in this hybrid environment of Presto in the cloud retrieving HDFS data from an on-premise environment is the network latency between the two clusters.</p>
+<p>This crucial bottleneck severely limits performance of any workload since a significant portion of its time is spent transferring the requested data between networks that could be residing in geographically disparate locations. As a result, most companies copy their data into a cloud environment and maintain that duplicate data, also known as Lift and Shift. Companies with compliance and data sovereignty requirements may even prevent organizations from copying data into the cloud. This approach is not scalable and requires introducing a lot of manual effort to achieve reasonable results. This article introduces <a href="https://www.alluxio.io/">Alluxio</a> to serve as a <a href="https://www.alluxio.io/data-orchestration/">data orchestration</a> layer to help serve data to Presto efficiently, as opposed to either directly querying the distant HDFS cluster or manually providing a localized copy of the data to Presto in a cloud cluster.</p>
+<!--truncate-->
+<h2><a class="anchor" aria-hidden="true" id="hybrid-cloud-architecture-with-alluxio-and-presto"></a><a href="#hybrid-cloud-architecture-with-alluxio-and-presto" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Hybrid Cloud Architecture with Alluxio and Presto</h2>
+<p>In the following architecture diagram, both Presto and Alluxio processes are co-located in the cloud cluster. As far as Presto is concerned, it is querying for and writing data to Alluxio as if it were a co-located HDFS cluster. When Alluxio receives a request for data, it fetches the data from the remote HDFS cluster initially, but subsequent requests will be served directly from its cache. When Presto sends data to be persisted into storage, Alluxio asynchronously writes data to HDFS, freeing the Presto workload from needing to wait for the remote write to complete. In both read and write scenarios, with the exception of the initial read, a Presto workload is able to run at the same, if not faster, performance as if it were in the same network as the HDFS cluster. Note that besides the deployment and configuration of Alluxio and establishing the connection between Presto and Alluxio, there is no additional configuration or other manual efforts needed to maintain the hybrid environment.</p>
+<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/PrestoAlluxioHadoop.png" alt=""></p>
+<h2><a class="anchor" aria-hidden="true" id="benchmarking-performance"></a><a href="#benchmarking-performance" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Benchmarking Performance</h2>
+<p>For benchmarking, we run SQL queries on data in a geographically separated Hive and HDFS cluster.</p>
+<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/VPCPeering.png" alt=""></p>
+<p>The hybrid cloud environment used for experimentation in this section includes two Amazon EMR clusters in different AWS regions. Because the two clusters are geographically dispersed, there is noticeable network latency between the clusters. <a href="https://docs.aws.amazon.com/vpc/latest/peering/create-vpc-peering-connection.html">VPC peering</a> is used to create VPC connections to allow traffic between the two VPCs over the global AWS backbone with no bandwidth bottleneck. Readers can follow the <a href="https://www.alluxio.io/resources/whitepapers/zero-copy-hybrid-cloud-for-data-analytics-strategy-architecture-and-benchmark-report/">tutorial in the whitepaper</a> to reproduce the benchmark results if using AWS as the cloud provider.</p>
+<p>We used data and queries from the industry standard <a href="http://www.tpc.org/tpcds/">TPC-DS</a> benchmark for decision support systems that examines large amounts of data and answers business questions. The queries can be categorized into the following classes (according to visualizations in this <a href="https://github.com/databricks/spark-sql-perf/blob/e9ef9788c2094aeb40c0f7d883b8c1cb0f852b74/src/main/notebooks/performance.dashboard.scala">repository</a>): Reporting, Interactive, and Deep Analytics.</p>
+<p>With Alluxio, we collected two numbers for all TPC-DS queries; denoted by <strong>Cold</strong> and <strong>Warm</strong>.</p>
+<ul>
+<li><strong>Cold</strong> is the case where data is not loaded in Alluxio storage before the query is run. In this case Alluxio fetches data from HDFS on-demand during query execution.</li>
+<li><strong>Warm</strong> is the case where data is loaded into Alluxio storage after the Cold run. Subsequent queries accessing the same data do not communicate with HDFS.</li>
+</ul>
+<p>With HDFS, we collected two numbers as well; <strong>Local</strong> and <strong>Remote</strong>.</p>
+<ul>
+<li><strong>Local</strong> is the case where Presto and HDFS are co-located in the same region. This number shows us the performance of running the compute on-premises when data is local without bursting into the cloud.</li>
+<li><strong>Remote</strong> is the case where Presto reads from storage in another region.</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="tpc-ds-data-specificiations"></a><a href="#tpc-ds-data-specificiations" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>TPC-DS Data Specificiations</h3>
+<table>
+<thead>
+<tr><th>Scale Factor</th><th>Format</th><th>Compression</th><th>Data Size</th><th>Number of Files</th></tr>
+</thead>
+<tbody>
+<tr><td>1000</td><td>Parquet</td><td>Snappy</td><td>463.5 GB</td><td>234.2 K</td></tr>
+</tbody>
+</table>
+<h3><a class="anchor" aria-hidden="true" id="emr-instance-specificiations"></a><a href="#emr-instance-specificiations" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>EMR Instance Specificiations</h3>
+<table>
+<thead>
+<tr><th>Instance Type</th><th>Master Instance Count</th><th>Worker Instance Count</th><th>Alluxio Storage Volume (us-west-1)</th><th>HDFS Storage Volume (ap-southeast-1)</th></tr>
+</thead>
+<tbody>
+<tr><td>r5.4xlarge</td><td>1 each</td><td>10 each</td><td>NVMe SSD</td><td>EBS</td></tr>
+</tbody>
+</table>
+<p>We compared the performance of Presto with Alluxio (Cold and Warm) with Presto directly on HDFS (Local and Remote). Benchmarking shows an average of <strong>3x improvement</strong> in performance with Alluxio when the cache is warm over accessing HDFS data remotely.</p>
+<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/AlluxioWarmVsHdfsRemote.png" alt=""></p>
+<p>The following table summarizes the results by class. Overall the maximum improvement seen with Alluxio was for q9 (7.1x) and the minimum was for q39a (1x - no difference).</p>
+<p>Query Class: Reporting
+Max Improvement: q27 (3.1x)
+Min Improvement:  q43 (2.7x)</p>
+<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/TpcdsReporting.png" alt=""></p>
+<p>Query Class: Interactive
+Max Improvement: q73 (3.9x)
+Min Improvement:  q98 (2.2x)</p>
+<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/TpcdsInteractive.png" alt=""></p>
+<p>Query Class: Deep Analytics
+Max Improvement: q34 (4.2x)
+Min Improvement:  q59 (1.9x)</p>
+<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/TpcdsDeepAnalytics.png" alt=""></p>
+<p>With a 10 node compute cluster, the peak bandwidth utilization throughout running all the queries remained under 2Gbps when accessing data from the geographically separated cluster. Bandwidth was not the bottleneck with the AWS backbone network. As the utilization scales with the size of the compute cluster, a bandwidth bottleneck could be expected for larger clusters when not using Alluxio since the bandwidth available with Direct Connect may be limited.</p>
+<p>Most of the performance gain seen with Alluxio is explained by the latency difference for both metadata and data, when cached seamlessly into the localized Alluxio cluster.</p>
+<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/TpcdsAll.png" alt=""></p>
+<h2><a class="anchor" aria-hidden="true" id="conclusion"></a><a href="#conclusion" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h2>
+<p>A hybrid cloud architecture allows cloud computing resources to be used for data analytics, even if the data resides in a completely different network. In addition to achieving significantly better performance, the execution plan outlined does not require any significant reconfiguration of the on-premise infrastructure. Since users can harness the compute power of a public cloud, this opens up more opportunities for Presto to be utilized as a scalable and performant compute framework for analytics using data stored on-premises.</p>
+<p>An in-depth whitepaper, <a href="https://www.alluxio.io/resources/whitepapers/zero-copy-hybrid-cloud-for-data-analytics-strategy-architecture-and-benchmark-report/">“Zero-Copy” Hybrid Cloud for Data Analytics - Strategy, Architecture, and Benchmark Report</a>, was originally published by Alluxio on the Alluxio Engineering Blog on April 6, 2020. Check out the <a href="https://www.alluxio.io/blog/">blogs</a> for more articles about Alluxio’s engineering work and join Alluxio Open Source community on <a href="http://alluxio-community.slack.com">Slack</a> for any questions you might have.</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#hybrid-cloud-architecture-with-alluxio-and-presto">Hybrid Cloud Architecture with Alluxio and Presto</a></li><li><a href="#benchmarking-performance">Benchmarking Performance</a><ul class="toc-headings"><li><a href="#tpc-ds-data-specificiations">TPC-DS Data Specificiations</a></li><li><a href="#emr-instance-specificiations">EMR Instance Specificiations</a></li></ul></li><li><a href="#conclusion">Conclusion</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page. Linux is a registered trademark of Linus Torvalds. <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> and <a href="http://www.linuxfoundation.org/terms">Terms of Use</a>.</section></footer></div></body></html>
