@@ -59,10 +59,10 @@
 <!--truncate-->
 <h2><a class="anchor" aria-hidden="true" id="hybrid-cloud-architecture-with-alluxio-and-presto"></a><a href="#hybrid-cloud-architecture-with-alluxio-and-presto" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Hybrid Cloud Architecture with Alluxio and Presto</h2>
 <p>In the following architecture diagram, both Presto and Alluxio processes are co-located in the cloud cluster. As far as Presto is concerned, it is querying for and writing data to Alluxio as if it were a co-located HDFS cluster. When Alluxio receives a request for data, it fetches the data from the remote HDFS cluster initially, but subsequent requests will be served directly from its cache. When Presto sends data to be persisted into storage, Alluxio asynchronously writes data to HDFS, freeing the Presto workload from needing to wait for the remote write to complete. In both read and write scenarios, with the exception of the initial read, a Presto workload is able to run at the same, if not faster, performance as if it were in the same network as the HDFS cluster. Note that besides the deployment and configuration of Alluxio and establishing the connection between Presto and Alluxio, there is no additional configuration or other manual efforts needed to maintain the hybrid environment.</p>
-<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/PrestoAlluxioHadoop.png" alt=""></p>
+<p><img src="/img/blog/2020-07-17-alluxio-hybrid-cloud/PrestoAlluxioHadoop.png" alt=""></p>
 <h2><a class="anchor" aria-hidden="true" id="benchmarking-performance"></a><a href="#benchmarking-performance" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Benchmarking Performance</h2>
 <p>For benchmarking, we run SQL queries on data in a geographically separated Hive and HDFS cluster.</p>
-<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/VPCPeering.png" alt=""></p>
+<p><img src="/img/blog/2020-07-17-alluxio-hybrid-cloud/VPCPeering.png" alt=""></p>
 <p>The hybrid cloud environment used for experimentation in this section includes two Amazon EMR clusters in different AWS regions. Because the two clusters are geographically dispersed, there is noticeable network latency between the clusters. <a href="https://docs.aws.amazon.com/vpc/latest/peering/create-vpc-peering-connection.html">VPC peering</a> is used to create VPC connections to allow traffic between the two VPCs over the global AWS backbone with no bandwidth bottleneck. Readers can follow the <a href="https://www.alluxio.io/resources/whitepapers/zero-copy-hybrid-cloud-for-data-analytics-strategy-architecture-and-benchmark-report/">tutorial in the whitepaper</a> to reproduce the benchmark results if using AWS as the cloud provider.</p>
 <p>We used data and queries from the industry standard <a href="http://www.tpc.org/tpcds/">TPC-DS</a> benchmark for decision support systems that examines large amounts of data and answers business questions. The queries can be categorized into the following classes (according to visualizations in this <a href="https://github.com/databricks/spark-sql-perf/blob/e9ef9788c2094aeb40c0f7d883b8c1cb0f852b74/src/main/notebooks/performance.dashboard.scala">repository</a>): Reporting, Interactive, and Deep Analytics.</p>
 <p>With Alluxio, we collected two numbers for all TPC-DS queries; denoted by <strong>Cold</strong> and <strong>Warm</strong>.</p>
@@ -94,23 +94,23 @@
 </tbody>
 </table>
 <p>We compared the performance of Presto with Alluxio (Cold and Warm) with Presto directly on HDFS (Local and Remote). Benchmarking shows an average of <strong>3x improvement</strong> in performance with Alluxio when the cache is warm over accessing HDFS data remotely.</p>
-<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/AlluxioWarmVsHdfsRemote.png" alt=""></p>
+<p><img src="/img/blog/2020-07-17-alluxio-hybrid-cloud/AlluxioWarmVsHdfsRemote.png" alt=""></p>
 <p>The following table summarizes the results by class. Overall the maximum improvement seen with Alluxio was for q9 (7.1x) and the minimum was for q39a (1x - no difference).</p>
 <p>Query Class: Reporting
 Max Improvement: q27 (3.1x)
 Min Improvement:  q43 (2.7x)</p>
-<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/TpcdsReporting.png" alt=""></p>
+<p><img src="/img/blog/2020-07-17-alluxio-hybrid-cloud/TpcdsReporting.png" alt=""></p>
 <p>Query Class: Interactive
 Max Improvement: q73 (3.9x)
 Min Improvement:  q98 (2.2x)</p>
-<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/TpcdsInteractive.png" alt=""></p>
+<p><img src="/img/blog/2020-07-17-alluxio-hybrid-cloud/TpcdsInteractive.png" alt=""></p>
 <p>Query Class: Deep Analytics
 Max Improvement: q34 (4.2x)
 Min Improvement:  q59 (1.9x)</p>
-<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/TpcdsDeepAnalytics.png" alt=""></p>
+<p><img src="/img/blog/2020-07-17-alluxio-hybrid-cloud/TpcdsDeepAnalytics.png" alt=""></p>
 <p>With a 10 node compute cluster, the peak bandwidth utilization throughout running all the queries remained under 2Gbps when accessing data from the geographically separated cluster. Bandwidth was not the bottleneck with the AWS backbone network. As the utilization scales with the size of the compute cluster, a bandwidth bottleneck could be expected for larger clusters when not using Alluxio since the bandwidth available with Direct Connect may be limited.</p>
 <p>Most of the performance gain seen with Alluxio is explained by the latency difference for both metadata and data, when cached seamlessly into the localized Alluxio cluster.</p>
-<p><img src="/img/blog/2020-06-15-alluxio-hybrid-cloud/TpcdsAll.png" alt=""></p>
+<p><img src="/img/blog/2020-07-17-alluxio-hybrid-cloud/TpcdsAll.png" alt=""></p>
 <h2><a class="anchor" aria-hidden="true" id="conclusion"></a><a href="#conclusion" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h2>
 <p>A hybrid cloud architecture allows cloud computing resources to be used for data analytics, even if the data resides in a completely different network. In addition to achieving significantly better performance, the execution plan outlined does not require any significant reconfiguration of the on-premise infrastructure. Since users can harness the compute power of a public cloud, this opens up more opportunities for Presto to be utilized as a scalable and performant compute framework for analytics using data stored on-premises.</p>
 <p>An in-depth whitepaper, <a href="https://www.alluxio.io/resources/whitepapers/zero-copy-hybrid-cloud-for-data-analytics-strategy-architecture-and-benchmark-report/">“Zero-Copy” Hybrid Cloud for Data Analytics - Strategy, Architecture, and Benchmark Report</a>, was originally published by Alluxio on the Alluxio Engineering Blog on April 6, 2020. Check out the <a href="https://www.alluxio.io/blog/">blogs</a> for more articles about Alluxio’s engineering work and join Alluxio Open Source community on <a href="http://alluxio-community.slack.com">Slack</a> for any questions you might have.</p>
