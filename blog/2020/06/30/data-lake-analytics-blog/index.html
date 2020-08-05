@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Data Lake Analytics: Alibaba&#x27;s Federated Cloud Strategy · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Presto is known to be a high-performance, distributed SQL query engine for Big Data. It offers large-scale data analytics with multiple connectors for accessing various data sources. This capability enables the Presto users to further extend some features to build a large-scale data federation service on cloud. &lt;br&gt;"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Data Lake Analytics: Alibaba&#x27;s Federated Cloud Strategy · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2020/06/30/data-lake-analytics-blog"/><meta property="og:description" content="Presto is known to be a high-performance, distributed SQL query engine for Big Data. It offers large-scale data analytics with multiple connectors for accessing various data sources. This capability enables the Presto users to further extend some features to build a large-scale data federation service on cloud. &lt;br&gt;"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2020/07/17/alluxio-hybrid-cloud">Running Presto in a Hybrid Cloud Architecture</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2020/06/30/data-lake-analytics-blog">Data Lake Analytics: Alibaba&#x27;s Federated Cloud Strategy</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/06/16/alluxio-datacaching">Improving Presto Latencies with Alluxio Data Caching</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/05/07/local-spatial-joins">Spatial Joins 1: Local Spatial Joins</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/03/18/uber-pinot">Engineering SQL Support on Apache Pinot at Uber</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2020/06/30/data-lake-analytics-blog">Data Lake Analytics: Alibaba&#x27;s Federated Cloud Strategy</a></h1><p class="post-meta">June 30, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/george-wang-9a5a46190/" target="_blank" rel="noreferrer noopener">George Wang</a></p></div></header><div><span><p>Presto is known to be a high-performance, distributed SQL query engine for Big Data. It offers large-scale data analytics with multiple connectors for accessing various data sources. This capability enables the Presto users to further extend some features to build a large-scale data federation service on cloud. <br>
+<br>
+Alibaba Data Lake Analytics embraces Presto’s federated query engine capability and has accumulated a number of successful business use cases that signify the power of Presto's analytics capability.
+<br><br></p>
+<!-- truncate -->
+<h2><a class="anchor" aria-hidden="true" id="data-federation-service"></a><a href="#data-federation-service" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Data Federation Service</h2>
+<p>Today’s cloud databases empower cloud users to easily and directly interact with other cloud products and services, available to be built for their own cloud data lake analytic scenarios and solutions. The architecture to pile up a cloud-based data lake analytic scenario is divided into three layers:</p>
+<p><br><br>
+<img src="/img/blog/2020-06-30-data-lake-analytics-blog/threeLayerCloud_v1.png" alt="">
+<br><br>
+<strong>First Layer</strong>: A variety of selected cloud native data storage and database services.
+<br><br>
+Users store and place their data on a series of cloud-native data storage services and cloud databases systems. Cloud data sources vary depending on different business use cases and business scenarios, but speaking in general, there are two cloud data storage approaches: NoSQL and relational databases. Various choices of storage service may include: cost-effective object cloud storage which may store files, structured, semi-structured, unstructured raw data, multimedia files; NoSQL, RDS, and other cloud database services;
+<br><br></p>
+<p><strong>Second Layer</strong>: Cloud native data lake analysis service layer.
+<br><br>
+This layer emphasizes a very important feature in Cloud Native computing, that is, Serverless is server-free and is the basic service for building SaaS on the cloud, except for Data Lake analysis scenarios, there is also a more ubiquitous serverless PaaS and Function-computing as-a-Service (FaaS) such as Alibaba Cloud Function Calculation. This article focuses on the serverless analysis capability of Data Lake analytic scenarios.<br></p>
+<ol>
+<li><p>Elasticity - This allows an on-demand flexibility capability, which means being flexible in time, predictable and intelligent mixed load handling ability<br></p></li>
+<li><p>Resiliency -  This is a typical feature for High Availability systems. When failures occurs, the failover process moves processing performed by the failed component to the backup component within a matter of microseconds. This mechanism becomes transparent to users for a better user experience in a HA system in both Rolling Upgrade and Disaster Recovery across AZ (availability zones) <br></p></li>
+<li><p>Federated and Analytical - Multi-mode federated analysis capabilities, includes analysis and integration capabilities for multiple formats and systems, comprehensive analysis functions and excellent interactive analysis performance and experience, parallel computing processing capabilities, compatible interface capability and so on.<br></p></li>
+</ol>
+<p><br><br></p>
+<p><strong>Third layer</strong>: Data analysis application and visualization application layer
+<br><br>
+Business logic based upon Data Lake analysis service layer may require an integration of data analysis tools on the cloud. All kinds of visualized data analysis products and tools are available to be interacted with users.
+<br>
+Upon the basis of the above cloud data lake analysis architecture, the data federation ecosystem is divided into three layers accordingly, for which Data Lake Analytics plays a key role for serverless cloud-native computing framework:
+<br><br></p>
+<p><img src="/img/blog/2020-06-30-data-lake-analytics-blog/dla_three_tier.png" alt=""></p>
+<p><br><br></p>
+<h2><a class="anchor" aria-hidden="true" id="data-lake-analytics"></a><a href="#data-lake-analytics" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Data Lake Analytics</h2>
+<h3><a class="anchor" aria-hidden="true" id="introducing-dla"></a><a href="#introducing-dla" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Introducing DLA</h3>
+<p>Data Lake Analytics, known as DLA, is a large scale serverless data federation service on Alibaba Cloud. It is one of the most popular serverless SQL engines based on a well-customized computing engine from PrestoDB. DLA integrates with mainstream data sources and provides easy-to-use MySQL JDBC/ODBC connection protocol to allow users to interact with.
+<br><br>
+<img src="/img/blog/2020-06-30-data-lake-analytics-blog/DLA_architecture.png" alt="">
+<br><br>
+FrontNode is the SQL access layer which provides MySQL protocol to let users interact with. MySQL is a flexible and compatible connection protocol service, frequently used by DLA users. Unified Meta Layer is a metadata repository which holds all metadata for all data sources DLA can support. DLA is running as an independent project which was forked from PrestoDB(0.227) and is now integrated with mainstream data sources in Alibaba Cloud. It is currently working closely with the PrestoDB community to track ongoing projects and updates. It is mission critical to continue the close partnership with PrestoDB for business success with latest updates.
+<br><br></p>
+<h3><a class="anchor" aria-hidden="true" id="dla-product-key-features"></a><a href="#dla-product-key-features" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>DLA Product Key Features:</h3>
+<ol>
+<li>Serverless<br>
+a. No infrastructure and management cost<br>
+b. Zero start-time<br>
+c. Transparent upgrade<br>
+d. QoS Elastic Service<br></li>
+<li>Standard SQL Connections<br>
+a. Compatible with standard SQL Compliance<br>
+b. Rich built-in function support<br>
+c. JDBC/ODBC support<br>
+d. Compatible with BI tools<br></li>
+<li>Heterogeneous Data Sources<br>
+a. Enable OSS Data analysis requirements<br>
+b. Enable Table Store Data for SQL querying service<br>
+c. Federated data analysis across multiple database instances<br>
+d. Ease of interconnection analysis for multiple data sources<br>
+e. Any forms of analytics in “Data Lake”<br></li>
+<li>Optimized Compute Engine<br>
+a. Support for unstructured data<br>
+b. Vectorized execution and optimization<br>
+c. Operator pipeline optimization<br>
+d. Resource isolation and prioritization<br></li>
+</ol>
+<h2><a class="anchor" aria-hidden="true" id="dla-use-cases"></a><a href="#dla-use-cases" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>DLA Use Cases</h2>
+<h3><a class="anchor" aria-hidden="true" id="typical-data-flow-scenarios"></a><a href="#typical-data-flow-scenarios" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Typical Data Flow Scenarios:</h3>
+<p>Generally DLA empowers cloud users analytic capability in 3 typical user data flow scenarios:<br></p>
+<ol>
+<li>The cloud user uploads the business generated data such as Log, CSV, JSON and other files, directly to OSS (AliCloud Object Storage Service), and then uses DLA to directly point to the file or folder for which the table is created to query. Then the user may use BI tools to analyze and visualize business data analytics.<br>
+<br><br>
+<img src="/img/blog/2020-06-30-data-lake-analytics-blog/case1.png" alt="">
+<br><br></li>
+<li>The cloud user can directly copy and upload data to OSS, and then use DLA to directly point files or folders for which the table is created to query. Common data formats like Parquet, ORC, RCFile, Avro, and others are supported as well. Then the user may use BI tools for business data analysis and visualization. <br>
+<br><br>
+<img src="/img/blog/2020-06-30-data-lake-analytics-blog/case2.png" alt="">
+<br><br></li>
+<li>In order to provide better query performance and low storage cost for subsequent data analysis on OSS, data can be converted into Parquet or ORC format to improve the cost performance of repeated data analysis.<br>
+<br><br>
+<img src="/img/blog/2020-06-30-data-lake-analytics-blog/case3.png" alt="">
+<br><br></li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="alibaba-use-case-studies"></a><a href="#alibaba-use-case-studies" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Alibaba Use Case Studies:</h3>
+<h4><a class="anchor" aria-hidden="true" id="customer-case-1-log-data-analytics"></a><a href="#customer-case-1-log-data-analytics" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Customer Case #1: Log Data Analytics</h4>
+<p>Cloud customers generate log data which is stored on OSS. The challenge is that those log data are unstructured and typically on the order of Petabytes of data size. <br>
+<br><br>
+<img src="/img/blog/2020-06-30-data-lake-analytics-blog/case1_logAnalysis.png" alt="">
+<br><br>
+So in order to make it available to analyze, DLA’s massive parallel processing engine is the key to business success. It allows users to do full-volume, personalized log data analysis by using DLA’s Hive connector. Additionally log data can be synchronized to OSS with a max delay of 5 minutes with Alibaba Cloud SLS that can feed data to DLA in near real-time.
+<br><br></p>
+<h4><a class="anchor" aria-hidden="true" id="customer-case-2-genetic-data-analytics"></a><a href="#customer-case-2-genetic-data-analytics" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Customer Case #2: Genetic Data Analytics</h4>
+<p>One of Alicloud’s data vendors is in the Genetic engineering industry. The data volume is gigantic and the data is stored in various data sources. This is raw bioinformatics data storing gene sequence variations in the Variant Call Format(VCF). The challenge is that Genetic datasets are huge, but still need to be analyzed promptly.
+<br><br>
+<img src="/img/blog/2020-06-30-data-lake-analytics-blog/case2_gene_data_analytics.png" alt="">
+<br><br>
+The solution is to place a huge volume gene data on OSS where storage costs are low and materialize indexing data to a Key value store system. Aliyun Open Table Service (OTS) is a distributed NoSQL database that works well for this propose. DLA's cross data source analytic capabilities can then be used to join the data together across services making it possible to quickly access and analyze the data even on large scale datasets.
+<br><br></p>
+<h1><a class="anchor" aria-hidden="true" id="conclusion"></a><a href="#conclusion" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h1>
+<p>Alibaba Data Lake Analytics embraces Presto’s federated query engine capability and has empowered many Alibaba cloud users to experience large scale serverless cloud service. DLA is working to make the cloud user experience more transparent by improving ease of use and reducing infrastructure management overhead. The next blog will discuss some key technical developments on top of the Presto codebase.
+<br></p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#data-federation-service">Data Federation Service</a></li><li><a href="#data-lake-analytics">Data Lake Analytics</a><ul class="toc-headings"><li><a href="#introducing-dla">Introducing DLA</a></li><li><a href="#dla-product-key-features">DLA Product Key Features:</a></li></ul></li><li><a href="#dla-use-cases">DLA Use Cases</a><ul class="toc-headings"><li><a href="#typical-data-flow-scenarios">Typical Data Flow Scenarios:</a></li><li><a href="#alibaba-use-case-studies">Alibaba Use Case Studies:</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page. Linux is a registered trademark of Linus Torvalds. <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> and <a href="http://www.linuxfoundation.org/terms">Terms of Use</a>.</section></footer></div></body></html>

@@ -21,6 +21,21 @@
         </author>
     </entry>
     <entry>
+        <title type="html"><![CDATA[Data Lake Analytics: Alibaba's Federated Cloud Strategy]]></title>
+        <id>https://prestodb.io/blog/2020/06/30/data-lake-analytics-blog.html</id>
+        <link href="https://prestodb.io/blog/2020/06/30/data-lake-analytics-blog.html"/>
+        <updated>2020-06-30T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>Presto is known to be a high-performance, distributed SQL query engine for Big Data. It offers large-scale data analytics with multiple connectors for accessing various data sources. This capability enables the Presto users to further extend some features to build a large-scale data federation service on cloud. <br>
+<br>
+Alibaba Data Lake Analytics embraces Presto’s federated query engine capability and has accumulated a number of successful business use cases that signify the power of Presto's analytics capability.
+<br><br></p>
+]]></summary>
+        <author>
+            <name>George Wang</name>
+            <uri>https://www.linkedin.com/in/george-wang-9a5a46190/</uri>
+        </author>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Improving Presto Latencies with Alluxio Data Caching]]></title>
         <id>https://prestodb.io/blog/2020/06/16/alluxio-datacaching.html</id>
         <link href="https://prestodb.io/blog/2020/06/16/alluxio-datacaching.html"/>
