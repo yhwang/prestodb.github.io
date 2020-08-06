@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Fri, 17 Jul 2020 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 04 Aug 2020 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,16 @@
             <url>https://prestodb.io/img/presto.png</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[PrestoDB and Hudi]]></title>
+            <link>https://prestodb.io/blog/2020/08/04/prestodb-and-hudi.html</link>
+            <guid>https://prestodb.io/blog/2020/08/04/prestodb-and-hudi.html</guid>
+            <pubDate>Tue, 04 Aug 2020 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><strong>Co-author:</strong> <a href="https://www.linkedin.com/in/brandon-scheller-a00851ab">Brandon Scheller</a></p>
+<p><a href="https://hudi.apache.org">Apache Hudi</a> is a fast growing data lake storage system that helps organizations build and manage petabyte-scale data lakes. Hudi brings stream style processing to batch-like big data by introducing primitives such as upserts, deletes and incremental queries. These features help surface faster, fresher data on a unified serving layer. Hudi tables can be stored on the Hadoop Distributed File System (HDFS) or cloud stores and integrates well with popular query engines such as <a href="https://prestodb.io">Presto</a>, <a href="https://hive.apache.org">Apache Hive</a>, <a href="https://spark.apache.org">Apache Spark</a> and <a href="https://impala.apache.org">Apache Impala</a>. Given Hudi pioneered a new model that moved beyond just writing files to a more managed storage layer that interops with all major query engines, there were interesting learnings on how integration points evolved.</p>
+<p>In this blog we are going to discuss how the Presto-Hudi integration has evolved over time and also discuss upcoming file listing and query planning improvements to Presto-Hudi queries.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Running Presto in a Hybrid Cloud Architecture]]></title>
             <link>https://prestodb.io/blog/2020/07/17/alluxio-hybrid-cloud.html</link>
