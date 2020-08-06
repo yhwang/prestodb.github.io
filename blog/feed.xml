@@ -13,7 +13,7 @@
             <link>https://prestodb.io/blog</link>
         </image>
         <item>
-            <title><![CDATA[PrestoDB and Hudi]]></title>
+            <title><![CDATA[PrestoDB and Apache Hudi]]></title>
             <link>https://prestodb.io/blog/2020/08/04/prestodb-and-hudi.html</link>
             <guid>https://prestodb.io/blog/2020/08/04/prestodb-and-hudi.html</guid>
             <pubDate>Tue, 04 Aug 2020 06:00:00 GMT</pubDate>

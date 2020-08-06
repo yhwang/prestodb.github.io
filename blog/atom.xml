@@ -8,7 +8,7 @@
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
     <entry>
-        <title type="html"><![CDATA[PrestoDB and Hudi]]></title>
+        <title type="html"><![CDATA[PrestoDB and Apache Hudi]]></title>
         <id>https://prestodb.io/blog/2020/08/04/prestodb-and-hudi.html</id>
         <link href="https://prestodb.io/blog/2020/08/04/prestodb-and-hudi.html"/>
         <updated>2020-08-04T06:00:00.000Z</updated>
