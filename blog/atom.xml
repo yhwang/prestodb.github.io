@@ -2,11 +2,25 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2020-08-04T06:00:00.000Z</updated>
+    <updated>2020-08-14T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
+    <entry>
+        <title type="html"><![CDATA[Getting Started with PrestoDB and Aria Scan Optimizations]]></title>
+        <id>https://prestodb.io/blog/2020/08/14/getting-started-and-aria.html</id>
+        <link href="https://prestodb.io/blog/2020/08/14/getting-started-and-aria.html"/>
+        <updated>2020-08-14T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>This article was originally published by Adam on June 15th, 2020 over at his blog at <a href="https://datacatessen.com/blog/prestodb-aria/">datacatessen.com</a>.</p>
+<hr>
+<p><a href="https://prestodb.io">PrestoDB</a> recently released a set of experimental features under their Aria project in order to increase table scan performance of data stored in ORC files via the Hive Connector.  In this post, we'll check out these new features at a very basic level using a test environment of PrestoDB on Docker.  To find out more about the Aria features, you can check out the <a href="https://engineering.fb.com/data-infrastructure/aria-presto/">Facebook Engineering</a> blog post which was published June 2019.</p>
+]]></summary>
+        <author>
+            <name>Adam Shook</name>
+            <uri>https://www.linkedin.com/in/adamjshook</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[PrestoDB and Apache Hudi]]></title>
         <id>https://prestodb.io/blog/2020/08/04/prestodb-and-hudi.html</id>
