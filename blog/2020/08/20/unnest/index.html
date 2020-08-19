@@ -1,0 +1,219 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Even Faster Unnest · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Ying Su, Masha Basmanova, Orri Erling"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Even Faster Unnest · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2020/08/20/unnest"/><meta property="og:description" content="Ying Su, Masha Basmanova, Orri Erling"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2020/08/20/unnest">Even Faster Unnest</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/14/getting-started-and-aria">Getting Started with PrestoDB and Aria Scan Optimizations</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/04/prestodb-and-hudi">PrestoDB and Apache Hudi</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/07/17/alluxio-hybrid-cloud">Running Presto in a Hybrid Cloud Architecture</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/06/30/data-lake-analytics-blog">Data Lake Analytics: Alibaba&#x27;s Federated Cloud Strategy</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2020/08/20/unnest">Even Faster Unnest</a></h1><p class="post-meta">August 20, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/ying-su-b00b81107/" target="_blank" rel="noreferrer noopener">Ying Su</a></p><div class="authorPhoto"><a href="https://www.linkedin.com/in/ying-su-b00b81107/" target="_blank" rel="noreferrer noopener"><img src="https://graph.facebook.com/656599427/picture/?height=200&amp;width=200" alt="Ying Su"/></a></div></div></header><div><span><p>Ying Su, Masha Basmanova, Orri Erling</p>
+<p>Unnest is a common operation in Facebook’s daily Presto workload. It converts an <code>ARRAY</code>, <code>MAP</code>, or <code>ROW</code> into a flat relation. Its original implementation used deep copy all the time and was very inefficient. In <a href="https://prestosql.io/blog/2019/08/23/unnest-operator-performance-enhancements.html">Unnest Operator Performance Enhancement with Dictionary Blocks</a>, the author improved the Unnest operator by up to 10x in CPU and elapsed times by using <code>DictionaryBlock</code> when possible. We went one step further and improved it for another 5-10x.</p>
+<!--truncate-->
+<p>In this post, we will refer to the PrestoSQL implementation as &quot;baseline&quot;. The JMH Benchmark results for different cases are shown below (&quot;before&quot; is the baseline implementation, and &quot;after&quot; is our new implementation):</p>
+<p><img src="/img/blog/2020-08-20-unnest.md/UnnestOneColumnWithoutOrdinality.png" alt="Remote Exchange">
+<img src="/img/blog/2020-08-20-unnest.md/UnnestTwoColumns.png" alt="Remote Exchange">
+<img src="/img/blog/2020-08-20-unnest.md/UnnestRowType.png" alt="Remote Exchange"></p>
+<p>The optimized Unnest implementation is available in Presto 0.235 and onward and is enabled by default. The JMH benchmark was also expanded to have better coverage and can be found in <a href="https://github.com/prestodb/presto/blob/29acdbaff128fff2de185c28fb26031be1d88019/presto-main/src/test/java/com/facebook/presto/operator/BenchmarkUnnestOperator.java">BenchmarkUnnestOperator.java</a>.</p>
+<p>In Facebook's production workload, we observed over a 6x CPU reduction on this operator. The following chart shows the pairwise comparison for all unnest operators in one of our test runs. Every dot below the diagonal is a win. About 25% of operators show over a 5x CPU reduction, and some of them have even over a 20x reduction.</p>
+<p><img src="/img/blog/2020-08-20-unnest.md/UnnestCPUPairWiseComparison.png" alt="Remote Exchange"></p>
+<p>The histogram of the after vs. before CPU ratio shows most operators has a ratio less than 1, meaning most of them were more efficient.
+<img src="/img/blog/2020-08-20-unnest.md/UnnestCPUDistribution.png" alt="Remote Exchange"></p>
+<p>The following chart shows the operator's CPU percentage was reduced from about 2% to 0.1% out of all operators after the roll-out happened on May 28. The amount of CPU, though small, still matters at Facebook's scale.
+<img src="/img/blog/2020-08-20-unnest.md/UnnestPercentageTimeline.png" alt="Remote Exchange"></p>
+<h2><a class="anchor" aria-hidden="true" id="what-is-the-unnest-operator"></a><a href="#what-is-the-unnest-operator" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What is the Unnest Operator?</h2>
+<p>When users have data structured as <code>ARRAY</code>, <code>MAP</code>, or <code>ROW</code> they sometimes need to flatten them so that the nested structure can be regarded as top level citizen and sent to downstream operators for easier arithmetic or aggregation processing. An example query is as follows:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span>
+    zoo, animal
+<span class="hljs-keyword">FROM</span> (
+    <span class="hljs-keyword">VALUES</span>
+        (<span class="hljs-string">'OaklandZoo'</span>, <span class="hljs-built_in">ARRAY</span>[<span class="hljs-string">'dog'</span>, <span class="hljs-string">'cat'</span>, <span class="hljs-string">'tiger'</span>]),
+        (<span class="hljs-string">'SanFranciscoZoo'</span>, <span class="hljs-built_in">ARRAY</span>[<span class="hljs-string">'dog'</span>, <span class="hljs-string">'cat'</span>])
+) <span class="hljs-keyword">AS</span> x (zoo, animals)
+<span class="hljs-keyword">CROSS</span> <span class="hljs-keyword">JOIN</span> <span class="hljs-keyword">UNNEST</span>(animals) <span class="hljs-keyword">AS</span> t (animal);
+</code></pre>
+<p>In this example, the <code>zoo</code> column, which is a <code>VARCHAR</code> column, is being replicated for the same row and thus being called the &quot;replicated column&quot;; and the <code>animals</code> column, which is an <code>ARRAY(VARCHAR)</code> column, is unnested into a <code>VARCHAR</code> column, named as <code>animal</code> and is a &quot;unnest column&quot;:</p>
+<pre><code class="hljs css language-text">| zoo             | animal |
+| ----------------| ------ |
+| OaklandZoo      | dog    |
+| OaklandZoo      | cat    |
+| OaklandZoo      | tiger  |
+| SanFranciscoZoo | dog    |
+| SanFranciscoZoo | cat    |
+</code></pre>
+<p>In Presto relational data is represented as a series of <code>Page</code>s internally. <code>Page</code>s are composed of <code>Block</code>s, one for each column. For replicated columns, the Unnest operator needs to create new <code>Block</code>s from the original <code>Block</code>s with the data being replicated within each original row. The baseline implementation achieved this by creating a <code>DictionaryBlock</code> on top of the original <code>Block</code>, and thus avoided expensive deep copies. The same thing was done for the unnest columns if there is no need to insert nulls, where <code>DictionaryBlocks</code> were created, and the array offsets were translated to indices of the underlying block.</p>
+<p>What happens when there are multiple unnest columns and their cardinalities do not match? Take a look at this example:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span>
+    zoo,
+    animal,
+    employee
+<span class="hljs-keyword">FROM</span> (
+    <span class="hljs-keyword">VALUES</span>
+        (<span class="hljs-string">'OaklandZoo'</span>, <span class="hljs-built_in">ARRAY</span>[<span class="hljs-string">'dog'</span>, <span class="hljs-string">'cat'</span>, <span class="hljs-string">'tiger'</span>], <span class="hljs-built_in">ARRAY</span>[<span class="hljs-string">'Alice'</span>, <span class="hljs-string">'Bob'</span>]),
+        (<span class="hljs-string">'SanFranciscoZoo'</span>, <span class="hljs-built_in">ARRAY</span>[<span class="hljs-string">'dog'</span>, <span class="hljs-string">'cat'</span>], <span class="hljs-built_in">ARRAY</span>[<span class="hljs-string">'Clara'</span>, <span class="hljs-string">'Danny'</span>])
+) <span class="hljs-keyword">AS</span> x (zoo, animals, employees)
+<span class="hljs-keyword">CROSS</span> <span class="hljs-keyword">JOIN</span> <span class="hljs-keyword">UNNEST</span>(animals, employees) <span class="hljs-keyword">AS</span> t (animal, employee);
+</code></pre>
+<p>The result is</p>
+<pre><code class="hljs css language-text">| zoo             | animal | employee |
+| --------------- | ------ | -------- |
+| OaklandZoo      | dog    | Alice    |
+| OaklandZoo      | cat    | Bob      |
+| OaklandZoo      | tiger  | NULL     |
+| SanFranciscoZoo | dog    | Clara    |
+| SanFranciscoZoo | cat    | Danny    |
+</code></pre>
+<p>Note that a <code>NULL</code> is inserted in the last column on the third row. In this case, can we still create a <code>DictionaryBlock</code> on the original block? The original nested block does not have a <code>NULL</code>! So it’s impossible to find an index that points to a <code>NULL</code> value and build a <code>DictionaryBlock</code> easily. The baseline implementation just switches back to deep copying for this case. In the sections below, we are going to explain how we tackled this problem.</p>
+<h2><a class="anchor" aria-hidden="true" id="opportunities-for-improvements-yes"></a><a href="#opportunities-for-improvements-yes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Opportunities for Improvements? Yes!</h2>
+<p>The baseline implementation did a number of things well. It avoided deep copy by using DictionaryBlock which improved the original improvement by an order of magnitude for cases without NULL insertions. Can we improve it additionally? The answer is yes.</p>
+<h3><a class="anchor" aria-hidden="true" id="process-data-column-by-column-not-row-by-row"></a><a href="#process-data-column-by-column-not-row-by-row" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Process data column-by-column, not row-by-row</h3>
+<p>If you read our blog post <a href="https://prestodb.io/blog/2019/12/20/repartition">5 design choices—and 1 weird trick — to get 2x efficiency gains in Presto repartitioning</a>, you may remember the design choice “Process data column by column, not row by row”. The same thing applies to <code>UnnestOperator</code> as well. The baseline implementation constructs the output blocks in the row-by-row manner:</p>
+<pre><code class="hljs css language-text">for each incoming row
+    for each replicated column
+        append the repeated values by adding ids to the DictionaryBlock
+    for each unnest column
+        append the unnested  values by adding ids to the DictionaryBlock if possible.
+        Otherwise append the value to BlockBuilder.
+    if there is ordinality column
+        append the oridinality to the BlockBuilder
+</code></pre>
+<p>A key principle of vectorized execution is to use tight loops which allow the JVM to vectorize the compiled binary, and allow the CPU to parallelize the work as much as possible. Processing the data in a column by column manner makes this possible and an example of such a loop for building a replicated block looks like this:</p>
+<pre><code class="hljs css language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> Block <span class="hljs-title">buildOutputBlock</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] maxEntries, <span class="hljs-keyword">int</span> offset, <span class="hljs-keyword">int</span> length, <span class="hljs-keyword">int</span> totalEntries)</span>
+</span>{
+    <span class="hljs-keyword">int</span>[] ids = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[totalEntries];
+    <span class="hljs-keyword">int</span> fromPosition = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; length; i++) {
+        <span class="hljs-keyword">int</span> toPosition = fromPosition + maxEntries[offset + i];
+        Arrays.fill(ids, fromPosition, toPosition, sourcePosition++);
+        fromPosition = toPosition;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> DictionaryBlock(totalEntries, source, ids);
+}
+</code></pre>
+<p>This simple change improved the performance of the NO-NULL case by at least 3x as shown by the JMH benchmarks.</p>
+<h3><a class="anchor" aria-hidden="true" id="computation-of-maxentries-array-and-batch-size"></a><a href="#computation-of-maxentries-array-and-batch-size" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Computation of maxEntries array and batch size</h3>
+<p>To make the above loop possible, we pre-compute the cardinalities for each row for all unnest columns and use them to get the max cardinalities (we call it the maxEntries array) in the operator. This way the memory can be accessed sequentially and the computation can be reused. The size of these arrays should require very little memory overhead, since they’re only for top level rows and should always be less than 1024 per block.</p>
+<p>We then compute the batch size, ie. top level row count that can fit into the next output page. Right now we limit the nested row count for each batch to 1000 with a minimum batch size of 1. This means the unnested row count for each block might be over 1000. For example, if a row contains 10000 array entries, then the unnested row count would be 10000. Although this is over the 1000 rows we still have to output the whole top level row which translates into 10000 unnested rows.</p>
+<h3><a class="anchor" aria-hidden="true" id="bonus-no-need-to-create-dictionaryblock-at-all-for-some-cases"></a><a href="#bonus-no-need-to-create-dictionaryblock-at-all-for-some-cases" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Bonus: No need to create DictionaryBlock at all for some cases!</h3>
+<p>There are several cases that we can tell no <code>NULL</code>s need to be inserted:</p>
+<ol>
+<li>When there is only one unnest column (except <code>ARRAY</code> of <code>ROW</code>s case).</li>
+<li>When there are multiple columns, but the cardinalities for them are the same for the current batch.</li>
+<li>For a single Array of Row unnest column case, if the row block doesn't contain any nulls.</li>
+</ol>
+<p>For these cases, the result can simply be acquired by using <code>getRegion()</code> to get a view on top of the original leaf block:</p>
+<pre><code class="hljs css language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> Block <span class="hljs-title">buildOutputBlockWithoutNulls</span><span class="hljs-params">(<span class="hljs-keyword">int</span> outputPositionCount)</span>
+</span>{
+    Block output = source.getRegion(sourcePosition, outputPositionCount);
+    sourcePosition += outputPositionCount;
+    <span class="hljs-keyword">return</span> output;
+}
+</code></pre>
+<p>This doesn’t copy the data, nor does it construct the <code>ids</code> mapping and <code>DictionaryBlock</code>. Nice!</p>
+<h3><a class="anchor" aria-hidden="true" id="a-better-way-to-copy-blocks"></a><a href="#a-better-way-to-copy-blocks" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>A better way to copy Blocks</h3>
+<p>How do we handle the cases where <code>NULL</code>s need to be inserted? We can formulate the problem as a simple question: given a <code>Block</code> without <code>NULL</code>, how do we insert a <code>NULL</code> efficiently?</p>
+<p>There are two ways of doing this:</p>
+<ol>
+<li>Use special id, e.g. <code>-1</code> to identify null in <code>DictionaryBlock</code></li>
+<li>Copy the blocks and insert a NULL.</li>
+</ol>
+<p>Currently <code>DictionaryBlock</code> doesn’t support the logic in 1). To make it happen, we need to change all <code>getId()</code> and <code>getIds()</code> call to handle the special values. While the size of the callsites is manageable (about 50), the performance implication need to be studied carefully.</p>
+<p>The baseline implementation used the second way and used <code>PageBuilder</code> and <code>BlockBuilder</code> to copy the values for this case. However, the JMH benchmarks shows that they are not super efficient for this purpose. To compare the cost of copying blocks using
+<code>PageBuilder</code> and <code>BlockBuilder</code> versus doing bulk copy using tight loops, we measured the following two implementations:</p>
+<ol>
+<li>Using <code>PageBuilder</code> and <code>BlockBuilder</code></li>
+</ol>
+<pre><code class="hljs css language-java"><span class="hljs-meta">@Benchmark</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">copyBlockByAppend</span><span class="hljs-params">(BenchmarkData data)</span>
+</span>{
+    LongArrayBlockBuilder longArrayBlockBuilder = <span class="hljs-keyword">new</span> LongArrayBlockBuilder(<span class="hljs-keyword">null</span>, POSITIONS_PER_PAGE);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; BLOCK_COUNT; i++) {
+        Block block = data.blocks.get(i);
+        <span class="hljs-keyword">int</span> positionCount = block.getPositionCount();
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; positionCount; j++) {
+            BIGINT.appendTo(block, j, longArrayBlockBuilder);
+        }
+
+        Block outputBlock = longArrayBlockBuilder.build();
+    }
+}
+</code></pre>
+<ol start="2">
+<li>Using bulk copy</li>
+</ol>
+<pre><code class="hljs css language-java"><span class="hljs-meta">@Benchmark</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">copyBlockByLoop</span><span class="hljs-params">(BenchmarkData data)</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; BLOCK_COUNT; i++) {
+        Block block = data.blocks.get(i);
+        <span class="hljs-keyword">int</span> positionCount = block.getPositionCount();
+
+        <span class="hljs-keyword">long</span>[] values = <span class="hljs-keyword">new</span> <span class="hljs-keyword">long</span>[positionCount];
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; positionCount; j++) {
+            values[j] = block.getLong(j);
+        }
+
+        <span class="hljs-keyword">boolean</span>[] valueIsNull = copyIsNulls(block);
+
+        Block outputBlock = <span class="hljs-keyword">new</span> LongArrayBlock(positionCount, Optional.of(valueIsNull), values);
+    }
+}
+</code></pre>
+<p>Even though the second code snippet is copying through the Block interface, it was over 4x faster over the first one:</p>
+<p><img src="/img/blog/2020-08-20-unnest.md/UnnestCopyBlocks.png" alt="Remote Exchange"></p>
+<p>We thus thought copying the Blocks this way can give us acceptable performance. To make the code clean and better encapsulated, we added a new method <code>appendNull()</code> to the <code>Block</code> interface. For all primitive types like <code>BOOLEAN</code>, <code>SMALLINT</code>, <code>INTEGER</code>, <code>BIGINT</code>, etc., we create a new <code>Block</code> with all the positions copied and then a <code>NULL</code> appended at the end of the block. For <code>VariableWidthBlock</code>, <code>ArrayBlock</code>, <code>MapBlock</code> and <code>RowBlock</code>, we can get hold of the underlying elements block or the raw slice, and then construct the offsets array. It doesn’t need to do a deep copy of the nested structure. To do this, we need to convert the <code>ArrayBlock</code>, <code>MapBlock</code> and <code>RowBlock</code> into the <code>ColumnarXXX</code> objects but the cost of conversion is very worthwhile.</p>
+<h2><a class="anchor" aria-hidden="true" id="further-reading"></a><a href="#further-reading" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Further reading</h2>
+<ul>
+<li>Here is the original issue explaining the design <a href="https://github.com/prestodb/presto/issues/13751">https://github.com/prestodb/presto/issues/13751</a></li>
+<li>Here is the main pull request that made it all happen <a href="https://github.com/prestodb/presto/pull/13746">https://github.com/prestodb/presto/pull/13746</a></li>
+</ul>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#what-is-the-unnest-operator">What is the Unnest Operator?</a></li><li><a href="#opportunities-for-improvements-yes">Opportunities for Improvements? Yes!</a><ul class="toc-headings"><li><a href="#process-data-column-by-column-not-row-by-row">Process data column-by-column, not row-by-row</a></li><li><a href="#computation-of-maxentries-array-and-batch-size">Computation of maxEntries array and batch size</a></li><li><a href="#bonus-no-need-to-create-dictionaryblock-at-all-for-some-cases">Bonus: No need to create DictionaryBlock at all for some cases!</a></li><li><a href="#a-better-way-to-copy-blocks">A better way to copy Blocks</a></li></ul></li><li><a href="#further-reading">Further reading</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page. Linux is a registered trademark of Linus Torvalds. <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> and <a href="http://www.linuxfoundation.org/terms">Terms of Use</a>.</section></footer></div></body></html>

@@ -2,11 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2020-08-14T06:00:00.000Z</updated>
+    <updated>2020-08-20T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
+    <entry>
+        <title type="html"><![CDATA[Even Faster Unnest]]></title>
+        <id>https://prestodb.io/blog/2020/08/20/unnest.html</id>
+        <link href="https://prestodb.io/blog/2020/08/20/unnest.html"/>
+        <updated>2020-08-20T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>Ying Su, Masha Basmanova, Orri Erling</p>
+<p>Unnest is a common operation in Facebook’s daily Presto workload. It converts an <code>ARRAY</code>, <code>MAP</code>, or <code>ROW</code> into a flat relation. Its original implementation used deep copy all the time and was very inefficient. In <a href="https://prestosql.io/blog/2019/08/23/unnest-operator-performance-enhancements.html">Unnest Operator Performance Enhancement with Dictionary Blocks</a>, the author improved the Unnest operator by up to 10x in CPU and elapsed times by using <code>DictionaryBlock</code> when possible. We went one step further and improved it for another 5-10x.</p>
+]]></summary>
+        <author>
+            <name>Ying Su</name>
+            <uri>https://www.linkedin.com/in/ying-su-b00b81107/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Getting Started with PrestoDB and Aria Scan Optimizations]]></title>
         <id>https://prestodb.io/blog/2020/08/14/getting-started-and-aria.html</id>
