@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Building a high-performance platform on AWS to support real-time gaming services using Presto and Alluxio · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="**Authors:** Teng Wang, Du Li, Yu Jin and Sundeep Narravula"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Building a high-performance platform on AWS to support real-time gaming services using Presto and Alluxio · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2020/08/06/presto-in-ea"/><meta property="og:description" content="**Authors:** Teng Wang, Du Li, Yu Jin and Sundeep Narravula"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2020/08/20/unnest">Even Faster Unnest</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/14/getting-started-and-aria">Getting Started with PrestoDB and Aria Scan Optimizations</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2020/08/06/presto-in-ea">Building a high-performance platform on AWS to support real-time gaming services using Presto and Alluxio</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/04/prestodb-and-hudi">PrestoDB and Apache Hudi</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/07/17/alluxio-hybrid-cloud">Running Presto in a Hybrid Cloud Architecture</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2020/08/06/presto-in-ea">Building a high-performance platform on AWS to support real-time gaming services using Presto and Alluxio</a></h1><p class="post-meta">August 6, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/teng-wang-9b8732194/" target="_blank" rel="noreferrer noopener">Teng Wang</a></p></div></header><div><span><p><strong>Authors:</strong> Teng Wang, Du Li, Yu Jin and Sundeep Narravula</p>
+<p>Electronic Arts (EA) is a leading company in the gaming industry, providing over a thousand games to serve billions of users worldwide.
+Making near real-time decisions for EA’s online services is critical for our business.
+This blog describes a data platform on AWS based on Presto and Alluxio to support online services with instantaneous response within the gaming industry.</p>
+<!--truncate-->
+<p><img src="/img/blog/2020-08-06-presto-in-ea/EAGames.png" alt=""></p>
+<p>The EA Data &amp; AI Department builds hundreds of platforms to manage petabytes of data generated by games and users everyday. These platforms consist of a wide range of data analytics, from real-time data ingestion to ETL pipelines. Formatted data produced by our department is widely adopted by executives, producers, product managers, game engineers, and designers for marketing and monetization, game design, customer engagement, player retention, and end-user experience.</p>
+<h2><a class="anchor" aria-hidden="true" id="use-cases"></a><a href="#use-cases" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Use Cases</h2>
+<p>Near real-time information for EA’s online services is critical for making business decisions, such as campaigns and troubleshooting. These services include, but are not limited to, real-time data visualization, dashboarding, and conversational analytics. Our team is actively seeking a framework that can support these use cases.</p>
+<p>At EA, we have adopted numerous data visualization tools, such as Tableau and Dundas, to support data insight analytics. These tools are usually connected with multiple data sources, such as MySQL DB, AWS S3, or HDFS. Users can load data from multiple endpoints simultaneously to run computationally heavy algorithms. One severe performance bottleneck is loading data as it is I/O heavy. This could be exacerbated more if the same data needs to be loaded multiple times. Thus we need a solution to reduce this data retrieving overhead by caching the data locally.</p>
+<p>Dashboarding is another common use case, used to keep tracking user engagements, customer satisfaction, or system status in real-time. In these cases, the data volume is usually on the order of gigabytes, but frequent refreshes require instantaneous processing. Currently, we use commercial databases such as Redshift to serve time-sensitive data, and we are seeking an alternative to slash costs without losing performance.</p>
+<p>We recently developed a reporting chatbot to provide immediate game related insights, such as live user satisfaction and real-time profit analysis. The backend of this system runs Presto with petabytes of data stored on S3. This chatbot converts user's questions into ANSI SQL and runs these queries on a Presto cluster. The queries usually conduct complex computations, such as prediction and merging after searching across datasets. We are eager to find a solution that compliments our S3 based datasets to improve the performance without introducing extra cost.</p>
+<h2><a class="anchor" aria-hidden="true" id="architecture"></a><a href="#architecture" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Architecture</h2>
+<p>To serve these different use cases with near-realtime requirements, we built and evaluated Presto as our data query platform with data in S3, and the working set cached in Alluxio.
+In this blog we compare a mock of the aforementioned production setup of Presto on S3 against a similar stack with Alluxio. The architecture is shown below:</p>
+<p><img src="/img/blog/2020-08-06-presto-in-ea/architecture.png" alt=""></p>
+<p>Here are some more details about our setup:</p>
+<ul>
+<li>Each instance launched Presto and Alluxio, co-locating the two services.</li>
+<li>For hardware, we used three h1.8xlarge AWS instances, each with 8TB ephemeral disks mounted for use by Alluxio to cache data local to Presto.</li>
+<li>S3 was mounted to Alluxio as the underlying persisting file system.</li>
+<li>Two catalogs were configured for Presto; one connected to our existing Hive metastore, referencing the benchmark datasets externally stored on S3, and the other connected to a separate - Hive metastore with the benchmark tables created in Alluxio.</li>
+<li>We used the same datasets on S3 for performance comparison and pre-loaded the data into Alluxio with <code>alluxio fs distributedLoad /testDB</code></li>
+<li>To optimize the query performance when  processing large amounts of small files, we enabled metadata caching in <code>alluxio-site.properties</code> to tune the performance</li>
+</ul>
+<pre><code class="hljs">alluxio<span class="hljs-selector-class">.user</span><span class="hljs-selector-class">.metadata</span><span class="hljs-selector-class">.cache</span>.enabled=true
+alluxio<span class="hljs-selector-class">.user</span><span class="hljs-selector-class">.metadata</span><span class="hljs-selector-class">.cache</span><span class="hljs-selector-class">.max</span>.size=<span class="hljs-number">100000</span>
+alluxio<span class="hljs-selector-class">.user</span><span class="hljs-selector-class">.metadata</span><span class="hljs-selector-class">.cache</span><span class="hljs-selector-class">.expiration</span>.time=<span class="hljs-number">10</span>min
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="benchmark-result"></a><a href="#benchmark-result" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Benchmark Result</h2>
+<p>Four independent benchmarks representing a wide range of different workloads were selected.
+The baseline is the performance when Presto was querying S3 directly.</p>
+<p><strong>Benchmark 1</strong> is our internal synthesis snapshots of player in-game events, representing <strong>I/O heavy use cases</strong>.
+Three datasets were tested with a total size of 1GB, 10GB, and 100GB and files in ORC format.
+Each dataset is created with the same DDL, containing 49 cols, 40 varchar, 5 booleans, and 4 maps.
+The benchmark queries select all columns with one varchar field filter condition.</p>
+<p><strong>Result</strong>: With caching data in Alluxio, Presto performs 2x to 7x faster compared to the baseline when querying S3 directly.</p>
+<p><strong>Benchmark 2</strong> simulates data visualization with game metadata and user engagement records.
+which is a typical query that <strong>stresses both CPU and I/O</strong>.
+With two commonly used datasets and queries frequently used in Tableau and Dundas respectively,
+the queries select all columns with a date filtering condition, followed by <code>GROUP BY</code> and <code>ORDER BY</code> of the date.
+In this test, we intentionally disabled Alluxio metadata caching which already shows significant improvement, to understand how data caching helps here.</p>
+<p><strong>Result</strong>: Without metadata caching, Presto with Alluxio is 2.75x faster than S3 with the Dundas dataset and 5.1x faster with the Tableau dataset.</p>
+<p><strong>Benchmark 3</strong> simulates our dashboarding use case using a dataset with <strong>a large number of small files</strong>. The datasets are batches of 2MB files, totalling to 50, 500, and 5000 files. The query used is a select query aggregating the number of entries for each date.</p>
+<p><strong>Result</strong>: Alluxio with metadata caching is 1.2x to 5.9x faster than S3. Without metadata caching, Alluxio is only 1x to 1.35x faster. Enabling metadata caching significantly reduces the execution time by memorizing metadata, recognizing hot data and increasing replicas.</p>
+<p><strong>Benchmark 4</strong> simulates the conversational bot. The dataset used was a snapshot of daily game performance.
+The query contains <strong>multiple stages of calculation to simulate a CPU intensive query</strong>.
+It converts an integer field into HyperLogLog, merges it, and selects the cardinality.
+The results are filtered by an integer and varchar field.</p>
+<p><strong>Result</strong>: Alluxio without metadata caching shortens the timespan from 85.2 seconds to 3 seconds, which improves the performance as much as 27x.</p>
+<h2><a class="anchor" aria-hidden="true" id="conclusion"></a><a href="#conclusion" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h2>
+<p>This blog explores an innovative platform with Presto as the computing engine and Alluxio as a data orchestration layer between Presto and S3 storage, to support online services with instantaneous response within the gaming industry. We evaluated this platform with real industrial examples of data visualization, dashboarding, and a conversational chatbot. Our preliminary results show that Presto with Alluxio outperforms S3 significantly in all cases. In particular, Alluxio with metadata caching shows up to 5.9x performance gain when handling large numbers of small files. Alluxio enables the separation of storage and compute by managing the allocated ephemeral disks to cache data from S3 local to Presto. Advanced cache management with an asymmetric number of replicas for hot vs. cold data accounts for performance gains in each scenario we tested.</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#use-cases">Use Cases</a></li><li><a href="#architecture">Architecture</a></li><li><a href="#benchmark-result">Benchmark Result</a></li><li><a href="#conclusion">Conclusion</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page. Linux is a registered trademark of Linus Torvalds. <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> and <a href="http://www.linuxfoundation.org/terms">Terms of Use</a>.</section></footer></div></body></html>

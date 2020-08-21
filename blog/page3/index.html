@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Blog · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Faster big data with SQL on everything"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Blog · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/"/><meta property="og:description" content="Faster big data with SQL on everything"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="blog"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2020/08/20/unnest">Even Faster Unnest</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/14/getting-started-and-aria">Getting Started with PrestoDB and Aria Scan Optimizations</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/06/presto-in-ea">Building a high-performance platform on AWS to support real-time gaming services using Presto and Alluxio</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/04/prestodb-and-hudi">PrestoDB and Apache Hudi</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/07/17/alluxio-hybrid-cloud">Running Presto in a Hybrid Cloud Architecture</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="posts"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2019/06/28/introducing-the-presto-blog">Introducing the Presto blog</a></h1><p class="post-meta">June 28, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/orrierling/" target="_blank" rel="noreferrer noopener">Orri Erling</a></p><div class="authorPhoto"><a href="https://www.linkedin.com/in/orrierling/" target="_blank" rel="noreferrer noopener"><img src="https://graph.facebook.com/100026224749124/picture/?height=200&amp;width=200" alt="Orri Erling"/></a></div></div></header><article class="post-content"><div><span><p>Presto is a key piece of data infrastructure at many companies. The community has many ongoing projects for taking it to new levels of performance and functionality plus unique experience and insight into challenges of scale.</p>
+<p>We are opening this blog as an informal channel for discussing our work as well as technology trends and issues that affect the big data and data warehouse world at large. Our development continues to take place at github and can thus be followed by everybody. Here we seek to have a channel that is more concise and interesting to a broader readership than github issues and code comments would be.</p>
+<p>We have current projects like Aria Presto for doubling CPU efficiency and Presto Unlimited for enabling fault tolerant execution of very large queries. We are running one of the world’s largest data warehouses and thus have a unique perspective on platform technologies, e.g. C++ vs. Java, data analytics usage patterns, integration of machine learning and database, data center infrastructure for supporting these and much more.
+Some of the big questions we are facing have to do with optimizing infrastructure at scale and designing the future of interoperable file formats and metadata. Today we are running ORC on Presto and Spark and system specific file formats for diverse online systems. We are constantly navigating the strait between universality and specialization and keep looking for ways to generalize while advancing functionality and performance.</p>
+<p>The Presto user and developer community involves many of the world’s leading technology players. There is exciting work in progress around Presto at many of these companies. We look forward to tracking these too here. Articles from the Presto world are welcome.
+Stay tuned for everything Presto.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev" href="/blog/page2/">← Prev</a></div></div></div></div></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage">Trademark Usage</a> page. Linux is a registered trademark of Linus Torvalds. <a href="http://www.linuxfoundation.org/privacy">Privacy Policy</a> and <a href="http://www.linuxfoundation.org/terms">Terms of Use</a>.</section></footer></div></body></html>

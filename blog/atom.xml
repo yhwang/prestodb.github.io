@@ -35,6 +35,21 @@
         </author>
     </entry>
     <entry>
+        <title type="html"><![CDATA[Building a high-performance platform on AWS to support real-time gaming services using Presto and Alluxio]]></title>
+        <id>https://prestodb.io/blog/2020/08/06/presto-in-ea.html</id>
+        <link href="https://prestodb.io/blog/2020/08/06/presto-in-ea.html"/>
+        <updated>2020-08-06T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p><strong>Authors:</strong> Teng Wang, Du Li, Yu Jin and Sundeep Narravula</p>
+<p>Electronic Arts (EA) is a leading company in the gaming industry, providing over a thousand games to serve billions of users worldwide.
+Making near real-time decisions for EA’s online services is critical for our business.
+This blog describes a data platform on AWS based on Presto and Alluxio to support online services with instantaneous response within the gaming industry.</p>
+]]></summary>
+        <author>
+            <name>Teng Wang</name>
+            <uri>https://www.linkedin.com/in/teng-wang-9b8732194/</uri>
+        </author>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[PrestoDB and Apache Hudi]]></title>
         <id>https://prestodb.io/blog/2020/08/04/prestodb-and-hudi.html</id>
         <link href="https://prestodb.io/blog/2020/08/04/prestodb-and-hudi.html"/>
