@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Presto Enables Internal Log Data Analysis at Drift · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="I’m a Senior Software Engineer in the data group at Drift, a conversational marketing platform that is used for qualifying leads faster, automatically booking meetings and connecting customers to the right business solutions more efficiently. I’ve used Presto quite a bit throughout my career, and I want to first give readers a quick overview of how Presto has enabled my team at Drift to quickly and cost-effectively analyze distributed logs at scale. Then I will share how we used and benefited from Presto at Vistaprint, where I worked previously."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Presto Enables Internal Log Data Analysis at Drift · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2020/10/29/presto-at-drift"/><meta property="og:description" content="I’m a Senior Software Engineer in the data group at Drift, a conversational marketing platform that is used for qualifying leads faster, automatically booking meetings and connecting customers to the right business solutions more efficiently. I’ve used Presto quite a bit throughout my career, and I want to first give readers a quick overview of how Presto has enabled my team at Drift to quickly and cost-effectively analyze distributed logs at scale. Then I will share how we used and benefited from Presto at Vistaprint, where I worked previously."/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2020/10/29/presto-at-drift">Presto Enables Internal Log Data Analysis at Drift</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/20/unnest">Even Faster Unnest</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/14/getting-started-and-aria">Getting Started with PrestoDB and Aria Scan Optimizations</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/06/presto-in-ea">Building a high-performance platform on AWS to support real-time gaming services using Presto and Alluxio</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/04/prestodb-and-hudi">PrestoDB and Apache Hudi</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2020/10/29/presto-at-drift">Presto Enables Internal Log Data Analysis at Drift</a></h1><p class="post-meta">October 29, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/venkaa6" target="_blank" rel="noreferrer noopener">Arun Venkateswaran</a></p></div></header><div><span><p>I’m a Senior Software Engineer in the data group at Drift, a conversational marketing platform that is used for qualifying leads faster, automatically booking meetings and connecting customers to the right business solutions more efficiently. I’ve used Presto quite a bit throughout my career, and I want to first give readers a quick overview of how Presto has enabled my team at Drift to quickly and cost-effectively analyze distributed logs at scale. Then I will share how we used and benefited from Presto at Vistaprint, where I worked previously.</p>
+<!--truncate-->
+## How we use Presto at Drift
+<p>To provide data engineers in my group with the ability to mine log files, we use Amazon Athena which has Presto as its distributed SQL query engine for running analytic queries against data of any size.
+We also use AWS Glue, an ETL service that makes it easy to categorize data, clean it, and move it between different data stores and data streams. Glue basically provides a unified metadata repository across a variety of data sources and formats, and it integrates easily with Athena.
+<br></p>
+<p><img src="/img/blog/2020-10-29-presto-at-drift/architecture.png" alt=""></p>
+<p></br></p>
+<p>Specifically, Presto plays a key role in enabling internal analysis here at Drift. We use Presto to query both semi-structured and freeform log data such as JSON messages. With Presto, data engineers can easily drop the data into Amazon S3 without needing to perform too much data cleaning, so that Athena can read the data easily. We use that data to generate graphs that show how many log reports we’re running, or how many bad instances per hour are occurring.</p>
+<h3><a class="anchor" aria-hidden="true" id="advantages-of-presto"></a><a href="#advantages-of-presto" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Advantages of Presto</h3>
+<p>One of the main advantages of Presto in this case is that my engineering team can get to the data quickly and start querying the data immediately.</p>
+<p>The data in Presto is completely cloud-based; it basically functions as an on-demand service query search. If the engineers need to run a massive load of data, it will automatically spin as many nodes as needed.</p>
+<p>Business users at Drift could use Presto by querying Salesforce data using Looker, our BI and analytics platform. They would be able to easily process petabytes of data to find answers to their questions, such as how many sales opportunities were created, how many accounts they have, and the progression of the sales pipeline from qualified lead to a closed sale.
+The main data warehouse at Drift is Snowflake. The data loading does take a lot of development time, as it would require a lot of “scaffolding work” in order to run it. With Presto, I can drop the data in and parse it immediately.</p>
+<h2><a class="anchor" aria-hidden="true" id="how-we-used-presto-at-vistaprint"></a><a href="#how-we-used-presto-at-vistaprint" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>How we used Presto at Vistaprint</h2>
+<p>I also had the opportunity to use Presto earlier in my career, while working at Vistaprint, an ecommerce platform that combined in-house software and production technology to mass-customize personalized products.</p>
+<p>At Vistaprint, Presto was used for flow log reporting to read order data. Every five minutes, we would do a count in AWS Athena to look at orders coming through the system. If it showed that no orders came through in a 15-minute timeframe, I would get an automatic alert via Slack or text, and I would know that there was a problem that needed human intervention. Presto provided quick visibility into the logs so that we could act fast. When our Kafka ingestion cluster went down, the Lambda code that I wrote triggered a Slack alert so we could respond quickly.</p>
+<h3><a class="anchor" aria-hidden="true" id="the-advantages-of-using-presto-at-vistaprint"></a><a href="#the-advantages-of-using-presto-at-vistaprint" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The advantages of using Presto at Vistaprint</h3>
+<p>In the case with Vistaprint, Presto’s ability to efficiently and quickly query large amounts of data from multiple sources was critical. I also appreciated how easy it was to add AWS Athena/Presto to our existing system. I didn’t need to worry about node provisioning, cluster setup, Presto configuration, or cluster tuning.</p>
+<h2><a class="anchor" aria-hidden="true" id="conclusion"></a><a href="#conclusion" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h2>
+<p>Presto is designed and tuned for real-world workloads, and I can query data where it is stored without needing to move it into a separate analytics system. This is a huge resource and cost saver. I’m looking forward to seeing how Presto evolves over the next few years, and I’m excited to continue to use it for interactive analytic queries.</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#how-we-use-presto-at-drift">How we use Presto at Drift</a><ul class="toc-headings"><li><a href="#advantages-of-presto">Advantages of Presto</a></li></ul></li><li><a href="#how-we-used-presto-at-vistaprint">How we used Presto at Vistaprint</a><ul class="toc-headings"><li><a href="#the-advantages-of-using-presto-at-vistaprint">The advantages of using Presto at Vistaprint</a></li></ul></li><li><a href="#conclusion">Conclusion</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>

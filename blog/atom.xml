@@ -2,11 +2,23 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2020-08-20T06:00:00.000Z</updated>
+    <updated>2020-10-29T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
+    <entry>
+        <title type="html"><![CDATA[Presto Enables Internal Log Data Analysis at Drift]]></title>
+        <id>https://prestodb.io/blog/2020/10/29/presto-at-drift.html</id>
+        <link href="https://prestodb.io/blog/2020/10/29/presto-at-drift.html"/>
+        <updated>2020-10-29T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>I’m a Senior Software Engineer in the data group at Drift, a conversational marketing platform that is used for qualifying leads faster, automatically booking meetings and connecting customers to the right business solutions more efficiently. I’ve used Presto quite a bit throughout my career, and I want to first give readers a quick overview of how Presto has enabled my team at Drift to quickly and cost-effectively analyze distributed logs at scale. Then I will share how we used and benefited from Presto at Vistaprint, where I worked previously.</p>
+]]></summary>
+        <author>
+            <name>Arun Venkateswaran</name>
+            <uri>https://github.com/venkaa6</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Even Faster Unnest]]></title>
         <id>https://prestodb.io/blog/2020/08/20/unnest.html</id>
