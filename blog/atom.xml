@@ -2,11 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2020-10-29T06:00:00.000Z</updated>
+    <updated>2020-11-30T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
+    <entry>
+        <title type="html"><![CDATA[PrestoCon and Growing Industry Consortium - Intel and Upsolver Join Presto Foundation]]></title>
+        <id>https://prestodb.io/blog/2020/11/30/prestocon-and-foundation-update.html</id>
+        <link href="https://prestodb.io/blog/2020/11/30/prestocon-and-foundation-update.html"/>
+        <updated>2020-11-30T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>Girish Baliga</p>
+<p>Presto Foundation joined the Linux Foundation over a year ago, and has been focused on growing the <a href="http://prestodb.io">Presto open source project</a> and community. We encourage industry involvement with an <a href="https://github.com/prestodb/foundation#presto-foundation-related-documents">open charter</a>, <a href="https://github.com/prestodb/foundation/blob/master/PRINCIPLES.md#presto-foundation-principles">clear guiding principles</a>, and <a href="https://github.com/prestodb/foundation/blob/master/GOALS.md#presto-foundation-pf-strategic-goals">community-oriented goals</a>. We recently hosted <a href="https://prestodb.io/prestocon.html">PrestoCon 2020</a>, our first annual community conference, which was widely attended and well represented by Presto community members. We also warmly welcomed Intel and Upsolver who recently joined the Presto Foundation.</p>
+]]></summary>
+        <author>
+            <name>Girish Baliga</name>
+            <uri>https://github.com/gbbaliga</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Presto Enables Internal Log Data Analysis at Drift]]></title>
         <id>https://prestodb.io/blog/2020/10/29/presto-at-drift.html</id>
