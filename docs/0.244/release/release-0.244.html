@@ -1,0 +1,126 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>13.1. Release 0.244 &#8212; Presto 0.244 Documentation</title>
+    <link rel="stylesheet" href="../_static/presto.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.244',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="13.2. Release 0.243.3" href="release-0.243.3.html" />
+    <link rel="prev" title="13. Release Notes" href="../release.html" /> 
+  </head>
+  <body>
+<div class="header">
+    <h1 class="heading"><a href="../index.html">
+        <span>Presto 0.244 Documentation</span></a></h1>
+    <h2 class="heading"><span>13.1. Release 0.244</span></h2>
+</div>
+<div class="topnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="../release.html">13. Release Notes</a>
+    </span>
+    <span class="right">
+        <a href="release-0.243.3.html">13.2. Release 0.243.3</a> &raquo;
+    </span>
+</p>
+
+</div>
+<div class="content">
+    
+  <div class="section" id="release-0-244">
+<h1>13.1. Release 0.244</h1>
+<div class="section" id="highlights">
+<h2><strong>Highlights</strong></h2>
+<ul class="simple">
+<li>Improve performance of cross joins.</li>
+<li>Add support for spilling joins when using materialized exchanges.</li>
+</ul>
+</div>
+<div class="section" id="details">
+<h2><strong>Details</strong></h2>
+<div class="section" id="general-changes">
+<h3>General Changes</h3>
+<ul class="simple">
+<li>Fix an issue where queries could encounter an int overflow error during spilling.</li>
+<li>Fix <a class="reference internal" href="../functions/string.html#hamming_distance" title="hamming_distance"><code class="xref py py-func docutils literal"><span class="pre">hamming_distance()</span></code></a> to handle code point zero correctly.</li>
+<li>Fix caching and case-sensitivity bugs with type signatures for enum types.</li>
+<li>Fix a bug where queries could produce wrong results when they have multiple lambda expressions that only differ in complex type constants (:issue:15424).</li>
+<li>Improve performance of cross joins.</li>
+<li>Add <code class="docutils literal"><span class="pre">peak_node_total_memory</span></code> to statistics to allow monitoring the peak sum of memory used across tasks at any node by a query.</li>
+<li>Add support for spilling joins when using materialized exchanges.</li>
+<li>Add support for thrift transport for TaskStatus. This can be enabled using config property <code class="docutils literal"><span class="pre">experimental.internal-communication.thrift-transport-enabled</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="druid-changes">
+<h3>Druid Changes</h3>
+<ul class="simple">
+<li>Fix druid reading issue caused by using the ARRAY_LINES result format.</li>
+</ul>
+</div>
+<div class="section" id="hive-changes">
+<h3>Hive Changes</h3>
+<ul class="simple">
+<li>Fix a bug with reading encrypted DWRF tables where queries could fail with a <code class="docutils literal"><span class="pre">NullPointerException</span></code>.</li>
+<li>Add support for AWS SDK client request metrics and Glue API metrics to <code class="docutils literal"><span class="pre">GlueHiveMetastore</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="pinot-changes">
+<h3>Pinot Changes</h3>
+<ul class="simple">
+<li>Add support for querying Pinot server with streaming API (with Pinot version &gt;= 0.6.0). The API can be enabled by setting the configuration property <code class="docutils literal"><span class="pre">pinot.use-streaming-for-segment-queries=true</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="verifier-changes">
+<h3>Verifier Changes</h3>
+<ul class="simple">
+<li>Fix an issue where queries are always directed to the first cluster when multiple control or test clusters are specified.</li>
+<li>Improve handling of memory limits by using the verifier cluster’s memory limits instead of the limits defined while running the query.</li>
+<li>Add control and test session properties to Verifier output.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="contributors">
+<h2><strong>Contributors</strong></h2>
+<p>Adli Mousa, Ajay George, Andrii Rosa, Ariel Weisberg, Bhavani Hari, Bin Fan, Daniel Ohayon, Guy Moore, James Petty, James Sun, Ke Wang, Leiqing Cai, Masha Basmanova, Mohamed Shafee, Nikhil Collooru, Rebecca Schlussel, Rongrong Zhong, Saksham Sachdev, Sergii Druzkin, Shixuan Fan, Stone Shi, Vic Zhang, Wenlei Xie, Xiang Fu, Ying Su, Zhenxiao Luo, prithvip</p>
+</div>
+</div>
+
+
+</div>
+<div class="bottomnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="../release.html">13. Release Notes</a>
+    </span>
+    <span class="right">
+        <a href="release-0.243.3.html">13.2. Release 0.243.3</a> &raquo;
+    </span>
+</p>
+
+</div>
+
+    <div class="footer" role="contentinfo">
+    </div>
+  </body>
+</html>
