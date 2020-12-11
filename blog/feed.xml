@@ -53,7 +53,7 @@
             <guid>https://prestodb.io/blog/2020/08/06/presto-in-ea.html</guid>
             <pubDate>Thu, 06 Aug 2020 06:00:00 GMT</pubDate>
             <description><![CDATA[<p><strong>Authors:</strong> Teng Wang, Du Li, Yu Jin and Sundeep Narravula</p>
-<p>Electronic Arts (EA) is a leading company in the gaming industry, providing over a thousand games to serve billions of users worldwide.
+<p>Electronic Arts (EA) is a leading company in the gaming industry, providing dozens of games to serve billions of users worldwide each year.
 Making near real-time decisions for EA’s online services is critical for our business.
 This blog describes a data platform on AWS based on Presto and Alluxio to support online services with instantaneous response within the gaming industry.</p>
 ]]></description>
