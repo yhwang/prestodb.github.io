@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Using OptimizedTypedSet to Improve Map and Array Functions · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Function evaluation is a big part of projection CPU cost. Recently we optimized a set of functions that use `TypedSet`, e.g.  `map_concat`, `array_union`, `array_intersect`, and `array_except`. By introducing a new `OptimizedTypeSet`, the above functions saw improvements in several dimensions:"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Using OptimizedTypedSet to Improve Map and Array Functions · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2020/12/04/typedset"/><meta property="og:description" content="Function evaluation is a big part of projection CPU cost. Recently we optimized a set of functions that use `TypedSet`, e.g.  `map_concat`, `array_union`, `array_intersect`, and `array_except`. By introducing a new `OptimizedTypeSet`, the above functions saw improvements in several dimensions:"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2020/12/04/typedset">Using OptimizedTypedSet to Improve Map and Array Functions</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/11/20/prestocon-and-foundation-update">PrestoCon and Growing Industry Consortium - Intel and Upsolver Join Presto Foundation</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/10/29/presto-at-drift">Presto Enables Internal Log Data Analysis at Drift</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/20/unnest">Even Faster Unnest</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/08/14/getting-started-and-aria">Getting Started with PrestoDB and Aria Scan Optimizations</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2020/12/04/typedset">Using OptimizedTypedSet to Improve Map and Array Functions</a></h1><p class="post-meta">December 4, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/ying-su-b00b81107/" target="_blank" rel="noreferrer noopener">Ying Su</a></p><div class="authorPhoto"><a href="https://www.linkedin.com/in/ying-su-b00b81107/" target="_blank" rel="noreferrer noopener"><img src="https://graph.facebook.com/656599427/picture/?height=200&amp;width=200" alt="Ying Su"/></a></div></div></header><div><span><p>Function evaluation is a big part of projection CPU cost. Recently we optimized a set of functions that use <code>TypedSet</code>, e.g.  <code>map_concat</code>, <code>array_union</code>, <code>array_intersect</code>, and <code>array_except</code>. By introducing a new <code>OptimizedTypeSet</code>, the above functions saw improvements in several dimensions:</p>
+<ul>
+<li>Up to 80% reduction in wall time and CPU time in JMH benchmarks</li>
+<li>Reserved memory reduced by 5%</li>
+<li>Allocation rate reduced by 80%</li>
+</ul>
+<p>Furthermore, OptimizedTypeSet resolves the long standing issue of throwing <code>EXCEEDED_FUNCTION_MEMORY_LIMIT</code> for large incoming blocks: &quot;The input to function_name is too large. More than 4MB of memory is needed to hold the intermediate hash set.”</p>
+<p>The <code>OptimizedTypeSet</code> and improvements to the above mentioned functions are merged to master, and will be available from Presto 0.244.</p>
+<!--truncate-->
+<p>In this post we will look at the methods used in this improvement.</p>
+<h2><a class="anchor" aria-hidden="true" id="avoid-using-internal-blockbuilder"></a><a href="#avoid-using-internal-blockbuilder" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Avoid Using Internal BlockBuilder</h2>
+<p><code>TypedSet</code> has an internal <code>BlockBuilder</code> and appends each <code>Block</code> position being added to it, as well as an external <code>BlockBuilder</code> to construct the results. Block building using <code>BlockBuilder</code> is very costly and inefficient, especially when memory growth is not handled properly. The <code>BlockBuilder</code> was needed to keep track of the elements being added, so that it can:</p>
+<ol>
+<li>Resolve hash table probing collision</li>
+<li>Rehash</li>
+</ol>
+<p>However, <code>BlockBuilder</code> is not necessary for either of these issues. In all use cases, whole blocks (instead of several positions of a block) are added to the <code>TypedSet</code>, and the problem of resolving collisions can be resolved by keeping track of the blocks being added. Rehashing is not needed in most cases because we can calculate the maximum number of entries before creating the <code>TypedSet</code>.</p>
+<p>In the new design, we provided methods that add a whole <code>Block</code> with different set operations:</p>
+<ul>
+<li>union</li>
+<li>intersect</li>
+<li>except</li>
+</ul>
+<p>These methods take in a <code>Block</code> and remember the selected positions. The operations can be applied on the same set multiple times, i.e. you can union two Block A and B, then intersect with Block C, then minus(except) Block D. This way the internal operations on the Block elements can be streamlined to more efficient loops. The memory consumption and allocation were also reduced because now we only need to remember the selected positions instead of building a whole new Block internally.</p>
+<h2><a class="anchor" aria-hidden="true" id="avoid-recomputing-hash-positions"></a><a href="#avoid-recomputing-hash-positions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Avoid Recomputing Hash Positions</h2>
+<p>Calculating hash positions took over 60% of original function costs. For some operations like set intersection, the previous implementation requires creating multiple <code>TypedSet</code>s and calculating the hash position multiple times. For example, the <code>array_intersect</code> function calculates the distinct common elements from two incoming <code>Block</code>s, one from the right side and the other one from the left side. It builds a <code>TypedSet</code> R which contains a hash table <code>R</code> for the right side <code>Block</code> first. When inserting a new element <code>X</code> from the left side <code>Block</code>, it first checks if hash table <code>R</code> contains the element. If not, the new element will be added to the other <code>TypedSet</code> L, which has another hash table <code>L</code> and represents the final results.</p>
+<p><img src="/img/blog/2020-12-04-OptimizedTypedSet/TypedSet.png" alt="Remote Exchange"></p>
+<p>As shown in the above picture, the <code>contains</code> and <code>add</code> operation would both calculate the hash positions for hash table <code>R</code> and <code>L</code> respectively. This hash position indicates the starting position of the linear probing for both hash tables. But actually the hashPosition calculated in hash table <code>R</code> can be reused by hash table <code>L</code> if the hash table sizes and hash functions are the same.</p>
+<p><img src="/img/blog/2020-12-04-OptimizedTypedSet/OptimizedTypedSet.png" alt="Remote Exchange"></p>
+<p>In the new <code>OptimizedTypedSet</code>, the first step is the same as the original implementation, in which the right side <code>Block</code> is added to the set first, and hash table <code>R</code> is constructed. Intersecting the set with the left side <code>Block</code> was done by creating a new hash table <code>L</code> of the same size (size precalculated) internally: it checks if the new elements are contained in hash table <code>R</code>, and if not, add them to hash table <code>L</code>. Unlike the original implementation, the <code>contains</code> and <code>add</code> operation share the same hash position calculation. When the new hash table <code>L</code> is constructed, the hash table <code>R</code> will be discarded.</p>
+<h2><a class="anchor" aria-hidden="true" id="next-steps"></a><a href="#next-steps" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Next Steps</h2>
+<p>The goal of the above PR was to demonstrate the benefit using the OptimizedTypedSet on 4 functions. There are a few other usages, e.g. <code>MultimapAggregationFunction</code>, <code>MapFromEntriesFunction</code>, etc. After we change them to use the new <code>OptimizedTypedSet</code>, the legacy <code>TypedSet</code> implementation can be removed.</p>
+<h2><a class="anchor" aria-hidden="true" id="further-reading"></a><a href="#further-reading" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Further reading</h2>
+<p>For more information please refer to the <a href="https://github.com/prestodb/presto/pull/15362">PR#15362</a>.</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#avoid-using-internal-blockbuilder">Avoid Using Internal BlockBuilder</a></li><li><a href="#avoid-recomputing-hash-positions">Avoid Recomputing Hash Positions</a></li><li><a href="#next-steps">Next Steps</a></li><li><a href="#further-reading">Further reading</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>

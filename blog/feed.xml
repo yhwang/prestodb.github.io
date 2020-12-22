@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Fri, 20 Nov 2020 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 04 Dec 2020 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,21 @@
             <url>https://prestodb.io/img/presto.png</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Using OptimizedTypedSet to Improve Map and Array Functions]]></title>
+            <link>https://prestodb.io/blog/2020/12/04/typedset.html</link>
+            <guid>https://prestodb.io/blog/2020/12/04/typedset.html</guid>
+            <pubDate>Fri, 04 Dec 2020 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Function evaluation is a big part of projection CPU cost. Recently we optimized a set of functions that use <code>TypedSet</code>, e.g.  <code>map_concat</code>, <code>array_union</code>, <code>array_intersect</code>, and <code>array_except</code>. By introducing a new <code>OptimizedTypeSet</code>, the above functions saw improvements in several dimensions:</p>
+<ul>
+<li>Up to 80% reduction in wall time and CPU time in JMH benchmarks</li>
+<li>Reserved memory reduced by 5%</li>
+<li>Allocation rate reduced by 80%</li>
+</ul>
+<p>Furthermore, OptimizedTypeSet resolves the long standing issue of throwing <code>EXCEEDED_FUNCTION_MEMORY_LIMIT</code> for large incoming blocks: &quot;The input to function_name is too large. More than 4MB of memory is needed to hold the intermediate hash set.”</p>
+<p>The <code>OptimizedTypeSet</code> and improvements to the above mentioned functions are merged to master, and will be available from Presto 0.244.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[PrestoCon and Growing Industry Consortium - Intel and Upsolver Join Presto Foundation]]></title>
             <link>https://prestodb.io/blog/2020/11/20/prestocon-and-foundation-update.html</link>
