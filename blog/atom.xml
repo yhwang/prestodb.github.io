@@ -2,25 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2021-01-07T06:00:00.000Z</updated>
+    <updated>2020-12-04T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
-    <entry>
-        <title type="html"><![CDATA[2020 Recap - A Year with Presto]]></title>
-        <id>https://prestodb.io/blog/2021/01/07/2020-recap-year-with-presto.html</id>
-        <link href="https://prestodb.io/blog/2021/01/07/2020-recap-year-with-presto.html"/>
-        <updated>2021-01-07T06:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>Tl;dr: 2020 was a huge year for the Presto community. We held our first major conference, PrestoCon, the biggest Presto event ever. We had a massive expansion of our meetup groups with more than 20 sessions held throughout the year, and significant innovations were contributed to Presto!</p>
-<p>This year has certainly been unique, to say the least. As chairperson of the Presto Foundation Outreach Committee, the term “outreach” took on a whole new meaning this year. But through the challenges of 2020, we adopted new ways to connect. We continued to build and engage with the Presto community in a new “virtual” way, and I couldn’t be more proud of all we’ve accomplished as a community in 2020.</p>
-<p>So what did the Presto Foundation do in 2020?</p>
-]]></summary>
-        <author>
-            <name>Dipti Borkar</name>
-            <uri>https://www.linkedin.com/in/diptiborkar/</uri>
-        </author>
-    </entry>
     <entry>
         <title type="html"><![CDATA[Using OptimizedTypedSet to Improve Map and Array Functions]]></title>
         <id>https://prestodb.io/blog/2020/12/04/typedset.html</id>
