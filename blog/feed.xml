@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Fri, 04 Dec 2020 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 12 Jan 2021 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,16 @@
             <url>https://prestodb.io/img/presto.png</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[2020 Recap - A Year with Presto]]></title>
+            <link>https://prestodb.io/blog/2021/01/12/2020-recap-year-with-presto.html</link>
+            <guid>https://prestodb.io/blog/2021/01/12/2020-recap-year-with-presto.html</guid>
+            <pubDate>Tue, 12 Jan 2021 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Tl;dr: 2020 was a huge year for the Presto community. We held our first major conference, PrestoCon, the biggest Presto event ever. We had a massive expansion of our meetup groups with more than 20 sessions held throughout the year, and significant innovations were contributed to Presto!</p>
+<p>This year has certainly been unique, to say the least. As chairperson of the Presto Foundation Outreach Committee, the term “outreach” took on a whole new meaning this year. But through the challenges of 2020, we adopted new ways to connect. We continued to build and engage with the Presto community in a new “virtual” way, and I couldn’t be more proud of all we’ve accomplished as a community in 2020.</p>
+<p>So what did the Presto Foundation do in 2020?</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Using OptimizedTypedSet to Improve Map and Array Functions]]></title>
             <link>https://prestodb.io/blog/2020/12/04/typedset.html</link>
