@@ -1,0 +1,107 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>13.1. Release 0.246 &#8212; Presto 0.246 Documentation</title>
+    <link rel="stylesheet" href="../_static/presto.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.246',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="13.2. Release 0.245.1" href="release-0.245.1.html" />
+    <link rel="prev" title="13. Release Notes" href="../release.html" /> 
+  </head>
+  <body>
+<div class="header">
+    <h1 class="heading"><a href="../index.html">
+        <span>Presto 0.246 Documentation</span></a></h1>
+    <h2 class="heading"><span>13.1. Release 0.246</span></h2>
+</div>
+<div class="topnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="../release.html">13. Release Notes</a>
+    </span>
+    <span class="right">
+        <a href="release-0.245.1.html">13.2. Release 0.245.1</a> &raquo;
+    </span>
+</p>
+
+</div>
+<div class="content">
+    
+  <div class="section" id="release-0-246">
+<h1>13.1. Release 0.246</h1>
+<div class="section" id="details">
+<h2><strong>Details</strong></h2>
+<div class="section" id="general-changes">
+<h3>General Changes</h3>
+<ul class="simple">
+<li>Fix a bug introduced in <a class="reference external" href="https://github.com/prestodb/presto/pull/15313">#15313</a> that would cause queries to fail when using upper case in SQL function catalog schema names.</li>
+<li>Fix a possible integer overflow error when spilling to temporary storage.</li>
+<li>Fix an issue where prepared statements would allow some non-constant parameters.</li>
+<li>Fix an error where Presto server can fail to start when using function namespace manager.</li>
+<li>Add a minimum value of 30 seconds to the configuration property <code class="docutils literal"><span class="pre">query.min-expire-age</span></code>.</li>
+<li>Add listener-based revocation model for spilling strategy <code class="docutils literal"><span class="pre">PER_TASK_MEMORY_THRESHOLD</span></code>.</li>
+<li>Disable spill to disk for join queries where the probe side uses grouped execution and the build does not. Previously these queries would fail with <code class="docutils literal"><span class="pre">GENERIC_INTERNAL_ERRORS</span></code>.</li>
+<li>Disallow <code class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span></code> literals used with Window functions as it’s not useful, expensive and most often used wrongly.</li>
+<li>Add support for fragment result caching for queries with local exchange (e.g. intermediate aggregation).</li>
+<li>Improve queries that have unnecessary limits and order bys.
+This feature is enabled by default and can be disabled by using the configuration property <code class="docutils literal"><span class="pre">optimizer.skip-redundant-sort</span></code> or session property <code class="docutils literal"><span class="pre">skip_redundant_sort</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="geospatial-changes">
+<h3>Geospatial Changes</h3>
+<ul class="simple">
+<li>Upgrade JTS to 1.18.0.</li>
+</ul>
+</div>
+<div class="section" id="hive-changes">
+<h3>Hive Changes</h3>
+<ul class="simple">
+<li>Fix dynamic pruning failures for joining on null keys in hive partition.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="contributors">
+<h2><strong>Contributors</strong></h2>
+<p>Andrii Rosa, Ariel Weisberg, Bhavani Hari, Bin Fan, Emy Sun, George Wang, James Gill, James Petty, James Sun, John Roll, Maria Basmanova, Moji Solgi, Nikhil Collooru, Rebecca Schlussel, Rohit Jain, Rongrong Zhong, Saksham Sachdev, Shixuan Fan, Sorin Stoiana, Sreeni Viswanadha, Vic Zhang, Wenlei Xie, Ying Su, Zhenyuan Zhao, fornaix</p>
+</div>
+</div>
+
+
+</div>
+<div class="bottomnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="../release.html">13. Release Notes</a>
+    </span>
+    <span class="right">
+        <a href="release-0.245.1.html">13.2. Release 0.245.1</a> &raquo;
+    </span>
+</p>
+
+</div>
+
+    <div class="footer" role="contentinfo">
+    </div>
+  </body>
+</html>
