@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>RaptorX: Building a 10X Faster Presto · </title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;div style=&quot;text-align: justify&quot;&gt;"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="RaptorX: Building a 10X Faster Presto · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2021/02/04/raptorx"/><meta property="og:description" content="&lt;div style=&quot;text-align: justify&quot;&gt;"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2021/02/04/raptorx">RaptorX: Building a 10X Faster Presto</a></li><li class="navListItem"><a class="navItem" href="/blog/2021/01/12/2020-recap-year-with-presto">2020 Recap - A Year with Presto</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/12/04/typedset">Using OptimizedTypedSet to Improve Map and Array Functions</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/11/20/prestocon-and-foundation-update">PrestoCon and Growing Industry Consortium - Intel and Upsolver Join Presto Foundation</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/10/29/presto-at-drift">Presto Enables Internal Log Data Analysis at Drift</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2021/02/04/raptorx">RaptorX: Building a 10X Faster Presto</a></h1><p class="post-meta">February 4, 2021</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/yutiansun/" target="_blank" rel="noreferrer noopener">James Sun</a></p><div class="authorPhoto"><a href="https://www.linkedin.com/in/yutiansun/" target="_blank" rel="noreferrer noopener"><img src="https://graph.facebook.com/100001087056694/picture/?height=200&amp;width=200" alt="James Sun"/></a></div></div></header><div><span><div style="text-align: justify">
+<p><strong>Facebook:</strong> Amit Dutta, Baldeep Hira, Biswapesh Chattopadhyay, James Sun, Jialiang Tan, Ke Wang, Lin Liu, Naveen Cherukuri, Nikhil Collooru, Peter Na, Rohit Jain, Saksham Sachdev, Sergey Pershin, Shixuan Fan, Varun Gajjala</p>
+<p><strong>Alluxio:</strong> Bin Fan, Calvin Jia, Haoyuan Li</p>
+<p><strong>Twitter:</strong> Zhenxiao Luo</p>
+<p><strong>Pinterest:</strong> Lu Niu</p>
+<p><em>RaptorX is an internal project name aiming to boost query latency significantly beyond what vanilla Presto is capable of. This blog post introduces the hierarchical cache work, which is the key building block for RaptorX. With the support of the cache, we are able to boost query performance by 10X. This new architecture can beat performance oriented connectors like Raptor with the added benefit of continuing to work with disaggregated storage.</em></p>
+<!--truncate-->
+<h2><a class="anchor" aria-hidden="true" id="problems-with-disaggregated-storage"></a><a href="#problems-with-disaggregated-storage" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Problems with Disaggregated Storage</h2>
+<p><a href="https://en.wikipedia.org/wiki/Disaggregated_storage">Disaggregated storage</a> is the industry wide trend towards scaling storage and compute independently. It helps cloud providers reduce costs. Presto by nature supports such architecture. Data can be streamed from remote storage nodes outside of Presto servers.</p>
+<p>However, storage-compute disaggregation also provides new challenges for query latency as scanning huge amounts of data over the wire is going to be IO bound when the network is saturated. Moreover, the metadata paths will also go through the wire to retrieve the location of the data; a few roundtrips of metadata RPCs can easily bump up the latency to more than a second. The following figure shows the IO paths for Hive connectors in orange color, each of which could be a bottleneck on query performance.</p>
+<p><img src="/img/blog/2021-02-04-raptorx/presto-arch.png" alt="Presto Architecture"></p>
+<h2><a class="anchor" aria-hidden="true" id="raptorx-build-a-hierarchical-caching-solution"></a><a href="#raptorx-build-a-hierarchical-caching-solution" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>RaptorX: Build a Hierarchical Caching Solution</h2>
+<p>Historically, to solve the network saturation issue, Presto has a built-in Raptor connector to load data from remote storage to local SSD for fast access. However, this solution is no different from having a shared compute/storage node, which is runs counter to the idea of storage-compute disaggregation. The downside is obvious: either we waste CPU because the SSD in a worker is full or we waste SSD capacity if we are CPU bound. Thus, we started project RaptorX.</p>
+<p>RaptorX is an internal project aiming to boost query performance for Presto by at least 10X. Hierarchical caching is the key to RaptorX's success. Cache is particularly useful when storage nodes are disaggregated from compute nodes. The goal of RaptorX is not to create a new connector or product, but a built-in solution so that existing workloads can seamlessly benefit from it without migration. We are specifically targeting the existing Hive connector which is used by many workloads.</p>
+<p>The following figure shows the architecture of the caching solution. We have hierarchical layers of cache, which will be introduced in details in the remainder of this post:</p>
+<ul>
+<li>Metastore versioned cache: We cache table/partition information in the coordinator. Given metadata is mutable, like Iceberg or Delta Lake, the information is versioned. We only sync versions with metastore and fetch updated metadata when a version is out of date.</li>
+<li>File list cache: Cache file list from remote storage partition directory.</li>
+<li>Fragment result cache: Cache partially computed result on leaf worker's local SSDs. Pruning techniques are required to simplify query plans as they change all the time.</li>
+<li>File handle and footer cache: Cache open file descriptors and stripe/file footer information in leaf worker memory. These pieces of data are mostly frequently accessed when reading files.</li>
+<li>Alluxio data cache: Cache file segments with 1MB aligned chunks on leaf worker's local SSDs. The library is built from Alluxio's cache service.</li>
+<li>Affinity scheduler: A scheduler that sends sticky requests based on file paths to particular workers to maximize cache hit rate.</li>
+</ul>
+<p><img src="/img/blog/2021-02-04-raptorx/raptorx-arch.png" alt="RaptorX Architecture"></p>
+<h2><a class="anchor" aria-hidden="true" id="metastore-versioned-cache"></a><a href="#metastore-versioned-cache" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Metastore Versioned Cache</h2>
+<p>A Presto coordinator caches table metadata (schema, partition list, and partition info) to avoid long <code>getPartitions</code> calls to Hive Metastore. However, Hive table metadata is mutable. Versioning is needed to determine if the cached metadata is valid or not. To achieve that, the coordinator attaches a version number to each cache key-value pair. When a read request comes, the coordinator asks the Hive Metastore to get the partition info (if it's not cached at all) or checks with Hive Metastore to confirm the cached info is up to date. Though the roundtrip to Hive Metastore cannot be avoided, the version matching is relatively cheap compared with fetching the entire partition info.</p>
+<h2><a class="anchor" aria-hidden="true" id="file-list-cache"></a><a href="#file-list-cache" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>File List cache</h2>
+<p>A Presto coordinator caches file lists in memory to avoid long <code>listFile</code> calls to remote storage. This can only be applied to sealed directories. For open partitions, Presto will skip caching those directories to guarantee data freshness. One major use case for open partitions is to support the need of near-realtime ingestion and serving. In such cases, the ingestion engines (e.g., micro batch) will keep writing new files to the open partitions so that Presto can read near-realtime data. Further details like compaction, metastore update, or replication for near-realtime ingestion will be out of the scope of this note.</p>
+<h2><a class="anchor" aria-hidden="true" id="fragment-result-cache"></a><a href="#fragment-result-cache" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Fragment Result Cache</h2>
+<p>A Presto worker that is running a leaf stage can decide to cache the partially computed results on local SSD. This is to prevent duplicated computation upon multiple queries. The most typical use case is to cache the plan fragments on leaf stage with one level of scan, filter, project, and/or aggregation.</p>
+<p>For example, suppose a user sends the following query, where <code>ds</code> is a partition column:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">SUM</span>(<span class="hljs-keyword">col</span>) <span class="hljs-keyword">FROM</span> T <span class="hljs-keyword">WHERE</span> ds <span class="hljs-keyword">BETWEEN</span> <span class="hljs-string">'2021-01-01'</span> <span class="hljs-keyword">AND</span> <span class="hljs-string">'2021-01-03'</span>
+</code></pre>
+<p>The partially computed sum for each of <code>2021-01-01</code>, <code>2021-01-02</code>, and <code>2021-01-03</code> partitions (or more precisely the corresponding files) will be cached on leaf workers forming a &quot;fragment result&quot;. Suppose the user sends another query:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">sum</span>(<span class="hljs-keyword">col</span>) <span class="hljs-keyword">FROM</span> T <span class="hljs-keyword">WHERE</span> ds <span class="hljs-keyword">BETWEEN</span> <span class="hljs-string">'2021-01-01'</span> <span class="hljs-keyword">AND</span> <span class="hljs-string">'2021-01-05'</span>
+</code></pre>
+<p>Then, the leaf worker will directly fetch the fragment result for <code>2021-01-01</code>, <code>2021-01-02</code>, and <code>2021-01-03</code> from cache and just compute the partial sum for <code>2021-01-04</code> and <code>2021-01-05</code>.</p>
+<p>Note that the fragment result is based on the leaf query fragment, which could be highly flexible as users can add or remove filters or projections. The above example shows we can easily handle filters with only partition columns. In order to avoid the cache miss caused by frequently changing non-partition column filters, we introduced partition statistics based pruning. Consider the following query, where time is a non-partition column:</p>
+<pre><code class="hljs css language-sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">SUM</span>(<span class="hljs-keyword">col</span>) <span class="hljs-keyword">FROM</span> T
+<span class="hljs-keyword">WHERE</span> ds <span class="hljs-keyword">BETWEEN</span> <span class="hljs-string">'2021-01-01'</span> <span class="hljs-keyword">AND</span> <span class="hljs-string">'2021-01-05'</span>
+<span class="hljs-keyword">AND</span> <span class="hljs-built_in">time</span> &gt; <span class="hljs-keyword">now</span>() - <span class="hljs-built_in">INTERVAL</span> <span class="hljs-string">'3'</span> <span class="hljs-keyword">DAY</span>
+</code></pre>
+<p>Note that <code>now()</code> is a function that has values changing all the time. If a leaf worker caches the plan fragment based on <code>now()</code>’s absolute value, there is almost no chance to have a cache hit. However, if predicate <code>time &gt; now() - INTERVAL '3' DAY</code> is a &quot;loose&quot; condition that is going to be true for most of the partitions, we can strip out the predicate from the plan during scheduling time. For example, if today was <code>2021-01-04</code>, we know for partition <code>ds = 2021-01-04</code>, predicate <code>time &gt; now() - INTERVAL '3' DAY</code> is always true.</p>
+<p>More generically, consider the following figure that contains a predicate and 3 partitions (<code>A</code>, <code>B</code>, <code>C</code>) with stats showing min and max. When the partition stats domain does not have any overlap with the predicate domain (e.g. partition <code>A</code>), we could directly prune this partition without sending splits to workers. If the partition stats is completely contained by the predicate domain (e.g. Partition <code>C</code>), then we don’t need this predicate because it would always hold true for this specific partition, and we could strip the predicate when doing plan comparison. For other partitions that have some overlapping with the predicate, we have to scan the partition with the given filter.</p>
+<p><img src="/img/blog/2021-02-04-raptorx/frc.png" alt="Predicate Pruning"></p>
+<h2><a class="anchor" aria-hidden="true" id="file-descriptor-and-footer-cache"></a><a href="#file-descriptor-and-footer-cache" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>File Descriptor and Footer Cache</h2>
+<p>A Presto worker caches the file descriptors in memory to avoid long <code>openFile</code> calls to remote storage. Also, a worker caches common columnar file and stripe footers in memory. The current supported file formats are ORC, DWRF, and Parquet. The reason to cache such information in memory is due to the high hit rate of footers as they are the indexes to the data itself.</p>
+<h2><a class="anchor" aria-hidden="true" id="alluxio-data-cache"></a><a href="#alluxio-data-cache" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Alluxio Data Cache</h2>
+<p>Alluxio data cache has been introduced in <a href="https://prestodb.io/blog/2020/06/16/alluxio-datacaching">an earlier post</a>. It is the main feature to deprecate the Raptor connector. A Presto worker caches remote storage data in its original form (compressed and possibly encrypted) on local SSD upon read. If, in the future, there is a read request covering the range that can be found on the local SSD, the request will return the result directly from the local SSD. The caching library was built as a joint effort with <a href="https://www.alluxio.io/">Alluxio</a> and the Presto open source community.</p>
+<p>The caching mechanism aligns each read into 1MB chunks, where 1MB is configurable to be adapted to different storage capability. For example, suppose Presto issues a read with 3MB in length starting with offset 0, then Alluxio cache checks if 0 - 1MB, 1 - 2MB, and 2 - 3MB chunks are already on disk and only fetch those that are not cached. The purging policy is based on LRU. It removes chunks from a disk that has not been accessed for the longest time. The Alluxio data cache exposes a standard Hadoop File System interface to the Hive connector, transparently storing requested chunks in a high-performance, highly concurrent, and fault-tolerant storage engine which is designed to serve workloads at Facebook scale.</p>
+<p><img src="/img/blog/2021-02-04-raptorx/alluxio.png" alt="Alluxio Data Cache"></p>
+<h2><a class="anchor" aria-hidden="true" id="soft-affinity-scheduling"></a><a href="#soft-affinity-scheduling" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Soft Affinity Scheduling</h2>
+<p>To maximize the cache hit rate on workers, the coordinator needs to schedule the requests of the same file to the same worker. Because there is a high chance part of the file has already been cached on that particular worker. The scheduling policy is &quot;soft&quot;, meaning that if the destination worker is too busy or unavailable, the scheduler will fallback to its secondary pick worker for caching or just skip the cache when necessary. The same <a href="https://prestodb.io/blog/2020/06/16/alluxio-datacaching">earlier post</a> has a detailed explanation of the scheduling policy. The scheduling policy guarantees that cache is not on the critical path, but still can boost performance.</p>
+<h2><a class="anchor" aria-hidden="true" id="performance"></a><a href="#performance" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Performance</h2>
+<p>RaptorX cache has been fully deployed and battle tested within Facebook. To compare the performance with vanilla Presto, we ran TPC-H benchmark on a 114-node cluster. Each worker has a 1TB local SSD with 4 threads configured per task. We prepared TPC-H tables with a scale factor of 100 in remote storage. The following chart shows the comparison between Presto and Presto with the hierarchical cache.</p>
+<p><img src="/img/blog/2021-02-04-raptorx/tpch.png" alt="Alluxio Data Cache"></p>
+<p>From the benchmark, scan-heavy or aggregation-heavy queries like Q1, Q6, Q12 - Q16, Q19, and Q22 all have more than 10X latency improvement. Even join-heavy queries like Q2, Q5, Q10, or Q17 have 3X - 5X latency improvements.</p>
+<h2><a class="anchor" aria-hidden="true" id="user-guide"></a><a href="#user-guide" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>User Guide</h2>
+<p>It is required to have local SSDs for workers in order to fully enable this feature. To turn on various layers of the caches in this post, tune the following configs accordingly.</p>
+<p>Scheduling (<code>/catalog/hive.properties</code>):</p>
+<pre><code class="hljs css language-text">hive.node-selection-strategy=SOFT_AFFINITY
+</code></pre>
+<p>Metastore versioned cache (<code>/catalog/hive.properties</code>):</p>
+<pre><code class="hljs"><span class="hljs-attr">hive.partition-versioning-enabled</span>=<span class="hljs-literal">true</span>
+<span class="hljs-attr">hive.metastore-cache-scope</span>=PARTITION
+<span class="hljs-attr">hive.metastore-cache-ttl</span>=<span class="hljs-number">2</span>d
+<span class="hljs-attr">hive.metastore-refresh-interval</span>=<span class="hljs-number">3</span>d
+<span class="hljs-attr">hive.metastore-cache-maximum-size</span>=<span class="hljs-number">10000000</span>
+</code></pre>
+<p>List files cache (<code>/catalog/hive.properties</code>):</p>
+<pre><code class="hljs">hive.file-status-<span class="hljs-keyword">cache</span>-<span class="hljs-keyword">expire</span>-<span class="hljs-built_in">time</span>=<span class="hljs-number">24</span>h
+hive.file-<span class="hljs-keyword">status</span>-<span class="hljs-keyword">cache</span>-<span class="hljs-keyword">size</span>=<span class="hljs-number">100000000</span>
+hive.file-<span class="hljs-keyword">status</span>-<span class="hljs-keyword">cache</span>-<span class="hljs-keyword">tables</span>=*
+</code></pre>
+<p>Data cache (<code>/catalog/hive.properties</code>):</p>
+<pre><code class="hljs"><span class="hljs-attr">cache.enabled</span>=<span class="hljs-literal">true</span>
+<span class="hljs-attr">cache.base-directory</span>=file:///mnt/flash/data
+<span class="hljs-attr">cache.type</span>=ALLUXIO
+<span class="hljs-attr">cache.alluxio.max-cache-size</span>=<span class="hljs-number">1600</span>GB
+</code></pre>
+<p>Fragment result cache (<code>/config.properties</code> and <code>/catalog/hive.properties</code>):</p>
+<pre><code class="hljs"><span class="hljs-attr">fragment-result-cache.enabled</span>=<span class="hljs-literal">true</span>
+<span class="hljs-attr">fragment-result-cache.max-cached-entries</span>=<span class="hljs-number">1000000</span>
+<span class="hljs-attr">fragment-result-cache.base-directory</span>=file:///mnt/flash/fragment
+<span class="hljs-attr">fragment-result-cache.cache-ttl</span>=<span class="hljs-number">24</span>h
+<span class="hljs-attr">hive.partition-statistics-based-optimization-enabled</span>=<span class="hljs-literal">true</span>
+</code></pre>
+<p>File and stripe footer cache (<code>/catalog/hive.properties</code>):</p>
+<ul>
+<li>For ORC or DWRF:</li>
+</ul>
+<pre><code class="hljs">hive.orc.file-tail-<span class="hljs-keyword">cache</span>-enabled=<span class="hljs-literal">true</span>
+hive.orc.file-tail-<span class="hljs-keyword">cache</span>-<span class="hljs-keyword">size</span>=<span class="hljs-number">100</span>MB
+hive.orc.file-tail-<span class="hljs-keyword">cache</span>-ttl-since-<span class="hljs-keyword">last</span>-<span class="hljs-keyword">access</span>=<span class="hljs-number">6</span>h
+hive.orc.stripe-metadata-<span class="hljs-keyword">cache</span>-enabled=<span class="hljs-literal">true</span>
+hive.orc.stripe-footer-<span class="hljs-keyword">cache</span>-<span class="hljs-keyword">size</span>=<span class="hljs-number">100</span>MB
+hive.orc.stripe-footer-<span class="hljs-keyword">cache</span>-ttl-since-<span class="hljs-keyword">last</span>-<span class="hljs-keyword">access</span>=<span class="hljs-number">6</span>h
+hive.orc.stripe-stream-<span class="hljs-keyword">cache</span>-<span class="hljs-keyword">size</span>=<span class="hljs-number">300</span>MB
+hive.orc.stripe-stream-<span class="hljs-keyword">cache</span>-ttl-since-<span class="hljs-keyword">last</span>-<span class="hljs-keyword">access</span>=<span class="hljs-number">6</span>h
+</code></pre>
+<ul>
+<li>For Parquet:</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-attr">hive.parquet.metadata-cache-enabled</span>=<span class="hljs-literal">true</span>
+<span class="hljs-attr">hive.parquet.metadata-cache-size</span>=<span class="hljs-number">100</span>MB
+<span class="hljs-attr">hive.parquet.metadata-cache-ttl-since-last-access</span>=<span class="hljs-number">6</span>h
+</code></pre>
+</div>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#problems-with-disaggregated-storage">Problems with Disaggregated Storage</a></li><li><a href="#raptorx-build-a-hierarchical-caching-solution">RaptorX: Build a Hierarchical Caching Solution</a></li><li><a href="#metastore-versioned-cache">Metastore Versioned Cache</a></li><li><a href="#file-list-cache">File List cache</a></li><li><a href="#fragment-result-cache">Fragment Result Cache</a></li><li><a href="#file-descriptor-and-footer-cache">File Descriptor and Footer Cache</a></li><li><a href="#alluxio-data-cache">Alluxio Data Cache</a></li><li><a href="#soft-affinity-scheduling">Soft Affinity Scheduling</a></li><li><a href="#performance">Performance</a></li><li><a href="#user-guide">User Guide</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>

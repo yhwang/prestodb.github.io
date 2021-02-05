@@ -2,11 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2021-01-12T06:00:00.000Z</updated>
+    <updated>2021-02-04T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
+    <entry>
+        <title type="html"><![CDATA[RaptorX: Building a 10X Faster Presto]]></title>
+        <id>https://prestodb.io/blog/2021/02/04/raptorx.html</id>
+        <link href="https://prestodb.io/blog/2021/02/04/raptorx.html"/>
+        <updated>2021-02-04T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<div style="text-align: justify">
+<p><strong>Facebook:</strong> Amit Dutta, Baldeep Hira, Biswapesh Chattopadhyay, James Sun, Jialiang Tan, Ke Wang, Lin Liu, Naveen Cherukuri, Nikhil Collooru, Peter Na, Rohit Jain, Saksham Sachdev, Sergey Pershin, Shixuan Fan, Varun Gajjala</p>
+<p><strong>Alluxio:</strong> Bin Fan, Calvin Jia, Haoyuan Li</p>
+<p><strong>Twitter:</strong> Zhenxiao Luo</p>
+<p><strong>Pinterest:</strong> Lu Niu</p>
+<p><em>RaptorX is an internal project name aiming to boost query latency significantly beyond what vanilla Presto is capable of. This blog post introduces the hierarchical cache work, which is the key building block for RaptorX. With the support of the cache, we are able to boost query performance by 10X. This new architecture can beat performance oriented connectors like Raptor with the added benefit of continuing to work with disaggregated storage.</em></p>
+]]></summary>
+        <author>
+            <name>James Sun</name>
+            <uri>https://www.linkedin.com/in/yutiansun/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[2020 Recap - A Year with Presto]]></title>
         <id>https://prestodb.io/blog/2021/01/12/2020-recap-year-with-presto.html</id>
