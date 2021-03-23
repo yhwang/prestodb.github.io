@@ -1,0 +1,19 @@
+.main.embed {
+  min-height: 200px;
+}
+
+h1 {
+  display: none;
+}
+
+.sh_wrapper {
+  display: none;
+}
+
+.embed .mosaic-wrap {
+  width: 20%;
+}
+
+.borderless-mode .mosaic .logo {
+  height: 100px;
+}
