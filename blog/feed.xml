@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Thu, 04 Feb 2021 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 14 Jun 2021 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,22 @@
             <url>https://prestodb.io/img/presto.png</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Presto Foundation and PrestoDB: Our Commitment to the Presto Open Source Community]]></title>
+            <link>https://prestodb.io/blog/2021/06/14/Commitment-to-Presto-Open-Source-Community.html</link>
+            <guid>https://prestodb.io/blog/2021/06/14/Commitment-to-Presto-Open-Source-Community.html</guid>
+            <pubDate>Mon, 14 Jun 2021 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><strong>Authors</strong></p>
+<p>Girish Baliga, Chair, Presto Foundation, Presto Foundation Member: <a href="https://www.uber.com/">Uber</a>
+Tim Meehan, Chair, Presto Foundation, Technical Steering Committee, Presto Foundation Member: <a href="https://www.facebook.com/">Facebook</a>
+Dipti Borkar, Chair, Presto Foundation, Outreach, Presto Foundation Member: <a href="https://ahana.io/">Ahana</a>
+Amit Chopra, Board member, Presto Foundation Member: <a href="https://www.facebook.com/">Facebook</a>
+Zhenxiao Luo , Board member, Presto Foundation Member: <a href="https://twitter.com/">Twitter</a>
+Steven Mih, Board member, Presto Foundation Member: Ahana <a href="https://ahana.io/">Ahana</a>
+Bin Fan, Outreach team member, Presto Foundation Member: <a href="https://www.alluxio.io/">Alluxio</a></p>
+<p>We recently wrapped up an amazing PrestoCon Day attended by over 600 people from across the globe. The technical discussions and the panel was a clear indication of the growing community. We showcased a number of features contributed by various companies that continue to advance the mission of Presto open source, reiterating our commitment to grow the Presto community and support the continued improvement of the core technology.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[RaptorX: Building a 10X Faster Presto]]></title>
             <link>https://prestodb.io/blog/2021/02/04/raptorx.html</link>

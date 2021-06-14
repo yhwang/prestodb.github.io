@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Presto Foundation and PrestoDB: Our Commitment to the Presto Open Source Community · </title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="**Authors** "/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Presto Foundation and PrestoDB: Our Commitment to the Presto Open Source Community · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2021/06/14/Commitment-to-Presto-Open-Source-Community"/><meta property="og:description" content="**Authors** "/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2021/06/14/Commitment-to-Presto-Open-Source-Community">Presto Foundation and PrestoDB: Our Commitment to the Presto Open Source Community</a></li><li class="navListItem"><a class="navItem" href="/blog/2021/02/04/raptorx">RaptorX: Building a 10X Faster Presto</a></li><li class="navListItem"><a class="navItem" href="/blog/2021/01/12/2020-recap-year-with-presto">2020 Recap - A Year with Presto</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/12/04/typedset">Using OptimizedTypedSet to Improve Map and Array Functions</a></li><li class="navListItem"><a class="navItem" href="/blog/2020/11/20/prestocon-and-foundation-update">PrestoCon and Growing Industry Consortium - Intel and Upsolver Join Presto Foundation</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2021/06/14/Commitment-to-Presto-Open-Source-Community">Presto Foundation and PrestoDB: Our Commitment to the Presto Open Source Community</a></h1><p class="post-meta">June 14, 2021</p><div class="authorBlock"><p class="post-authorName"><a target="_blank" rel="noreferrer noopener">Girish Baliga, Tim Meehan, Dipti Borkar, Amit Chopra, Zhenxiao Luo, Steven Mih, Bin Fan</a></p></div></header><div><span><p><strong>Authors</strong></p>
+<p>Girish Baliga, Chair, Presto Foundation, Presto Foundation Member: <a href="https://www.uber.com/">Uber</a>
+Tim Meehan, Chair, Presto Foundation, Technical Steering Committee, Presto Foundation Member: <a href="https://www.facebook.com/">Facebook</a>
+Dipti Borkar, Chair, Presto Foundation, Outreach, Presto Foundation Member: <a href="https://ahana.io/">Ahana</a>
+Amit Chopra, Board member, Presto Foundation Member: <a href="https://www.facebook.com/">Facebook</a>
+Zhenxiao Luo , Board member, Presto Foundation Member: <a href="https://twitter.com/">Twitter</a>
+Steven Mih, Board member, Presto Foundation Member: Ahana <a href="https://ahana.io/">Ahana</a>
+Bin Fan, Outreach team member, Presto Foundation Member: <a href="https://www.alluxio.io/">Alluxio</a></p>
+<p>We recently wrapped up an amazing PrestoCon Day attended by over 600 people from across the globe. The technical discussions and the panel was a clear indication of the growing community. We showcased a number of features contributed by various companies that continue to advance the mission of Presto open source, reiterating our commitment to grow the Presto community and support the continued improvement of the core technology.</p>
+<!-- truncate -->
+<p><strong>Why companies are choosing Presto today</strong></p>
+<p>While the data infrastructure stacks of member companies and customers are built on many different  open source technologies, Presto stands out as the interactive analytics engine of choice.</p>
+<p>Companies are choosing Presto for three main reasons:</p>
+<ul>
+<li>It’s open source, which lends itself to being a platform for innovation for many developers,</li>
+<li>It’s incredibly fast and feature rich, and its extensibility allows us to provide a uniform user interface for a variety of analytics use cases.</li>
+<li>It was built, matured, and is constantly improved at Facebook scale, one of the biggest in the industry. Some of the recent major innovations include Project Aria for scan optimization, Project RaptorX for IO performance optimization and multiple coordinator support.</li>
+</ul>
+<p>Presto’s versatility gives users the ability to make smart, effective, and timely business decisions based on data, and run critical business operations at global scale.</p>
+<p><strong>Why companies are participating in the Presto Foundation</strong></p>
+<p>Linux Foundation has provided an open and neutral governance model to successfully run the Presto project in the open., Under these guiding principles, the Presto community works in a constructive and collaborative manner in the Presto Foundation based on <a href="https://prestodb.io/join.html">the principles of openness, neutrality, and transparency</a>.</p>
+<p>As members of the Linux Foundation’s Presto Foundation, we believe that a community-driven open source approach is critical to the diversity of ideas and continued openness of a critical project like Presto.</p>
+<p><strong>What’s next for the Presto open source community</strong></p>
+<p>At <a href="https://prestodb.io/prestoconday2021.html">PrestoCon Day</a>, we shared a number of features on the roadmap that are driving Presto towards 10x improvements in Scale, Performance and Reliability. All these sessions will shortly be available on <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqUDkrabo6CRGQ7zNTOMvu2L">our Presto YouTube channel</a>.</p>
+<p>If you’re looking to join an open source project that is community-driven, focused on reliability, and are strongly committed to continuing the cutting edge innovating at scale in the data analytics space, we invite you to join the Presto community!</p>
+<p>Let’s make Presto better together!</p>
+<p><strong>Signed:</strong></p>
+<p>Girish Baliga, Chair, Presto Foundation, Presto Foundation Member: Uber<br>
+Tim Meehan, Chair, Presto Foundation, Technical Steering Committee, Presto Foundation Member: Facebook
+Dipti Borkar, Chair, Presto Foundation, Outreach, Presto Foundation Member: Ahana
+Amit Chopra, Board member, Presto Foundation Member: Facebook<br>
+Zhenxiao Luo , Board member, Presto Foundation Member: Twitter<br>
+Steven Mih, Board member, Presto Foundation Member: Ahana
+Bin Fan, Outreach team member, Presto Foundation Member: Alluxio</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>
