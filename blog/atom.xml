@@ -13,17 +13,20 @@
         <link href="https://prestodb.io/blog/2021/06/14/Commitment-to-Presto-Open-Source-Community.html"/>
         <updated>2021-06-14T06:00:00.000Z</updated>
         <summary type="html"><![CDATA[<p><strong>Authors</strong></p>
-<p>Girish Baliga, Chair, Presto Foundation, Presto Foundation Member: <a href="https://www.uber.com/">Uber</a>
-Tim Meehan, Chair, Presto Foundation, Technical Steering Committee, Presto Foundation Member: <a href="https://www.facebook.com/">Facebook</a>
-Dipti Borkar, Chair, Presto Foundation, Outreach, Presto Foundation Member: <a href="https://ahana.io/">Ahana</a>
-Amit Chopra, Board member, Presto Foundation Member: <a href="https://www.facebook.com/">Facebook</a>
-Zhenxiao Luo , Board member, Presto Foundation Member: <a href="https://twitter.com/">Twitter</a>
-Steven Mih, Board member, Presto Foundation Member: Ahana <a href="https://ahana.io/">Ahana</a>
-Bin Fan, Outreach team member, Presto Foundation Member: <a href="https://www.alluxio.io/">Alluxio</a></p>
+<ul>
+<li>Girish Baliga, Chair, Presto Foundation, Presto Foundation Member: <a href="https://www.uber.com/">Uber</a></li>
+<li>Tim Meehan, Chair, Presto Foundation, Technical Steering Committee, Presto Foundation Member: <a href="https://www.facebook.com/">Facebook</a></li>
+<li>Dipti Borkar, Chair, Presto Foundation, Outreach, Presto Foundation Member: <a href="https://ahana.io/">Ahana</a></li>
+<li>Amit Chopra, Board member, Presto Foundation Member: <a href="https://www.facebook.com/">Facebook</a></li>
+<li>Zhenxiao Luo , Board member, Presto Foundation Member: <a href="https://twitter.com/">Twitter</a></li>
+<li>Arijit Bandyopadhyay, Board member, Presto Foundation Member: <a href="https://intel.com/">Intel</a></li>
+<li>Steven Mih, Board member, Presto Foundation Member: <a href="https://ahana.io/">Ahana</a></li>
+<li>Bin Fan, Outreach team member, Presto Foundation Member: <a href="https://www.alluxio.io/">Alluxio</a></li>
+</ul>
 <p>We recently wrapped up an amazing PrestoCon Day attended by over 600 people from across the globe. The technical discussions and the panel was a clear indication of the growing community. We showcased a number of features contributed by various companies that continue to advance the mission of Presto open source, reiterating our commitment to grow the Presto community and support the continued improvement of the core technology.</p>
 ]]></summary>
         <author>
-            <name>Girish Baliga, Tim Meehan, Dipti Borkar, Amit Chopra, Zhenxiao Luo, Steven Mih, Bin Fan</name>
+            <name>Girish Baliga, Tim Meehan, Dipti Borkar, Amit Chopra, Zhenxiao Luo, Arijit Bandyopadhyay, Steven Mih, Bin Fan</name>
         </author>
     </entry>
     <entry>
