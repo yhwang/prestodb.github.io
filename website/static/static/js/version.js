@@ -1,5 +1,5 @@
-const presto_latest_presto_version = '0.264.1';
-const presto_latest_num_commits = 53;
-const presto_latest_num_contributors = 24;
-const presto_latest_num_committers = 8;
-const presto_latest_date = 'November 02, 2021';
+const presto_latest_presto_version = '0.265';
+const presto_latest_num_commits = 47;
+const presto_latest_num_contributors = 23;
+const presto_latest_num_committers = 9;
+const presto_latest_date = 'November 08, 2021';
