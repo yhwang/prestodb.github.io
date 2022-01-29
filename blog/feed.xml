@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Mon, 22 Nov 2021 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 28 Jan 2022 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,26 @@
             <url>https://prestodb.io/img/presto.png</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Avoid Data Silos in Presto in Meta: the journey from Raptor to RaptorX]]></title>
+            <link>https://prestodb.io/blog/2022/01/28/avoid-data-silos-in-presto-in-meta.html</link>
+            <guid>https://prestodb.io/blog/2022/01/28/avoid-data-silos-in-presto-in-meta.html</guid>
+            <pubDate>Fri, 28 Jan 2022 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><strong>Alluxio</strong>: Rongrong Zhong
+<strong>Meta</strong>: James Sun, Ke Wang</p>
+<p><em>Raptor</em> is a Presto connector (<a href="https://github.com/prestodb/presto/tree/master/presto-raptor">presto-raptor</a>) that is used to power some critical
+interactive query workloads in Meta (previously Facebook). Though referred to in the ICDE 2019 paper
+<em><a href="https://research.facebook.com/publications/presto-sql-on-everything/">Presto: SQL on Everything</a></em>, it remains somewhat mysterious to many
+Presto users because there is no available documentation for this feature. This article will shed some light on the history of Raptor, and why
+Meta eventually replaced it in favor of a new architecture based on local caching, namely RaptorX.</p>
+<p><img src="/img/blog/2022-01-28-avoid-data-silos-in-presto-in-meta/timeline.png" alt="Raptor Timeline"></p>
+<h2><a class="anchor" aria-hidden="true" id="the-story-of-raptor"></a><a href="#the-story-of-raptor" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The story of Raptor</h2>
+<p>Generally speaking, Presto as a query engine does not own storage. Instead, connectors were developed to query different external data sources.
+This framework is very flexible, but in disaggregated compute and storage architectures it is hard to offer low latency guarantees. Network and
+storage latency add difficult to avoid variability. To address this limitation, Raptor was designed as a shared-nothing storage engine for Presto.</p>
+<h3><a class="anchor" aria-hidden="true" id="motivation--an-initial-use-case-in-the-ab-testing-framework"></a><a href="#motivation--an-initial-use-case-in-the-ab-testing-framework" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Motivation – an initial use case in the AB testing framework</h3>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Common Sub-Expression optimization]]></title>
             <link>https://prestodb.io/blog/2021/11/22/common-sub-expression-optimization.html</link>
