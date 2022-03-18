@@ -2,11 +2,27 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2022-01-28T06:00:00.000Z</updated>
+    <updated>2022-03-15T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/presto.png</logo>
+    <entry>
+        <title type="html"><![CDATA[Native Delta Lake Connector for Presto]]></title>
+        <id>https://prestodb.io/blog/2022/03/15/native-delta-lake-connector-for-presto.html</id>
+        <link href="https://prestodb.io/blog/2022/03/15/native-delta-lake-connector-for-presto.html"/>
+        <updated>2022-03-15T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p><strong>Co-authors</strong><br>
+<a href="https://www.linkedin.com/in/dennyglee/">Denny Lee</a>, Sr. Staff Developer Advocate at Databricks</p>
+<p>This is a joint publication by the PrestoDB and Delta Lake communities</p>
+<p><img src="/img/blog/2022-03-15-native-delta-lake-connector-for-presto/banner.png" alt="Native Delta Lake Connector for Presto"></p>
+<p>Due to the popularity of both the <a href="https://prestodb.io">PrestoDB</a> and <a href="https://delta.io">Delta Lake</a> projects (more on this below), in <a href="https://databricks.com/blog/2020/01/29/query-delta-lake-tables-presto-athena-improved-operations-concurrency-merge-performance.html">early 2020</a> the Delta Lake community announced that one could query Delta tables from PrestoDB. While popular, this method entailed the use of a manifest file where a Delta table is registered in Hive metastore as symlink table type. While this approach may satisfy batch processing requirements, it did not satisfy frequent processing or streaming requirements.  Therefore, we are happy to announce the release of the native Delta Lake connector for PrestoDB (<a href="https://github.com/prestodb/presto/tree/master/presto-delta">source code</a> | <a href="https://prestodb.io/docs/current/connector/deltalake.html">docs</a>).</p>
+]]></summary>
+        <author>
+            <name>Rohan Pednekar</name>
+            <uri>https://www.linkedin.com/in/pednero</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Avoid Data Silos in Presto in Meta: the journey from Raptor to RaptorX]]></title>
         <id>https://prestodb.io/blog/2022/01/28/avoid-data-silos-in-presto-in-meta.html</id>

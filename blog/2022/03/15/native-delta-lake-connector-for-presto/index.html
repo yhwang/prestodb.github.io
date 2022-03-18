@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Native Delta Lake Connector for Presto · </title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="**Co-authors**\"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Native Delta Lake Connector for Presto · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2022/03/15/native-delta-lake-connector-for-presto"/><meta property="og:description" content="**Co-authors**\"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2022/03/15/native-delta-lake-connector-for-presto">Native Delta Lake Connector for Presto</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/01/28/avoid-data-silos-in-presto-in-meta">Avoid Data Silos in Presto in Meta: the journey from Raptor to RaptorX</a></li><li class="navListItem"><a class="navItem" href="/blog/2021/11/22/common-sub-expression-optimization">Common Sub-Expression optimization</a></li><li class="navListItem"><a class="navItem" href="/blog/2021/10/26/Scaling-with-Presto-on-Spark">Scaling with Presto on Spark</a></li><li class="navListItem"><a class="navItem" href="/blog/2021/06/29/native-parquet-writer-for-presto">Native Parquet Writer for Presto</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2022/03/15/native-delta-lake-connector-for-presto">Native Delta Lake Connector for Presto</a></h1><p class="post-meta">March 15, 2022</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/pednero" target="_blank" rel="noreferrer noopener">Rohan Pednekar</a></p></div></header><div><span><p><strong>Co-authors</strong><br>
+<a href="https://www.linkedin.com/in/dennyglee/">Denny Lee</a>, Sr. Staff Developer Advocate at Databricks</p>
+<p>This is a joint publication by the PrestoDB and Delta Lake communities</p>
+<p><img src="/img/blog/2022-03-15-native-delta-lake-connector-for-presto/banner.png" alt="Native Delta Lake Connector for Presto"></p>
+<p>Due to the popularity of both the <a href="https://prestodb.io">PrestoDB</a> and <a href="https://delta.io">Delta Lake</a> projects (more on this below), in <a href="https://databricks.com/blog/2020/01/29/query-delta-lake-tables-presto-athena-improved-operations-concurrency-merge-performance.html">early 2020</a> the Delta Lake community announced that one could query Delta tables from PrestoDB. While popular, this method entailed the use of a manifest file where a Delta table is registered in Hive metastore as symlink table type. While this approach may satisfy batch processing requirements, it did not satisfy frequent processing or streaming requirements.  Therefore, we are happy to announce the release of the native Delta Lake connector for PrestoDB (<a href="https://github.com/prestodb/presto/tree/master/presto-delta">source code</a> | <a href="https://prestodb.io/docs/current/connector/deltalake.html">docs</a>).</p>
+<!--truncate-->
+<p><a href="https://prestodb.io/prestocon_2021.html#Delta_Lake_Connector_for_Presto"><img src="/img/blog/2022-03-15-native-delta-lake-connector-for-presto/prestocon2021-session.png" alt="PrestoCon2021 Seesion"></a></p>
+<p>Before we dive into the connector, let’s provide some background for those not intimately  familiar with these projects.</p>
+<h2><a class="anchor" aria-hidden="true" id="presto---open-source-sql-engine-for-the-data-lakehouse"></a><a href="#presto---open-source-sql-engine-for-the-data-lakehouse" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Presto - Open Source SQL Engine for the Data Lakehouse</h2>
+<p>Presto is an open source, MPP, distributed SQL engine widely recognized for its low latency queries, high concurrency and native ability to query data lakes and many other data sources. Presto is a compute layer of the disaggregated stack which allows users to scale storage and compute separately and as cloud adoption has increased exponentially, Presto has become the de facto query engine for interactive analytical queries.</p>
+<h3><a class="anchor" aria-hidden="true" id="why-does-it-matter"></a><a href="#why-does-it-matter" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Why Does It Matter?</h3>
+<p>As cloud data warehouses become more cost prohibitive, and data mesh approach is not performant enough, more and more workloads are migrating to the data lake. If all your data is going to end up in cloud native storage like Amazon S3, ADLS Gen2, GCS, etc. then the most optimized and efficient data strategy is to leverage <a href="https://ahana.io/whitepaper-unlocking-the-business-value-of-the-data-lake/">an open data lakehouse analytics stack</a>, which provides much more flexibility with no lock-in.</p>
+<h2><a class="anchor" aria-hidden="true" id="delta-lake---open-source-data-lake-storage-standards"></a><a href="#delta-lake---open-source-data-lake-storage-standards" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Delta Lake - Open Source Data Lake Storage Standards</h2>
+<p>Delta Lake is an open-source project built for data <a href="http://cidrdb.org/cidr2021/papers/cidr2021_paper17.pdf">lakehouses</a> with compute engines including Spark, PrestoDB, Flink, and Hive and APIs for Scala, Java, Rust, Ruby, and Python. Delta Lake is an ACID table storage layer over cloud object stores that Databricks started providing to customers in 2017 and open sourced in 2019. The core idea of Delta Lake is simple: it maintains information about which objects are part of a Delta table in an ACID manner, using a write-ahead log that is itself stored in the cloud object store. The objects themselves are encoded in Parquet, making it easy to write connectors from engines that can already process Parquet. This design allows clients to update multiple objects at once, replace a subset of the objects with another, etc., in a serializable manner while still achieving high parallel read and write performance from the objects themselves (similar to raw Parquet). The log also contains metadata such as min/max statistics for each data file, enabling an order of magnitude faster metadata searches than the “files in object store” approach.</p>
+<p><img src="/img/blog/2022-03-15-native-delta-lake-connector-for-presto/delta-lake.png" alt="Delta Lake"></p>
+<p>Delta Lake is designed so that all the metadata is in the underlying object store, and transactions are achieved using optimistic concurrency protocols against the object store (with some details varying by cloud provider). This means that no servers need to be running to maintain state for a Delta table; users only need to launch servers when running queries, and enjoy the benefits of separately scaling compute and storage. For more information, refer to the VLDB whitepaper <a href="https://databricks.com/wp-content/uploads/2020/08/p975-armbrust.pdf">Delta Lake: High-Performance ACID Table Storage over Cloud Object Stores</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="native-delta-lake-connector"></a><a href="#native-delta-lake-connector" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Native Delta Lake Connector</h2>
+<p>We - the Presto and Delta Lake communities - have come together to make it easier for Presto to leverage the reliability of data lakes by integrating with Delta Lake.</p>
+<p>We're excited to announce the addition of the Native Delta Lake Connector feature which allows for the reading of Delta Lake tables natively in Presto instead of using a manifest file (symlink_format_manifest).</p>
+<p>This enhances the Open Data Lake Analytics Experience with Presto, offering:</p>
+<ul>
+<li>Robust data consistency</li>
+<li>Automatic schema evolution</li>
+<li>More memory performance with an iterator</li>
+<li>No additional manual intervention</li>
+<li>Time travel query support</li>
+<li>Data skipping (as part of the <a href="https://github.com/delta-io/delta/issues/920">Delta Lake 2022H1 roadmap</a>)</li>
+<li>File statistics (as part of the <a href="https://github.com/delta-io/delta/issues/920">Delta Lake 2022H1 roadmap</a>)</li>
+</ul>
+<p>This Presto/Delta connector utilizes the Delta Standalone project to natively read the Delta transaction log without the need of a manifest file. The memory-optimized, lazy iterator included in <a href="https://docs.delta.io/latest/delta-standalone.html">Delta Standalone</a> allows PrestoDB to efficiently iterate through the Delta transaction log metadata and avoids OOM issues when reading large Delta tables.</p>
+<h2><a class="anchor" aria-hidden="true" id="architecture"></a><a href="#architecture" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Architecture</h2>
+<p><img src="/img/blog/2022-03-15-native-delta-lake-connector-for-presto/Architecture.png" alt="Architecture"></p>
+<p>Figure 1: This diagram illustrates the flow of calls between Presto main, Delta connector, Delta Standalone Reader (DSR) library, Hive Metastore (HMS) and Storage at Presto Coordinator and Executors</p>
+<p>Presto consists of two types of processes, Coordinator and Worker.</p>
+<ul>
+<li><strong>Presto Coordinator</strong> is responsible for receiving the query from the client, parsing, planning, optimizing, scheduling tasks and managing workers to execute queries and sending query output back to the client.</li>
+<li><strong>Presto Worker</strong> is responsible for executing tasks and processing data.</li>
+</ul>
+<p>Delta Lake Connector consists of following main components:</p>
+<ul>
+<li><strong>Metadata Provider</strong>: As the name says Metadata Provider is responsible for discovery of Delta Lake tables either through Hive Metastore or table path in storage and loading Delta table metadata using Delta Standalone Reader library which stores in its own <a href="https://books.japila.pl/delta-lake-internals/DeltaLog/#_delta_log-metadata-directory">transaction logs</a>.</li>
+<li><strong>Delta Standalone Reader</strong>: This is a library used to get the list of files (that pass the predicate) from the snapshot. The predicate (if present) may contain filters on partition columns and/or regular columns. The DSR library takes care of filtering the files based on the predicate and partition columns (and in future can use file stats to prune even more files). Each file maps one split and in addition to the file path, the split also contains the predicate which is used in data skipping at the reader (eg. Parquet RowGroup skipping or Page skipping)</li>
+<li><strong>Split Generator</strong>: Split Generator splits the table into multiple input splits. Splits are generated in batches with help of DSR's lazy iterator. Once the first batch is received, the tasks are started by the Scheduler. As the tasks read the first batch of splits, the next set of splits is generated by the Split Generator.</li>
+<li><strong>Page Source Provider</strong>: In Delta connector implementation, existing Parquet reader implementation is used to create a Page Source. The Parquet PageSource takes the file path, list of columns to read and predicate from the Split generated by Delta Split Generator. The predicate is used to prune row groups based on the row group stats. As we add support for other file formats, there is a need to create PageSource for that format.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="implementation-querying-delta-lake-tables-from-presto"></a><a href="#implementation-querying-delta-lake-tables-from-presto" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Implementation: Querying Delta Lake tables from Presto</h2>
+<p>This native connector is available by default with your Presto installation. Here “delta” is the Delta Lake catalog name.</p>
+<h3><a class="anchor" aria-hidden="true" id="accessing-delta-table-with-table-name-from-presto"></a><a href="#accessing-delta-table-with-table-name-from-presto" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Accessing Delta Table with table name from Presto:</h3>
+<pre><code class="hljs">presto&gt; describe delta.default.nation_location;
+
+presto&gt; describe delta.default.nation_location;
+  Column   |<span class="hljs-string">  Type   </span>|<span class="hljs-string"> Extra </span>|<span class="hljs-string"> Comment 
+-----------+---------+-------+---------
+ nationkey </span>|<span class="hljs-string"> bigint  </span>|<span class="hljs-string">       </span>|<span class="hljs-string">         
+ name      </span>|<span class="hljs-string"> varchar </span>|<span class="hljs-string">       </span>|<span class="hljs-string">         
+ regionkey </span>|<span class="hljs-string"> bigint  </span>|<span class="hljs-string">       </span>|<span class="hljs-string">         
+ comment   </span>|<span class="hljs-string"> varchar </span>|<span class="hljs-string">       </span>|<span class="hljs-string">         
+(4 rows)
+
+Query 20220204_073639_00009_edx3y, FINISHED, 3 nodes
+Splits: 68 total, 68 done (100.00%)
+0:24 [4 rows, 299B] [0 rows/s, 12B/s]
+</span></code></pre>
+<h3><a class="anchor" aria-hidden="true" id="directly-querying-delta-lake-table-path---access-delta-table-with-its-s3-file-path"></a><a href="#directly-querying-delta-lake-table-path---access-delta-table-with-its-s3-file-path" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Directly querying Delta Lake table path - access delta table with its S3 file path</h3>
+<pre><code class="hljs">presto&gt; select * <span class="hljs-keyword">from</span> delta.<span class="hljs-string">"$path$"</span>.<span class="hljs-string">"s3://delta-glue/nation_data"</span> limit <span class="hljs-number">2</span>;
+
+presto&gt; select * <span class="hljs-keyword">from</span> delta.<span class="hljs-string">"$path$"</span>.<span class="hljs-string">"s3://delta-glue/nation_data"</span> limit <span class="hljs-number">2</span>;
+nationkey |   name    | regionkey |                                   comment
+-----------+-----------+-----------+------------------------------------------------------------------------------
+<span class="hljs-number">0</span> | ALGERIA   |         <span class="hljs-number">0</span> |  haggle. carefully <span class="hljs-keyword">final</span> deposits detect slyly agai
+<span class="hljs-number">1</span> | ARGENTINA |         <span class="hljs-number">1</span> | al foxes promise slyly according to the regular accounts. bold requests alon
+(<span class="hljs-number">2</span> rows)
+
+Query <span class="hljs-number">20220204</span>_073347_00005_edx3y, FINISHED, <span class="hljs-number">2</span> nodes
+Splits: <span class="hljs-number">34</span> total, <span class="hljs-number">34</span> done (<span class="hljs-number">100.00</span>%)
+<span class="hljs-number">0</span>:<span class="hljs-number">14</span> [<span class="hljs-number">3</span> rows, <span class="hljs-number">1.68</span>KB] [<span class="hljs-number">0</span> rows/s, <span class="hljs-number">123</span>B/s]
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="snapshot-access"></a><a href="#snapshot-access" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Snapshot Access</h3>
+<h4><a class="anchor" aria-hidden="true" id="query-version-1-of-this-table"></a><a href="#query-version-1-of-this-table" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Query version 1 of this table</h4>
+<pre><code class="hljs">presto&gt; <span class="hljs-keyword">WITH</span> nyctaxi_2019_part <span class="hljs-keyword">AS</span> (<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> deltas3."$path$"."s3://weyland-yutani/delta/nyctaxi_2019_part@v1") <span class="hljs-keyword">SELECT</span> COUNT(<span class="hljs-number">1</span>) <span class="hljs-keyword">FROM</span> nyctaxi_2019_part;
+
+  _col0
+<span class="hljs-comment">----------</span>
+ <span class="hljs-number">59354546</span>
+(<span class="hljs-number">1</span> <span class="hljs-keyword">row</span>)
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="query-version-5-of-this-table"></a><a href="#query-version-5-of-this-table" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Query version 5 of this table</h4>
+<pre><code class="hljs">presto&gt; <span class="hljs-keyword">WITH</span> nyctaxi_2019_part <span class="hljs-keyword">AS</span> (<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> deltas3."$path$"."s3://weyland-yutani/delta/nyctaxi_2019_part@v5") <span class="hljs-keyword">SELECT</span> COUNT(<span class="hljs-number">1</span>) <span class="hljs-keyword">FROM</span> nyctaxi_2019_part;
+
+  _col0
+<span class="hljs-comment">----------</span>
+ <span class="hljs-number">78959576</span>
+(<span class="hljs-number">1</span> <span class="hljs-keyword">row</span>)
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="query-current-version-of-this-table"></a><a href="#query-current-version-of-this-table" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Query current version of this table</h4>
+<pre><code class="hljs">presto&gt; <span class="hljs-keyword">WITH</span> nyctaxi_2019_part <span class="hljs-keyword">AS</span> (<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> deltas3."$path$"."s3://weyland-yutani/delta/nyctaxi_2019_part") <span class="hljs-keyword">SELECT</span> COUNT(<span class="hljs-number">1</span>) <span class="hljs-keyword">FROM</span> nyctaxi_2019_part;
+
+  _col0
+<span class="hljs-comment">----------</span>
+ <span class="hljs-number">84397753</span>
+(<span class="hljs-number">1</span> <span class="hljs-keyword">row</span>)
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="whats-next"></a><a href="#whats-next" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What’s next?</h2>
+<p>Try out the PrestoDB and Delta Lake connector! Here are some more resources to help you get started:</p>
+<ul>
+<li><a href="https://github.com/prestodb/presto/tree/master/presto-delta">Source code</a></li>
+<li><a href="https://prestodb.io/docs/current/connector/deltalake.html">Public documentation</a></li>
+<li><a href="https://www.youtube.com/watch?v=8qZ1zXLlD08">Presto/Delta Lake Community Office hours</a></li>
+<li><a href="https://databricks.com/blog/2022/01/28/the-ubiquity-of-delta-standalone-java-scala-hive-presto-trino-power-bi-and-more.html">Delta Standalone project</a></li>
+<li><a href="https://databricks.com/blog/2022/01/28/the-ubiquity-of-delta-standalone-java-scala-hive-presto-trino-power-bi-and-more.html">PrestoCon 2021 presentation</a></li>
+</ul>
+<p>If you find any issues with the connector, please open up an issue in the <a href="https://github.com/prestodb/presto">PrestoDB GitHub</a> or <a href="https://github.com/delta-io/connectors">Delta Lake Connectors GitHub</a>.  If you have questions, please join the <a href="https://groups.google.com/g/presto-users">presto-users</a> discussion list, <a href="https://prestodb.slack.com/">PrestoDB Slack channel</a>,  <a href="https://groups.google.com/forum/#!forum/delta-users">Delta Lake discussion list</a>, or <a href="https://dbricks.co/delta-users-slack">Delta Lake Slack channel</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="credit"></a><a href="#credit" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Credit</h2>
+<p>We would also like to thank the PrestoDB and Delta Lake communities with special call out to Venki Korukanti, Sajith Appukuttan, and George Chow.</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#presto---open-source-sql-engine-for-the-data-lakehouse">Presto - Open Source SQL Engine for the Data Lakehouse</a><ul class="toc-headings"><li><a href="#why-does-it-matter">Why Does It Matter?</a></li></ul></li><li><a href="#delta-lake---open-source-data-lake-storage-standards">Delta Lake - Open Source Data Lake Storage Standards</a></li><li><a href="#native-delta-lake-connector">Native Delta Lake Connector</a></li><li><a href="#architecture">Architecture</a></li><li><a href="#implementation-querying-delta-lake-tables-from-presto">Implementation: Querying Delta Lake tables from Presto</a><ul class="toc-headings"><li><a href="#accessing-delta-table-with-table-name-from-presto">Accessing Delta Table with table name from Presto:</a></li><li><a href="#directly-querying-delta-lake-table-path---access-delta-table-with-its-s3-file-path">Directly querying Delta Lake table path - access delta table with its S3 file path</a></li><li><a href="#snapshot-access">Snapshot Access</a></li></ul></li><li><a href="#whats-next">What’s next?</a></li><li><a href="#credit">Credit</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>
