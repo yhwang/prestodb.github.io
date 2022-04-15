@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Disaggregated Coordinator · </title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="**Meta**: Swapnil Tailor, Tim Meehan, Vaishnavi Batni, Abhisek Saikia, Neerad Somanchi"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Disaggregated Coordinator · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2022/04/15/disggregated-coordinator"/><meta property="og:description" content="**Meta**: Swapnil Tailor, Tim Meehan, Vaishnavi Batni, Abhisek Saikia, Neerad Somanchi"/><meta property="og:image" content="https://prestodb.io/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/docusaurus.png"/><link rel="shortcut icon" href="/img/presto-logo.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="css/footer.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/presto.png" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/overview.html" target="_self">OVERVIEW</a></li><li class=""><a href="https://prestodb.github.io/docs/current" target="_self">DOCS</a></li><li class=""><a href="/blog/index.html" target="_self">BLOG</a></li><li class=""><a href="/faq.html" target="_self">FAQ</a></li><li class=""><a href="/community.html" target="_self">COMMUNITY</a></li><li class=""><a href="/resources.html" target="_self">RESOURCES</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_self">GITHUB</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2022/04/15/disggregated-coordinator">Disaggregated Coordinator</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/03/15/native-delta-lake-connector-for-presto">Native Delta Lake Connector for Presto</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/01/28/avoid-data-silos-in-presto-in-meta">Avoid Data Silos in Presto in Meta: the journey from Raptor to RaptorX</a></li><li class="navListItem"><a class="navItem" href="/blog/2021/11/22/common-sub-expression-optimization">Common Sub-Expression optimization</a></li><li class="navListItem"><a class="navItem" href="/blog/2021/10/26/Scaling-with-Presto-on-Spark">Scaling with Presto on Spark</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2022/04/15/disggregated-coordinator">Disaggregated Coordinator</a></h1><p class="post-meta">April 15, 2022</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/swapnil-tailor-23077b6/" target="_blank" rel="noreferrer noopener">Swapnil Tailor</a></p></div></header><div><span><p><strong>Meta</strong>: Swapnil Tailor, Tim Meehan, Vaishnavi Batni, Abhisek Saikia, Neerad Somanchi</p>
+<h2><a class="anchor" aria-hidden="true" id="overview"></a><a href="#overview" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h2>
+<p>Presto's architecture originally only supported a single coordinator and a pool of workers. This has worked well for many years but created some challenges.</p>
+<ul>
+<li>With a single coordinator, the cluster can scale up to a certain number of workers reliably. A large worker pool running complex, multi-stage queries can overwhelm an inadequately provisioned coordinator, requiring upgraded hardware to support the increase in worker load.</li>
+<li>A single coordinator is a single point of failure for the Presto cluster.</li>
+</ul>
+<p>To overcome these challenges, we came up with a new design with a disaggregated coordinator that allows the coordinator to be horizontally scaled out across a single pool of workers.</p>
+<!--truncate-->
+<h2><a class="anchor" aria-hidden="true" id="architecture"></a><a href="#architecture" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Architecture</h2>
+<p><img src="/img/blog/2022-04-15-disaggregated-coordinator/disaggregated-coordinator-architecture.png" alt="Architecture"></p>
+<p>A disaggregated coordinator setup supports a pool of coordinators with the help of a new component, the resource manager.</p>
+<h4><a class="anchor" aria-hidden="true" id="resource-manager"></a><a href="#resource-manager" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Resource Manager</h4>
+<p>The resource manager aggregates data from all coordinators and workers, and constructs a global view of the cluster. Clusters support multiple resource managers, each acting as a primary. The discovery service runs on each resource manager.
+The resource manager is not in the critical path for the query.  Rather, it is a complementary process that can survive momentary unavailability.</p>
+<h4><a class="anchor" aria-hidden="true" id="coordinator"></a><a href="#coordinator" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Coordinator</h4>
+<p>The coordinator sends heartbeats at regular intervals to all the resource managers. These heartbeats contain information about the queries handled by the coordinator, which the resource managers use to refresh their global view of the cluster. The coordinator fetches aggregated resource group information periodically from the resource manager.</p>
+<h4><a class="anchor" aria-hidden="true" id="worker"></a><a href="#worker" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Worker</h4>
+<p>Each worker sends regular heartbeats with memory and cpu utilization to the resource managers. The resource managers track these metrics for the worker pool.</p>
+<h2><a class="anchor" aria-hidden="true" id="query-execution-flow"></a><a href="#query-execution-flow" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Query Execution Flow</h2>
+<p><img src="/img/blog/2022-04-15-disaggregated-coordinator/query-execution-flow.png" alt="QueryExecutionFlow"></p>
+<p>With the introduction of a resource manager, the query execution flow looks slightly different.</p>
+<ul>
+<li>A query is submitted to one of the coordinators in the cluster.</li>
+<li>The coordinator prepares the query for execution by parsing, analyzing and assigning it to a given resource group.</li>
+<li>A heartbeat is sent to each resource manager when the query is created by the coordinator.</li>
+<li>The coordinator polls the resource manager at regular intervals to fetch cluster level resource group information.</li>
+<li>The coordinator polls the resource manager to get active worker information. This information is used for query scheduling.</li>
+<li>The rest of the query execution remains the same.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="memory-management"></a><a href="#memory-management" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Memory Management</h2>
+<p><img src="/img/blog/2022-04-15-disaggregated-coordinator/memory-management.png" alt="MemoryManagement"></p>
+<p>The resource manager needs up to date information about memory and cpu utilization of the worker pool for resource group queuing. Currently, this information is periodically collected by the coordinator. In the disaggregated coordinator setup, resource managers receive query-level statistics from coordinator heartbeats, and memory pool information from worker heartbeats. This information is periodically polled by the coordinator to help make local decisions (i.e. queue/run a query, kill a query when the cluster is low on memory).</p>
+<h2><a class="anchor" aria-hidden="true" id="resource-management"></a><a href="#resource-management" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Resource Management</h2>
+<p><img src="/img/blog/2022-04-15-disaggregated-coordinator/resource-management.png" alt="ResourceManagement"></p>
+<p>The resource managers runs in multi-master mode. To support that, coordinators post query updates to all resource managers. The resource manager aggregates this information. The coordinator polls a resource manager to fetch up to date information about resource group usage in the cluster.</p>
+<h2><a class="anchor" aria-hidden="true" id="resource-group-consistency-model"></a><a href="#resource-group-consistency-model" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Resource Group Consistency Model</h2>
+<p>Resource groups in a disaggregated coordinator setup are eventually consistent.  While this may lead to over-admission in certain scenarios, in practice this is mitigated by gating the resource group to only allow queries to run when certain freshness guarantees have been met (as opposed to the previous logic of checking every millisecond).  This may mean if the cluster’s resource managers are down, then queries may be queued in the coordinator’s resource groups.  This is to ensure coordinators don’t over-admit queries in the face of resource manager unavailability.</p>
+<p>More details about flags can be found <a href="https://prestodb.io/docs/current/installation/deployment.html#config-properties">here</a> which can help tune the cluster’s resource groups to the desired consistency.</p>
+<h2><a class="anchor" aria-hidden="true" id="discovery-service"></a><a href="#discovery-service" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Discovery Service</h2>
+<p><img src="/img/blog/2022-04-15-disaggregated-coordinator/discovery-service.png" alt="discoveryservice"></p>
+<p>An embedded version of the discovery server runs on resource managers in distributed mode. Discovery servers stay in sync by passing updates they receive to other discovery servers in the cluster.</p>
+<h2><a class="anchor" aria-hidden="true" id="configuration"></a><a href="#configuration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuration</h2>
+<p>Minimal configuration to enable a disaggregated coordinator cluster can be found in <a href="https://prestodb.io/docs/current/installation/deployment.html#config-properties">here</a>.</p>
+<p>No changes needed in <a href="https://prestodb.io/docs/current/installation/deployment.html#jvm-config">jvm.config</a> and <a href="https://prestodb.io/docs/current/installation/deployment.html#node-properties">node.properties</a>.</p>
+<p>Recommended release version to use disaggregated coordinator in production: <a href="https://prestodb.io/docs/current/release/release-0.266.html#release-release-0-266--page-root">0.266</a></p>
+<h2><a class="anchor" aria-hidden="true" id="disaggregated-coordinator-talk"></a><a href="#disaggregated-coordinator-talk" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Disaggregated Coordinator Talk</h2>
+<p>There were lightning talks about the Disaggregated Coordinator at past PrestoCons. Videos and slides can be accessed using the following links:</p>
+<ol>
+<li><p>Lightning Talk in 2020 Prestocon: <a href="https://www.youtube.com/watch?v=slwPm-mROZ0">video</a></p></li>
+<li><p>Lightning Talk in 2021 PrestoCon about Production Rollout: <a href="https://prestodb.io/prestocon_2021.html#Disaggregated_Coordinator_Production_Rollout">video and slides</a></p></li>
+</ol>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#overview">Overview</a></li><li><a href="#architecture">Architecture</a></li><li><a href="#query-execution-flow">Query Execution Flow</a></li><li><a href="#memory-management">Memory Management</a></li><li><a href="#resource-management">Resource Management</a></li><li><a href="#resource-group-consistency-model">Resource Group Consistency Model</a></li><li><a href="#discovery-service">Discovery Service</a></li><li><a href="#configuration">Configuration</a></li><li><a href="#disaggregated-coordinator-talk">Disaggregated Coordinator Talk</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>
