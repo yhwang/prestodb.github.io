@@ -17,7 +17,14 @@
             <link>https://prestodb.io/blog/2022/05/10/faster-presto-queries-with-parquet-page-index.html</link>
             <guid>https://prestodb.io/blog/2022/05/10/faster-presto-queries-with-parquet-page-index.html</guid>
             <pubDate>Tue, 10 May 2022 06:00:00 GMT</pubDate>
-            <description><![CDATA[<p><strong>Uber:</strong> Xinli Shang</p> <p><strong>Uber:</strong> Chen Liang</p> <h2><a class="anchor" aria-hidden="true" id="introduction"></a><a href="#introduction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"/></svg></a>Introduction</h2> <p>Today’s data is growing very fast, which creates challenges for query engines like Presto. Presto is a popular interactive query engine, because of its scalability, high performance, and smooth integrat...</p>]]></description>
+            <description><![CDATA[<p><strong>Uber:</strong> Xinli Shang</p>
+<p><strong>Uber:</strong> Chen Liang</p>
+<h2><a class="anchor" aria-hidden="true" id="introduction"></a><a href="#introduction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Introduction</h2>
+<p>Today’s data is growing very fast, which creates challenges for query engines like Presto.  Presto is a popular interactive query engine, because of its scalability, high performance, and smooth integration with Hadoop. As the volume of data grows, Presto needs to read larger chunks of data and load them into memory, which causes higher IO, memory usage, and GC time etc.</p>
+<p>Apache Parquet is an open source, column-oriented data file format designed for efficient data storage and retrieval. It provides efficient data compression and encoding schemes with enhanced performance to handle complex data in bulk.</p>
+<p>There are some initiatives done earlier to speed up the Presto reading Parquet data, but there is still a lot of data to read. Since the Java version Parquet(parquet-mr 1.11.0) release, a feature called Page Index has been added to speed up the queries by filtering unnecessary Parquet pages in column chunks.</p>
+<p>This article discusses this feature, the porting status into Presto and the benchmark testing result.</p>
+]]></description>
         </item>
         <item>
             <title><![CDATA[Disaggregated Coordinator]]></title>
