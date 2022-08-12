@@ -160,6 +160,7 @@ const siteConfig = {
     "static/stylesheets/application-palette.css",
     "static/stylesheets/application.css",
     "static/css/bootstrap.min.css",
+    "static/css/custom.css",
     "static/css/effects.css", // sfx and animations
     "static/css/presentations.css", // for videos presentations pages
     "static/css/ytlightbox.css", // lightbox popup
