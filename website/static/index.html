@@ -137,37 +137,38 @@
 <section class="">
   <div class="container-fluid py-5">
     <div class="row">
-      <div class="col text-center mb-3 mx-auto" style="max-width:800px;">
+      <div class="col text-center mb-3 mx-auto" style="max-width:1024px;">
         <h2 class="my-4">Presto runs reliably at massive scale</h2>
-        <p>See how some the largest internet-scale companies are using Presto today. It doesn't matter if you're operating at Meta-like scale or at just a few nodes - Presto is for everyone! </p>
-        <table style="width: 100%;max-width: 900px;margin: 1rem auto; text-align:left;" cellpadding="15" class="">
-          <tr style="border-bottom: 1px solid #ccc;">
-            <td style="padding-right:20px;text-align:center;"><img src="img/presto-users/logo-uber.svg" className="" alt="Uber" style="max-width:150px;" /><br/>
-            </td>
-            <td><b><span class="countup" data-start="0" data-end="2" data-step="1" data-places="0">2</span></b> regions<br/>
+        <p style="max-width:800px;margin:0 auto">See how some the largest internet-scale companies are using Presto today. It doesn't matter if you're operating at Meta-like scale or at just a few nodes - Presto is for everyone! </p>
+
+        <div class="container-fluid" style="width: 100%;margin: 1rem auto; text-align:left;">
+          <div class="row py-3" style="border-bottom: 1px solid #ccc;">
+            <div class="col-12 col-md-4 pt-2 text-center " style="padding-right:20px;text-align:center;"><img src="img/presto-users/logo-uber.svg" className="" alt="Uber" style="max-width:150px;" /><br/>
+            </div>
+            <div class="col-12 col-md-2  text-center text-md-start"><b><span class="countup" data-start="0" data-end="2" data-step="1" data-places="0">2</span></b> regions<br/>
               <b><span class="countup" data-start="0" data-end="20" data-step="1" data-places="0">20</span></b> clusters<br/>
-              <b><span class="countup" data-start="0" data-end="8" data-step="1" data-places="0">8</span>K</b> nodes </td>
-              <td><b><span  class="countup" data-start="0" data-end="7" data-step="1" data-places="0">7</span>K</b> weekly active users<br/>
+              <b><span class="countup" data-start="0" data-end="8" data-step="1" data-places="0">8</span>K</b> nodes </div>
+              <div class="col-12 col-md-3  text-center text-md-start"><b><span  class="countup" data-start="0" data-end="7" data-step="1" data-places="0">7</span>K</b> weekly active users<br/>
                 <b><span  class="countup" data-start="0" data-end="100" data-step="5" data-places="0">100</span>M+</b> queries/day<br/>
-                <b><span  class="countup" data-start="0" data-end="50" data-step="2" data-places="0">50</span>PB</b> HDFS bytes read/day</td>
-                <td><a href="https://ahana.io/case-studies/uber?utm_source=prestodb&utm_medium=homepage&utm_campaign=ubercs" class="btn btn-sm btn-primary mt-3" target="_blank" >Read Case Study &rarr;</a></td>
-          </tr>
-          <tr style="border-bottom: 1px solid #ccc;">
-          <td style="padding-right:20px;text-align:center;"><img src="img/presto-users/logo-bytedance.svg" className="" alt="ByteDance" style="max-width:200px;" /></td>
+                <b><span  class="countup" data-start="0" data-end="50" data-step="2" data-places="0">50</span>PB</b> HDFS bytes read/day</div>
+                <div class="col-12 col-md-3  text-center text-md-start"><a href="https://ahana.io/case-studies/uber?utm_source=prestodb&utm_medium=homepage&utm_campaign=ubercs" class="btn btn-sm btn-primary mt-3" target="_blank" >Read Case Study &rarr;</a></div>
+          </div>
+          <div class="row py-3" style="border-bottom: 1px solid #ccc;">
+          <div class="col-12 col-md-4 pt-2 text-center " style="padding-right:20px;text-align:center;"><img src="img/presto-users/logo-bytedance.svg" className="" alt="ByteDance" style="max-width:200px;" /></div>
           
-            <td colspan="2"><b><span class="countup" data-start="0" data-end="10" data-step="1" data-places="0">10</span>K+</b> compute cores<br/>
-              <b>1M</b> queries/day</td>
-              <td><a href="https://static.sched.com/hosted_files/prestocon2021/1f/Presto%40Bytedance.pdf" class="btn btn-sm btn-primary mt-3" target="_blank" >See Presentation &rarr;</a></td>
-        </tr>
-        <tr >
-          <td style="padding-right:20px;text-align:center;"><img src="img/presto-users/logo-meta.svg" className="" alt="Meta" style="max-width:180px;" /></td>
+            <div class="col-12 col-md-5  text-center text-md-start" colspan="2"><b><span class="countup" data-start="0" data-end="10" data-step="1" data-places="0">10</span>K+</b> compute cores<br/>
+              <b>1M</b> queries/day</div>
+              <div class="col-12 col-md-3  text-center text-md-start"><a href="https://static.sched.com/hosted_files/prestocon2021/1f/Presto%40Bytedance.pdf" class="btn btn-sm btn-primary mt-3" target="_blank" >See Presentation &rarr;</a></div>
+        </div>
+        <div class="row py-3" >
+          <div class="col-12 col-md-4 pt-2 text-center " style="padding-right:20px;text-align:center;"><img src="img/presto-users/logo-meta.svg" className="" alt="Meta" style="max-width:180px;" /></div>
           
-            <td colspan="2"><b><span  class="countup" data-start="0" data-end="300" data-step="10" data-places="0">300</span>PB</b> data lakehouse<br/>
+            <div class="col-12 col-md-5  text-center text-md-start" colspan="2"><b><span  class="countup" data-start="0" data-end="300" data-step="10" data-places="0">300</span>PB</b> data lakehouse<br/>
               <b>1K</b> daily active users<br/>
-              <b><span class="countup" data-start="0" data-end="30" data-step="1" data-places="0">30</span>K</b> queries/day</td>
-              <td><a href="https://www.youtube.com/watch?v=GHXjjfGyCw8&list=PLJVeO1NMmyqXHoLuUJtulMDU0yBgSL0GH&index=8" class="btn btn-sm btn-primary mt-3" target="_blank" >See Presentation &rarr;</a></td>
-        </tr>
-        </table>
+              <b><span class="countup" data-start="0" data-end="30" data-step="1" data-places="0">30</span>K</b> queries/day</div>
+              <div class="col-12 col-md-3  text-center text-md-start"><a href="https://www.youtube.com/watch?v=GHXjjfGyCw8&list=PLJVeO1NMmyqXHoLuUJtulMDU0yBgSL0GH&index=8" class="btn btn-sm btn-primary mt-3" target="_blank" >See Presentation &rarr;</a></div>
+        </div>
+        </div>
           <h5><a href="powered-by-presto.html">Check out how other companies are using Presto today.</a></h5>
       </div>
     </div>
@@ -175,10 +176,10 @@
   </div>
 </section>
 <section class="container-fluid wrapper pb-5" style="max-width: 1100px;">
-  <div class="row my-5 align-items-center value_props">
+  <div class="row mb-5 align-items-center value_props">
     <div class="col-12 col-sm-4 text-center image"><object data="img/graphic-querydata.svg"
         type="image/svg+xml"></object></div>
-    <div class="col-12 col-sm-8 slideleft px-md-5">
+    <div class="col-12 col-sm-8 fadein px-md-5">
       <h4>Query data wherever it lives</h4>
       <p>Presto allows querying data where it lives and a single Presto query can combine data from multiple sources,
         allowing for analytics across your entire organization.</p>
@@ -187,7 +188,7 @@
   <div class="row my-5 align-items-center value_props">
     <div class="col-12 col-sm-4 text-center image"><object data="img/graphic-fasteranalytics.svg"
         type="image/svg+xml"></object></div>
-    <div class="col-12 col-sm-8 slideleft px-md-5">
+    <div class="col-12 col-sm-8 fadein px-md-5">
       <h4>Blazing fast analytics</h4>
       <p>Presto is an in-memory distributed SQL engine, faster than other compute engines in the disaggregated stack</p>
     </div>
@@ -195,7 +196,7 @@
   <div class="row my-5 align-items-center value_props">
     <div class="col-12 col-sm-4 text-center image"><object data="img/graphic-federated.svg"
         type="image/svg+xml"></object></div>
-    <div class="col-12 col-sm-8 slideleft px-md-5">
+    <div class="col-12 col-sm-8 fadein px-md-5">
       <h4>Federate your queries</h4>
       <p>Presto can query relational &amp; NoSQL databases, data warehouses, data lakes and more and has dozens of
         connectors available today.</p>
@@ -204,7 +205,7 @@
   <div class="row my-5 align-items-center value_props">
     <div class="col-12 col-sm-4 text-center image"><object data="img/graphic-opensource.svg"
         type="image/svg+xml"></object></div>
-    <div class="col-12 col-sm-8 slideleft px-md-5">
+    <div class="col-12 col-sm-8 fadein px-md-5">
       <h4>Open source</h4>
       <p>Presto is a neutrally governed open source project under The Linux Foundation. Run Presto wherever you want,
         on-prem or in any&nbsp;cloud.</p>
