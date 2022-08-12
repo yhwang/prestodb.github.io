@@ -2,27 +2,27 @@ export const GetStarted_Cards = [
   {
     title: "Manual / Local Download",
     description: "Use the tarball to install Presto manually",
-    buttonText: "presto-server-0.273.3.tar.gz",
+    buttonText: "presto-server-0.275.tar.gz",
     buttonLink:
-      "https://repo1.maven.org/maven2/com/facebook/presto/presto-server/0.273.3/presto-server-0.273.3.tar.gz",
+      "https://repo1.maven.org/maven2/com/facebook/presto/presto-server/0.275/presto-server-0.275.tar.gz",
     footer:
       'Visit <a href="https://prestodb.io/docs/current/installation/deployment.html" target="_blank">Deploying Presto</a> for deployment instructions.',
   },
   {
     title: "Command Line Interface",
     description: "Run queries using the CLI",
-    buttonText: "presto-cli-0.273.3-executable.jar",
+    buttonText: "presto-cli-0.275-executable.jar",
     buttonLink:
-      "https://repo1.maven.org/maven2/com/facebook/presto/presto-cli/0.273.3/presto-cli-0.273.3-executable.jar",
+      "https://repo1.maven.org/maven2/com/facebook/presto/presto-cli/0.275/presto-cli-0.275-executable.jar",
     footer:
       'A CLI for running queries is available see <a href="https://prestodb.io/docs/current/installation/cli.html" target="_blank">Command Line Interface.</a>',
   },
   {
     title: "JDBC Driver",
     description: "Connect to Presto from Java",
-    buttonText: "presto-jdbc-0.273.3.jar",
+    buttonText: "presto-jdbc-0.275.jar",
     buttonLink:
-      "https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.273.3/presto-jdbc-0.273.3.jar",
+      "https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.275/presto-jdbc-0.275.jar",
     footer:
       'Visit the <a href="https://prestodb.io/docs/current/installation/jdbc.html" target="_blank">JDCB Driver docs</a>',
   },
