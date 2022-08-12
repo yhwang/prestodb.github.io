@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
-    <title> Blog</title>
+    <title>Presto Blog</title>
     <updated>2022-05-10T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
-    <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
+    <subtitle>The best place to stay up-to-date with the latest Presto news and events.</subtitle>
     <logo>https://prestodb.io/img/logo-presto-white.svg</logo>
     <entry>
         <title type="html"><![CDATA[Faster Presto Queries with Parquet Page Index]]></title>
