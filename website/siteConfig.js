@@ -80,7 +80,7 @@ const siteConfig = {
       label: "GitHub",
       external: true,
     },
-    { href: "https://twitter.com/prestodb", label: "Tiwtter", external: true },
+    { href: "https://twitter.com/prestodb", label: "Twitter", external: true },
     {
       href: "https://www.linkedin.com/company/presto-foundation/",
       label: "LinkedIn",
