@@ -51,7 +51,7 @@ const users = [
 prestoBaseUrl =  '/'
 
 const siteConfig = {
-  title: "Presto",
+  title: "",
   tagline: "Fast and Reliable SQL for Data Analytics and the Open Lakehouse",
   url: "https://prestodb.io", // Your website URL
   cname: "prestodb.io",
