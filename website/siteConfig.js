@@ -74,7 +74,7 @@ const siteConfig = {
       label: "Docs",
       external: true,
     },
-    { href: "https://prestodb.slack.com/", label: "Slack", external: true },
+    { href: "https://join.slack.com/t/prestodb/shared_invite/zt-1e895j77n-zdX2Z3~6tFDnmFSruztQOw", label: "Slack", external: true },
     {
       href: "https://github.com/prestodb/presto",
       label: "GitHub",
