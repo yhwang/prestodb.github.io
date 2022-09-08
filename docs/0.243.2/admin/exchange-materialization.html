@@ -1,0 +1,117 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>4.5. Exchange Materialization &#8212; Presto 0.243.2 Documentation</title>
+    <link rel="stylesheet" href="../_static/presto.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.243.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.6. Resource Groups" href="resource-groups.html" />
+    <link rel="prev" title="4.4. Spill to Disk" href="spill.html" /> 
+  </head>
+  <body>
+<div class="header">
+    <h1 class="heading"><a href="../index.html">
+        <span>Presto 0.243.2 Documentation</span></a></h1>
+    <h2 class="heading"><span>4.5. Exchange Materialization</span></h2>
+</div>
+<div class="topnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="spill.html">4.4. Spill to Disk</a>
+    </span>
+    <span class="right">
+        <a href="resource-groups.html">4.6. Resource Groups</a> &raquo;
+    </span>
+</p>
+
+</div>
+<div class="content">
+    
+  <div class="section" id="exchange-materialization">
+<h1>4.5. Exchange Materialization</h1>
+<p>Presto allows exchange materialization to support memory intensive queries.
+This mechanism brings MapReduce-style execution to Presto’s MPP architecture runtime,
+and can be applied together with <a class="reference internal" href="spill.html"><span class="doc">Spill to Disk</span></a>.</p>
+<div class="section" id="introduction">
+<h2>Introduction</h2>
+<p>As with other MPP databases, Presto leverages RPC shuffle to achieve efficient and
+low-latency query execution for join and aggregation. However, RPC shuffle
+also requires all the producers and consumers to be executed concurrently until the
+query is finished.</p>
+<p>To illustrates this, consider the aggregation query:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">custkey</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="n">totalprice</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">orders</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">custkey</span>
+</pre></div>
+</div>
+<p>The following figure demonstrates how this query executes in Presto classic mode:</p>
+<div class="figure align-center">
+<img alt="../_images/rpc_shuffle_execution.png" src="../_images/rpc_shuffle_execution.png" />
+</div>
+<p>With exchange materialization, the intermediate shuffle data is written to disk (currently,
+it is always a temporary Hive bucketed table). This opens the opportunity for flexible scheduling policies
+on the aggregation side, as only a subset of aggregation data needs to be held in memory at the
+same time – this execution strategy is called “grouped execution” in Presto.</p>
+<div class="figure align-center">
+<img alt="../_images/materialized_shuffle_execution.png" src="../_images/materialized_shuffle_execution.png" />
+</div>
+</div>
+<div class="section" id="using-exchange-materialization">
+<h2>Using Exchange Materialization</h2>
+<p>Exchange materialization can be enabled on per-query basis by setting the following 3 session properties:
+<code class="docutils literal"><span class="pre">exchange_materialization_strategy</span></code>, <code class="docutils literal"><span class="pre">partitioning_provider_catalog</span></code> and <code class="docutils literal"><span class="pre">hash_partition_count</span></code>:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SET</span> <span class="k">SESSION</span> <span class="n">exchange_materialization_strategy</span><span class="o">=</span><span class="s1">&#39;ALL&#39;</span><span class="p">;</span>
+
+<span class="c1">-- Set partitioning_provider_catalog to the Hive connector catalog</span>
+<span class="k">SET</span> <span class="k">SESSION</span> <span class="n">partitioning_provider_catalog</span><span class="o">=</span><span class="s1">&#39;hive&#39;</span><span class="p">;</span>
+
+<span class="c1">-- We recommend setting hash_partition_count to be at least 5X-10X about the cluster size</span>
+<span class="c1">-- when exchange materialization is enabled.</span>
+<span class="k">SET</span> <span class="k">SESSION</span> <span class="n">hash_partition_count</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>To make it easy for user to use exchange materialization, the admin can leverage <a class="reference internal" href="session-property-managers.html"><span class="doc">Session Property Managers</span></a>
+to set the session properties automatically based on client tags. The example in <a class="reference internal" href="session-property-managers.html"><span class="doc">Session Property Managers</span></a>
+demonstrates how to automatically enable exchange materialization for queries with <code class="docutils literal"><span class="pre">high_mem_etl</span></code> tag.</p>
+</div>
+</div>
+
+
+</div>
+<div class="bottomnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="spill.html">4.4. Spill to Disk</a>
+    </span>
+    <span class="right">
+        <a href="resource-groups.html">4.6. Resource Groups</a> &raquo;
+    </span>
+</p>
+
+</div>
+
+    <div class="footer" role="contentinfo">
+    </div>
+  </body>
+</html>

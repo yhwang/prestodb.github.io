@@ -1,0 +1,140 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>13.8. Release 0.241 &#8212; Presto 0.244 Documentation</title>
+    <link rel="stylesheet" href="../_static/presto.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.244',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="13.9. Release 0.240" href="release-0.240.html" />
+    <link rel="prev" title="13.7. Release 0.242" href="release-0.242.html" /> 
+  </head>
+  <body>
+<div class="header">
+    <h1 class="heading"><a href="../index.html">
+        <span>Presto 0.244 Documentation</span></a></h1>
+    <h2 class="heading"><span>13.8. Release 0.241</span></h2>
+</div>
+<div class="topnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="release-0.242.html">13.7. Release 0.242</a>
+    </span>
+    <span class="right">
+        <a href="release-0.240.html">13.9. Release 0.240</a> &raquo;
+    </span>
+</p>
+
+</div>
+<div class="content">
+    
+  <div class="section" id="release-0-241">
+<h1>13.8. Release 0.241</h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">There is a bug in LambdaDefinitionExpression canonicalization introduced since 0.238. For more details, go to <a class="reference external" href="https://github.com/prestodb/presto/issues/15424">#15424</a>.</p>
+</div>
+<div class="section" id="general-changes">
+<h2>General Changes</h2>
+<ul class="simple">
+<li>Fix incorrect results from function <a class="reference internal" href="../functions/aggregate.html#classification_precision" title="classification_precision"><code class="xref py py-func docutils literal"><span class="pre">classification_precision()</span></code></a> introduced in release 0.239.</li>
+<li>Improve performance for queries with broadcast or collocated joins by adding dynamic filtering and bucket pruning support. This can be enabled with the <code class="docutils literal"><span class="pre">experimental.enable-dynamic-filtering</span></code> configuration property and <code class="docutils literal"><span class="pre">enable_dynamic_filtering</span></code> system session property. For more information please refer to (<a class="reference external" href="https://github.com/prestodb/presto/pull/15077">#15077</a>).</li>
+<li>Add new warning message for <code class="docutils literal"><span class="pre">UNION</span></code> queries without <code class="docutils literal"><span class="pre">ALL</span></code> or <code class="docutils literal"><span class="pre">DISTINCT</span></code> keywords.</li>
+<li>Downgrade the ZSTD JNI compressor version to resolve the frequent excessive GC events introduced in version 0.238.</li>
+</ul>
+</div>
+<div class="section" id="security-changes">
+<h2>Security Changes</h2>
+<ul class="simple">
+<li>Implement REST endpoint authorization in Presto. See <a class="reference internal" href="../security/authorization.html"><span class="doc">Authorization</span></a>.</li>
+</ul>
+</div>
+<div class="section" id="jdbc-changes">
+<h2>JDBC Changes</h2>
+<ul class="simple">
+<li>Add support for <code class="docutils literal"><span class="pre">ResultSet.getStatement</span></code>.</li>
+<li>Add support for Oracle JDBC connections.</li>
+</ul>
+</div>
+<div class="section" id="hive-changes">
+<h2>Hive Changes</h2>
+<ul class="simple">
+<li>Fix several memory accounting bugs in <code class="docutils literal"><span class="pre">OrcRecordReader</span></code> and <code class="docutils literal"><span class="pre">StreamReader</span></code>.</li>
+<li>Add procedure <code class="docutils literal"><span class="pre">system.sync_partition_metadata()</span></code> to synchronize the partitions in the metastore with the partitions that are physically in the file system.</li>
+<li>Add support for direct recursive file listings in <code class="docutils literal"><span class="pre">PrestoS3FileSystem</span></code>.</li>
+<li>Add support for non-Hive types to Hive views. This support had been removed in 0.233. If a view uses an unsupported type for any columns, only a single dummy column will be saved in the metastore.</li>
+<li>Add support for pushing dereferences into Parquet table scan, so that only the required nested column is read when other projected nested columns are in the same base column. This can be enabled with the <code class="docutils literal"><span class="pre">hive.enable-parquet-dereference-pushdown</span></code> Hive configuration property and <code class="docutils literal"><span class="pre">parquet_batch_reader_verification_enabled</span></code> Hive session property.</li>
+</ul>
+</div>
+<div class="section" id="druid-changes">
+<h2>Druid Changes</h2>
+<ul class="simple">
+<li>Add support for data ingestion. Three modes are supported: <code class="docutils literal"><span class="pre">INSERT</span> <span class="pre">INTO</span> <span class="pre">SELECT</span></code>, <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">AS</span></code>, and from local or HDFS folders.</li>
+</ul>
+</div>
+<div class="section" id="oracle-changes">
+<h2>Oracle Changes</h2>
+<ul class="simple">
+<li>Add Oracle connector.</li>
+</ul>
+</div>
+<div class="section" id="verifier-changes">
+<h2>Verifier Changes</h2>
+<ul class="simple">
+<li>Fix an issue during determinism analysis that queries with <code class="docutils literal"><span class="pre">LIMIT</span></code> clause are not identified as non-deterministic when a rerun of the control query fails.</li>
+<li>Add support to allow multiple control and test clusters.</li>
+</ul>
+</div>
+<div class="section" id="spi-changes">
+<h2>SPI Changes</h2>
+<ul class="simple">
+<li>Add <code class="docutils literal"><span class="pre">StageStatistics</span></code> and <code class="docutils literal"><span class="pre">OperatorStatistics</span></code> to <code class="docutils literal"><span class="pre">QueryCompletedEvent</span></code>, and remove stage and operator statistics from <code class="docutils literal"><span class="pre">QueryStatistics</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="geospatial-changes">
+<h2>Geospatial Changes</h2>
+<ul class="simple">
+<li>Fix a bug when two envelopes intersect at a point for <a class="reference internal" href="../functions/geospatial.html#ST_Intersection" title="ST_Intersection"><code class="xref py py-func docutils literal"><span class="pre">ST_Intersection()</span></code></a>.</li>
+<li>Add <a class="reference internal" href="../functions/geospatial.html#geometry_nearest_points" title="geometry_nearest_points"><code class="xref py py-func docutils literal"><span class="pre">geometry_nearest_points()</span></code></a> to find nearest points of a pair of geometries.</li>
+</ul>
+</div>
+</div>
+
+
+</div>
+<div class="bottomnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="release-0.242.html">13.7. Release 0.242</a>
+    </span>
+    <span class="right">
+        <a href="release-0.240.html">13.9. Release 0.240</a> &raquo;
+    </span>
+</p>
+
+</div>
+
+    <div class="footer" role="contentinfo">
+    </div>
+  </body>
+</html>
