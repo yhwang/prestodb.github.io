@@ -1,0 +1,140 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>13.5. Release 0.243 &#8212; Presto 0.244 Documentation</title>
+    <link rel="stylesheet" href="../_static/presto.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.244',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="13.6. Release 0.242.1" href="release-0.242.1.html" />
+    <link rel="prev" title="13.4. Release 0.243.1" href="release-0.243.1.html" /> 
+  </head>
+  <body>
+<div class="header">
+    <h1 class="heading"><a href="../index.html">
+        <span>Presto 0.244 Documentation</span></a></h1>
+    <h2 class="heading"><span>13.5. Release 0.243</span></h2>
+</div>
+<div class="topnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="release-0.243.1.html">13.4. Release 0.243.1</a>
+    </span>
+    <span class="right">
+        <a href="release-0.242.1.html">13.6. Release 0.242.1</a> &raquo;
+    </span>
+</p>
+
+</div>
+<div class="content">
+    
+  <div class="section" id="release-0-243">
+<h1>13.5. Release 0.243</h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">There is a bug in LambdaDefinitionExpression canonicalization introduced since 0.238. For more details, go to <a class="reference external" href="https://github.com/prestodb/presto/issues/15424">#15424</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">There is a bug that results in columns in the <code class="docutils literal"><span class="pre">USING</span></code> clause of a query to not be checked properly for column-level access control (<a class="reference external" href="https://github.com/prestodb/presto/pull/15333">#15333</a>).</p>
+</div>
+<div class="section" id="highlights">
+<h2><strong>Highlights</strong></h2>
+<ul class="simple">
+<li>Add <a class="reference internal" href="../functions/aggregate.html#approx_most_frequent" title="approx_most_frequent"><code class="xref py py-func docutils literal"><span class="pre">approx_most_frequent()</span></code></a> aggregation function.</li>
+<li>Add support to <a class="reference internal" href="../functions/math.html#truncate" title="truncate"><code class="xref py py-func docutils literal"><span class="pre">truncate()</span></code></a> function for specifying the number of digits to the right of the decimal point in the truncated result.</li>
+<li>Add support for ignoring access checks on columns that are referenced in the query, but are not required to compute the query results. This can be enabled with the <code class="docutils literal"><span class="pre">check_access_control_on_utilized_columns_only</span></code> session property.</li>
+<li>Add support in verifier to verify <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">VIEW</span></code> and <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> queries.</li>
+</ul>
+</div>
+<div class="section" id="details">
+<h2><strong>Details</strong></h2>
+<div class="section" id="general-changes">
+<h3>General Changes</h3>
+<ul class="simple">
+<li>Fix query failure when using <code class="docutils literal"><span class="pre">EXPLAIN</span></code> with a <code class="docutils literal"><span class="pre">USE</span></code> statement.</li>
+<li>Add <a class="reference internal" href="../functions/aggregate.html#approx_most_frequent" title="approx_most_frequent"><code class="xref py py-func docutils literal"><span class="pre">approx_most_frequent()</span></code></a> aggregation function.</li>
+<li>Add support to <a class="reference internal" href="../functions/math.html#truncate" title="truncate"><code class="xref py py-func docutils literal"><span class="pre">truncate()</span></code></a> function for specifying the number of digits to the right of the decimal point in the truncated result.</li>
+<li>Remove configuration property <code class="docutils literal"><span class="pre">optimizer.optimize-full-outer-join-with-coalesce</span></code> and the corresponding session property <code class="docutils literal"><span class="pre">optimize_full_outer_join_with_coalesce</span></code>. The feature will always be enabled.</li>
+<li>Remove deprecated configuration properties <code class="docutils literal"><span class="pre">grouped-execution-for-aggregation-enabled</span></code> and <code class="docutils literal"><span class="pre">grouped-execution-for-join-enabled</span></code> and their corresponding session properties <code class="docutils literal"><span class="pre">grouped_execution_for_aggregation</span></code> and <code class="docutils literal"><span class="pre">grouped_execution_for_join</span></code>.  These have been replaced by a single configuration property <code class="docutils literal"><span class="pre">grouped-execution-enabled</span></code> and session property <code class="docutils literal"><span class="pre">grouped_execution</span></code>.</li>
+<li>Remove deprecated configuration property <code class="docutils literal"><span class="pre">dynamic-schedule-for-grouped-execution</span></code> and session property <code class="docutils literal"><span class="pre">dynamic_schedule_for_grouped_execution</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="security-changes">
+<h3>Security Changes</h3>
+<ul class="simple">
+<li>Add support for ignoring access checks on columns that are referenced in the query, but are not required to compute the query results. This can be enabled with the <code class="docutils literal"><span class="pre">check_access_control_on_utilized_columns_only</span></code> session property.</li>
+</ul>
+</div>
+<div class="section" id="geospatial-changes">
+<h3>Geospatial Changes</h3>
+<ul class="simple">
+<li>Add support to allow geometries outside of the spatial partitioning to match in a partitioned spatial join.</li>
+</ul>
+</div>
+<div class="section" id="hive-changes">
+<h3>Hive Changes</h3>
+<ul class="simple">
+<li>Improve metadata query optimizer.</li>
+<li>Add support for Parquet file metadata caching.</li>
+</ul>
+</div>
+<div class="section" id="pinot-changes">
+<h3>Pinot Changes</h3>
+<ul class="simple">
+<li>Add support for pushing down aggregation function <code class="docutils literal"><span class="pre">approx_distinct(x,</span> <span class="pre">e)</span></code>.</li>
+<li>Add support for pushing down array functions <code class="docutils literal"><span class="pre">array_sum</span></code>, <code class="docutils literal"><span class="pre">array_min</span></code>, <code class="docutils literal"><span class="pre">array_max</span></code>, <code class="docutils literal"><span class="pre">array_average</span></code> and <code class="docutils literal"><span class="pre">contains</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="verifier-changes">
+<h3>Verifier Changes</h3>
+<ul class="simple">
+<li>Add support for removing explicitly set broadcast memory limits.</li>
+<li>Add support to verify <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">VIEW</span></code> and <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span></code> queries.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="contributors">
+<h2><strong>Contributors</strong></h2>
+<p>Ajay George, Andrii Rosa, Ariel Weisberg, Ashish Tadose, Bin Fan, Daniel Ohayon, George Wang, James A. Gill, James Sun, Ke, Leiqing Cai, Maria Basmanova, Mayank Garg, Nikhil Collooru, Rebecca Schlussel, Rongrong Zhong, Shixuan Fan, Timothy Meehan, Vivek, Wenlei Xie, Xiang Fu, Ying Su, Zhenxiao Luo, Zhenyuan Zhao, ankit0811, leonpanokarren, prithvip</p>
+</div>
+</div>
+
+
+</div>
+<div class="bottomnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="release-0.243.1.html">13.4. Release 0.243.1</a>
+    </span>
+    <span class="right">
+        <a href="release-0.242.1.html">13.6. Release 0.242.1</a> &raquo;
+    </span>
+</p>
+
+</div>
+
+    <div class="footer" role="contentinfo">
+    </div>
+  </body>
+</html>

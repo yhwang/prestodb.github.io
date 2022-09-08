@@ -1,0 +1,151 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>13.6. Release 0.242 &#8212; Presto 0.243.4 Documentation</title>
+    <link rel="stylesheet" href="../_static/presto.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.243.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="13.7. Release 0.241" href="release-0.241.html" />
+    <link rel="prev" title="13.5. Release 0.243" href="release-0.243.html" /> 
+  </head>
+  <body>
+<div class="header">
+    <h1 class="heading"><a href="../index.html">
+        <span>Presto 0.243.4 Documentation</span></a></h1>
+    <h2 class="heading"><span>13.6. Release 0.242</span></h2>
+</div>
+<div class="topnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="release-0.243.html">13.5. Release 0.243</a>
+    </span>
+    <span class="right">
+        <a href="release-0.241.html">13.7. Release 0.241</a> &raquo;
+    </span>
+</p>
+
+</div>
+<div class="content">
+    
+  <div class="section" id="release-0-242">
+<h1>13.6. Release 0.242</h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">There is a bug in LambdaDefinitionExpression canonicalization introduced since 0.238. For more details, go to <a class="reference external" href="https://github.com/prestodb/presto/issues/15424">#15424</a>.</p>
+</div>
+<div class="section" id="highlights">
+<h2><strong>Highlights</strong></h2>
+<ul class="simple">
+<li>Add configuration property <code class="docutils literal"><span class="pre">experimental.spiller.task-spilling-strategy</span></code> for choosing different spilling strategy to use.</li>
+<li>Add support for fragment result caching.</li>
+<li>Add support for partition versioning.</li>
+<li>Add support for caching HiveMetastore calls at a more granular level.</li>
+</ul>
+</div>
+<div class="section" id="details">
+<h2><strong>Details</strong></h2>
+<div class="section" id="general-changes">
+<h3>General Changes</h3>
+<ul class="simple">
+<li>Fix compiler error in <code class="docutils literal"><span class="pre">LambdaBytecodeGenerator</span></code> when common sub-expression optimization is enabled and multiple SQL functions contain lambda expressions.</li>
+<li>Fix possible permanently stucked queries when memory limit is exceeded during shuffle.</li>
+<li>Fix a bug where <code class="docutils literal"><span class="pre">IS</span> <span class="pre">DISTINCT</span> <span class="pre">FROM</span> <span class="pre">NULL</span></code> produces wrong results for columns with null values.</li>
+<li>Add configuration property <code class="docutils literal"><span class="pre">experimental.spiller.task-spilling-strategy</span></code> for choosing different spilling strategy to use.</li>
+<li>Add session property <code class="docutils literal"><span class="pre">query_max_output_bytes</span></code> and configuration property <code class="docutils literal"><span class="pre">query.max-output-bytes</span></code> to control how much data a query can output.</li>
+<li>Add support for fragment result caching. This can be enabled by <code class="docutils literal"><span class="pre">fragment-result-cache.enabled</span></code> and <code class="docutils literal"><span class="pre">experimental.fragment-result-caching-enabled</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="hive-changes">
+<h3>Hive Changes</h3>
+<ul class="simple">
+<li>Fix a bug where DWRF encryption would fail for large uncompressed column values.</li>
+<li>Fix a bug where non-Presto readers could not read encrypted DWRF files written by Presto if the encryption group listed columns out of order.</li>
+<li>Fix a performance regression for String field handling in GenericHiveRecordCursor when the SerDe does not provide an efficient Writable implementation.</li>
+<li>Improve split loading efficiency by only using as many threads as are required.</li>
+<li>Add support for file renaming for Hive connector. This can be enabled with the <code class="docutils literal"><span class="pre">hive.file_renaming_enabled</span></code> configuration property.</li>
+<li>Add support to query parquet files written by parquet-avro library that uses <code class="docutils literal"><span class="pre">TIMESTAMP_MICROS</span></code> as the <code class="docutils literal"><span class="pre">OriginalType</span></code> to represent timestamp.</li>
+<li>Add support for partition versioning. This can be enabled with <code class="docutils literal"><span class="pre">hive.partition-versioning-enabled</span></code> configuration property</li>
+<li>Add support for caching HiveMetastore calls at a more granular level. This can be specified by the <code class="docutils literal"><span class="pre">hive.metastore-cache-scope</span></code> configuration property.</li>
+</ul>
+</div>
+<div class="section" id="pinot-changes">
+<h3>Pinot Changes</h3>
+<ul class="simple">
+<li>Add configuration property <code class="docutils literal"><span class="pre">pinot.pushdown-topn-broker-queries</span></code> to allow pushing down TOPN queries to Pinot.</li>
+</ul>
+</div>
+<div class="section" id="cassandra-change">
+<h3>Cassandra Change</h3>
+<ul class="simple">
+<li>Add <code class="docutils literal"><span class="pre">SMALLINT</span></code>, <code class="docutils literal"><span class="pre">TINYINT</span></code>, and <code class="docutils literal"><span class="pre">DATE</span></code> type support.</li>
+</ul>
+</div>
+<div class="section" id="verifier-changes">
+<h3>Verifier Changes</h3>
+<ul class="simple">
+<li>Fix an issue in determinism analysis which would indicate failing due to data being changed while the data is not changed.</li>
+<li>Improve JSON plan comparison for explain verification. (<a class="reference external" href="https://github.com/prestodb/presto/pull/15198">#15198</a>).</li>
+<li>Add application-name config to override source passed in ClientInfo.</li>
+<li>Add support to fetch the list of queries to be verified by running a Presto query.</li>
+<li>Add support to run explain verification. (<a class="reference external" href="https://github.com/prestodb/presto/pull/15101">#15101</a>). This can be enabled by configuration property <code class="docutils literal"><span class="pre">explain</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="spi-changes">
+<h3>SPI Changes</h3>
+<ul class="simple">
+<li>Add <code class="docutils literal"><span class="pre">getIdentifier</span></code> to <code class="docutils literal"><span class="pre">ConnectorTableLayoutHandle</span></code>. Layout identifier is used in fragment result caching to construct canonical plan.</li>
+<li>Add <code class="docutils literal"><span class="pre">getSplitIdentifier</span></code> to <code class="docutils literal"><span class="pre">ConnectorSplit</span></code>. Split identifier is used in fragment result caching to identify if splits are identical.</li>
+</ul>
+</div>
+<div class="section" id="geospatial-changes">
+<h3>Geospatial Changes</h3>
+<ul class="simple">
+<li>Upgrade Esri to [2.2.4](<a class="reference external" href="https://github.com/Esri/geometry-api-java/releases/tag/v2.2.4">https://github.com/Esri/geometry-api-java/releases/tag/v2.2.4</a>). This includes two fixes for bug (<a class="reference external" href="https://github.com/Esri/geometry-api-java/issues/266">https://github.com/Esri/geometry-api-java/issues/266</a> and <a class="reference external" href="https://github.com/Esri/geometry-api-java/issues/247">https://github.com/Esri/geometry-api-java/issues/247</a>) that were seen in production.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="contributors">
+<h2><strong>Contributors</strong></h2>
+<p>Andrii Rosa, Ariel Weisberg, Bin Fan, Daniel Ohayon, Dharak Kharod, James Gill, James Petty, James Sun, Ke Wang, Leiqing Cai, Masha Basmanova, Mayank Garg, Nikhil Collooru, Palash Goel, Rebecca Schlussel, Rongrong Zhong, Saksham Sachdev, Sanjay Sundaresan, Saumitra Shahapure, Shixuan Fan, Sreeni Viswanadha, Tim Meehan, Vic Zhang, Vivek, Weidong Duan, Wenlei Xie, Xiang Fu, Ying Su, Yuya Ebihara, Zhenxiao Luo, ankit0811, asdf2014, fornaix</p>
+</div>
+</div>
+
+
+</div>
+<div class="bottomnav">
+    
+<p class="nav">
+    <span class="left">
+        &laquo; <a href="release-0.243.html">13.5. Release 0.243</a>
+    </span>
+    <span class="right">
+        <a href="release-0.241.html">13.7. Release 0.241</a> &raquo;
+    </span>
+</p>
+
+</div>
+
+    <div class="footer" role="contentinfo">
+    </div>
+  </body>
+</html>
