@@ -1,10 +1,11 @@
 export const Items = [
   // for youtube video thumbnails use https://i.ytimg.com/vi/[VIDEO ID]/hqdefault.jpg
+
 {
-"link":"https://www.youtube.com/watch?v=67gXN5697Vw",
-"thumbnail":"gettingStartedMeta.jpg",
-"title":"Getting started with Presto from Meta",
-"description":"A hands-on tutorial for getting started with Presto and large-scale analytics with multiple data sources."
+"link":"https://ahana.io/presto-refcard/",
+"thumbnail":"presto-refcard.png",
+"title":"Hands-on Guide: Getting Started with Presto",
+"description":"Get the hands-on guide to getting started with Presto, built in partnership with Dzone."
 },
 {
 "link":"https://www.youtube.com/watch?v=zLUs6ept1Hs",
@@ -137,5 +138,11 @@ export const Items = [
 "thumbnail":"prestoAtMeta.png",
 "title":"Presto: Interacting with petabytes of data at Facebook",
 "description":"In this post, we will briefly describe the architecture of Presto and how it solves the problem for data warehouse users at Meta."
-}
+},
+{
+"link":"https://www.youtube.com/watch?v=67gXN5697Vw",
+"thumbnail":"gettingStartedMeta.jpg",
+"title":"Getting started with Presto from Meta",
+"description":"A hands-on tutorial for getting started with Presto and large-scale analytics with multiple data sources."
+},
 ];
