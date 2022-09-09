@@ -88,9 +88,9 @@ export const Items = [
     Link: "https://ahana.io/customers/adroitts/",
   },
   {
-    Company: "Platfrom24",
+    Company: "Platform24",
     Description:
-      "Platform 24, the digital healthcare SaaS platform for healthcare providers, based in Sweden uses Presto as SQL engine for their Modern Data Platform to address the need of Open Source, Self hosted, Kubernetes friendly, Reliable, Scalable and Cost effective, etc.",
+      "Platform24, the digital healthcare SaaS platform for healthcare providers, based in Sweden uses Presto as SQL engine for their Modern Data Platform to address the need of Open Source, Self hosted, Kubernetes friendly, Reliable, Scalable and Cost effective, etc.",
     CTA: "Watch presentation",
     Link: "https://www.youtube.com/watch?v=mJoP71_Keyo&list=PLJVeO1NMmyqXHoLuUJtulMDU0yBgSL0GH&index=5",
     logo: "img/presto-users/logo-platform24.png",

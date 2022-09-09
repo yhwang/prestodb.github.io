@@ -1,6 +1,6 @@
 export const Projects_Cloud = [
   {
-    title: "Presto on AWS -<br/> Free Forever edition ",
+    title: "Presto on AWS -<br/> Free-Forever edition ",
     link: "https://ahana.io/get-started/",
     description:
       " Ahana Cloud for Presto is the first cloud-native managed service for Presto. This offering is designed to simplify the deployment, management and integration of Presto, with data catalogs, databases and data lakes on AWS and the community edition is for learning and validating the value of Presto for the Open Data Lakehouse in&nbsp;AWS.  <br /><br /> Ahana Cloud for Presto is easy-to-use with no installation, no AMIs or CFTs, and no configuration needed. Via the Ahana console, Presto is deployed within your AWS account so you have complete control and visibility of clusters and their data. The community edition is free forever, you just pay for infrastructure costs in&nbsp;AWS.<br/><br/><a href='https://www.youtube.com/watch?v=B8V7e3JWLVc&list=PLJVeO1NMmyqXHoLuUJtulMDU0yBgSL0GH&index=4&ab_channel=PrestoFoundation' target='_blank'>Watch a demo here</a> ",

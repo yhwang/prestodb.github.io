@@ -37,11 +37,11 @@ export const GetStarted_Cards = [
   },
   {
     title: "SaaS for Presto on AWS by Ahana",
-    description: "Free-forever Community Edition. Run Presto on AWS in your VPC with the Ahana Cloud Managed Service for&nbsp;Presto.",
+    description: "Easily run Presto clusters free-forever in your AWS VPC with the Ahana Cloud Managed Service for&nbsp;Presto.",
     buttonText: "Get Started",
     buttonLink:
       "https://ahana.io/get-started/?utm_source=prestodbio&utm_medium=community&utm_campaign=get_started",
     footer:
-      'See <a href="https://www.youtube.com/watch?v=B8V7e3JWLVc&list=PLJVeO1NMmyqXHoLuUJtulMDU0yBgSL0GH&index=4&ab_channel=PrestoFoundation" target="_blank">demo</a> to get started',
+      'See a 6min <a href="https://www.youtube.com/watch?v=B8V7e3JWLVc&list=PLJVeO1NMmyqXHoLuUJtulMDU0yBgSL0GH&index=4&ab_channel=PrestoFoundation" target="_blank">demo</a> to get started',
   },
 ];
