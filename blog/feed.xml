@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Sun, 10 Jul 2022 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 30 Nov 2022 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,25 @@
             <url>https://prestodb.io/img/logo-presto-white.svg</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Is PrestoDB the most popular Open Source Data Analytics project?]]></title>
+            <link>https://prestodb.io/blog/2022/11/30/datanami.html</link>
+            <guid>https://prestodb.io/blog/2022/11/30/datanami.html</guid>
+            <pubDate>Wed, 30 Nov 2022 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><strong>Co-author:</strong> <a href="https://www.linkedin.com/in/rachelpedreschi/">Rachel Pedreschi</a></p>
+<p>The Presto Foundation is thrilled to announce that today Presto has been awarded “2022 Editors Choice for Top 3 Data and AI Open Source Projects to Watch” from <a href="https://www.datanami.com/this-just-in/bigdatawire-formerly-datanami-reveals-winners-of-2022-readers-and-editors-choice-awards/">BigDATAwire</a>.  Past winners are a true who’s who in the data world including Apache Spark (2020), Apache Kafka (2018), MongoDB (2019), Apache Cassandra, ElasticSearch and Redis (2021).  This award underscores what the Linux Foundation's Presto Foundation has known for a long time, that PrestoDB continues to be extremely popular, and we have recently dug into the data to find out more.</p>
+<p><img src="/img/blog/2022-11-30-datanami/datanami2022.jpg" alt="Presto Architecture"></p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[5 Reasons to attend PrestoCon 2022 on Dec. 7-8.]]></title>
+            <link>https://prestodb.io/blog/2022/11/28/PrestoCon-2022.html</link>
+            <guid>https://prestodb.io/blog/2022/11/28/PrestoCon-2022.html</guid>
+            <pubDate>Mon, 28 Nov 2022 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><strong>Co-author:</strong> Steven Mih, Board member, Presto Foundation Member: <a href="https://ahana.io/">Ahana</a></p>
+<p>The annual <a href="https://events.linuxfoundation.org/prestocon/">PrestoCon</a> is coming back for its 3rd year and it’s going to be better than ever! If you want to learn how to use Presto with confidence and/or network with data engineers, this is the event for you. PrestoCon 2022 will be held in Mountain View, California on December 7th and 8th. The conference features two days of in-depth training sessions and talks led by some of the best minds in the industry. If you want to learn how to use Presto for data analytics and lakehouses, or simply to get the most out of your data infrastructure, register now and get ready for two exciting days of learning and networking!</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Presto Parquet Column Encryption]]></title>
             <link>https://prestodb.io/blog/2022/07/10/presto-parquet-column-encryption.html</link>

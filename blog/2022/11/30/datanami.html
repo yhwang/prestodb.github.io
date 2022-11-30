@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Is PrestoDB the most popular Open Source Data Analytics project? · </title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="**Co-author:** [Rachel Pedreschi](https://www.linkedin.com/in/rachelpedreschi/)"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Is PrestoDB the most popular Open Source Data Analytics project? · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2022/11/30/datanami"/><meta property="og:description" content="**Co-author:** [Rachel Pedreschi](https://www.linkedin.com/in/rachelpedreschi/)"/><meta property="og:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><link rel="shortcut icon" href="/img/icon-presto-dots-color.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/css/bootstrap.min.css"/><link rel="stylesheet" href="/css/custom.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/logo-presto-white.svg" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/getting-started.html" target="_self">Get Started</a></li><li class=""><a href="/what-is-presto.html" target="_self">What is Presto?</a></li><li class=""><a href="/community.html" target="_self">Community</a></li><li class=""><a href="/docs/current" target="_blank">Docs</a></li><li class=""><a href="https://communityinviter.com/apps/prestodb/prestodb" target="_blank">Slack</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_blank">GitHub</a></li><li class=""><a href="https://stackoverflow.com/questions/tagged/presto" target="_blank">Stackoverflow</a></li><li class=""><a href="https://twitter.com/prestodb" target="_blank">Twitter</a></li><li class=""><a href="https://www.linkedin.com/company/presto-foundation/" target="_blank">LinkedIn</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2022/11/30/datanami">Is PrestoDB the most popular Open Source Data Analytics project?</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/11/28/PrestoCon-2022">5 Reasons to attend PrestoCon 2022 on Dec. 7-8.</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/07/10/presto-parquet-column-encryption">Presto Parquet Column Encryption</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/05/10/faster-presto-queries-with-parquet-page-index">Faster Presto Queries with Parquet Page Index</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/04/15/disggregated-coordinator">Disaggregated Coordinator</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2022/11/30/datanami">Is PrestoDB the most popular Open Source Data Analytics project?</a></h1><p class="post-meta">November 30, 2022</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/alidodson/" target="_blank" rel="noreferrer noopener">Ali LeClerc</a></p></div></header><div><span><p><strong>Co-author:</strong> <a href="https://www.linkedin.com/in/rachelpedreschi/">Rachel Pedreschi</a></p>
+<p>The Presto Foundation is thrilled to announce that today Presto has been awarded “2022 Editors Choice for Top 3 Data and AI Open Source Projects to Watch” from <a href="https://www.datanami.com/this-just-in/bigdatawire-formerly-datanami-reveals-winners-of-2022-readers-and-editors-choice-awards/">BigDATAwire</a>.  Past winners are a true who’s who in the data world including Apache Spark (2020), Apache Kafka (2018), MongoDB (2019), Apache Cassandra, ElasticSearch and Redis (2021).  This award underscores what the Linux Foundation's Presto Foundation has known for a long time, that PrestoDB continues to be extremely popular, and we have recently dug into the data to find out more.</p>
+<p><img src="/img/blog/2022-11-30-datanami/datanami2022.jpg" alt="Presto Architecture"></p>
+<!--truncate-->
+<p>Back in March of this year,  the Presto Outreach committee has been doing some in-depth analysis of the PrestoDB Community as a whole.  We have been digging into Slack messages and Github issues, pouring over survey results and talking to as many users as we can to get a better idea of who our users are and how we can better serve them.  In doing so, we were able to unearth up a veritable treasure trove of impressive statistics.  I mean, we know PrestoDB was popular, but WOW, this really blew our socks off.</p>
+<p>As of Dec. 1 2022 we are able to count:
+21000+ members all over the world, representing over 2200 organizations.  Developers have been busy with 19k commits merged, 13k PRs created and over 13k stars on the Github repo.</p>
+<p>That is a lot to celebrate!</p>
+<p>So, the Presto Foundation has decided to throw a party for our community on Dec 7th and 8th at the Computer History Museum in Mountain View, CA.   PrestoCon Live will include hands-on workshops on Building Presto Connectors and Getting Started with a Data Lakehouse on Dec 7th.  The next day, Dec 8th, will be full of deep-cut technical sessions, ecosystem lightning talks, and real-world use cases highlighting the best of what Presto brings to these 2000 organizations that rely on it for making critical business decisions. We will then celebrate the 10 years of Presto success with a “meet the committers” cocktail party.  If you aren’t in the Bay Area, no worries, you can register as a virtual attendee to get access to all the recordings after the event.</p>
+<p>To register, just create a free account with The Linux Foundation:
+<a href="https://events.linuxfoundation.org/prestocon/register/">https://events.linuxfoundation.org/prestocon/register/</a>
+Only $25 if you register with the Cyber week special code: PRESTODB25.</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>
