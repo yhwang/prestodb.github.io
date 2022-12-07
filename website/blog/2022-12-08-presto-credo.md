@@ -3,7 +3,10 @@ title: Is PrestoDB the most popular Open Source Data Analytics project?
 author: Steven Mih, Board member & Treasurer Presto Foundation and Co-founder at Ahana
 authorURL: https://www.linkedin.com/in/stevenmih/
 ---
-**Co-author:** [Girish Baliga, Chair, Presto Foundation, Presto Foundation Member, Engineering at Uber](https://www.linkedin.com/in/girishbaliga/)
+**Co-authors:** 
+- [Girish Baliga, Chair, Presto Foundation, Presto Foundation Member, Engineering at Uber](https://www.linkedin.com/in/girishbaliga/)
+
+- [Tim Meehan, Chair, Presto Foundation TSC and Software Engineer at Meta](https://www.linkedin.com/in/timdmeehan/)
 
 We believe that data analytics should be democratized—and is why we innovate Presto with state-of-the-art database technology. Trusted governance is important to us—and is why we model our project governance and bylaws after the Linux Foundation.
  
