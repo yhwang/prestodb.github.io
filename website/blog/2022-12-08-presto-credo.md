@@ -36,3 +36,12 @@ The Presto Foundation hosted under Linux Foundation has neutrality, transparency
 
 Thank You.
 
+
+Signed,
+ 
+- Girish Baliga, Chair, Presto Foundation, Presto Foundation Member; Uber
+- Steven Mih, Board member, Presto Foundation Treasurer; Ahana
+- Rachel Pedreschi, Chair, Presto Foundation, Outreach, Presto Foundation Member; Ahana
+- Tim Meehan, Chair, Presto Foundation TSC Presto Foundation Member; Meta
+- Philip S Bell, Board Member, Presto Foundation; Meta Open Source
+- Rohan Pednekar, Chair, Presto Foundation, Conformance, Presto Foundation Member; Ahana
