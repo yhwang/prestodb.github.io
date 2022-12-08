@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Is PrestoDB the most popular Open Source Data Analytics project? · </title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="**Co-authors:** "/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Is PrestoDB the most popular Open Source Data Analytics project? · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2022/12/08/presto-credo"/><meta property="og:description" content="**Co-authors:** "/><meta property="og:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><link rel="shortcut icon" href="/img/icon-presto-dots-color.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/css/bootstrap.min.css"/><link rel="stylesheet" href="/css/custom.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/logo-presto-white.svg" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/getting-started.html" target="_self">Get Started</a></li><li class=""><a href="/what-is-presto.html" target="_self">What is Presto?</a></li><li class=""><a href="/community.html" target="_self">Community</a></li><li class=""><a href="/docs/current" target="_blank">Docs</a></li><li class=""><a href="https://communityinviter.com/apps/prestodb/prestodb" target="_blank">Slack</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_blank">GitHub</a></li><li class=""><a href="https://stackoverflow.com/questions/tagged/presto" target="_blank">Stackoverflow</a></li><li class=""><a href="https://twitter.com/prestodb" target="_blank">Twitter</a></li><li class=""><a href="https://www.linkedin.com/company/presto-foundation/" target="_blank">LinkedIn</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2022/12/08/presto-credo">Is PrestoDB the most popular Open Source Data Analytics project?</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2022/11/30/datanami">Is PrestoDB the most popular Open Source Data Analytics project?</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/11/28/PrestoCon-2022">5 Reasons to attend PrestoCon 2022 on Dec. 7-8.</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/07/10/presto-parquet-column-encryption">Presto Parquet Column Encryption</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/05/10/faster-presto-queries-with-parquet-page-index">Faster Presto Queries with Parquet Page Index</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2022/12/08/presto-credo">Is PrestoDB the most popular Open Source Data Analytics project?</a></h1><p class="post-meta">December 8, 2022</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/stevenmih/" target="_blank" rel="noreferrer noopener">Steven Mih, Board member &amp; Treasurer Presto Foundation and Co-founder at Ahana</a></p></div></header><div><span><p><strong>Co-authors:</strong></p>
+<ul>
+<li><p><a href="https://www.linkedin.com/in/girishbaliga/">Girish Baliga, Chair, Presto Foundation, Presto Foundation Member, Engineering at Uber</a></p></li>
+<li><p><a href="https://www.linkedin.com/in/timdmeehan/">Tim Meehan, Chair, Presto Foundation TSC and Software Engineer at Meta</a></p></li>
+</ul>
+<p>We believe that data analytics should be democratized—and is why we innovate Presto with state-of-the-art database technology. Trusted governance is important to us—and is why we model our project governance and bylaws after the Linux Foundation.</p>
+<p>TO OUR FELLOW DATA ENGINEERS, SOFTWARE DEVELOPERS, AND DATA PLATFORM ENTHUSIASTS:</p>
+<p>As the use of data analytics and SQL lakehouses grows, the open-forever Presto distributed SQL query engine has the enduring power to change the world with better data-driven decisions.</p>
+<p>We take this moment to reflect on the open source Presto query engine and especially why open source Presto, hosted by the Linux Foundation’s Presto Foundation, is the best choice for those who care about data platforms and state-of-the-art database technology.</p>
+<p>We believe:</p>
+<!--truncate-->
+<ul>
+<li><p><strong>In developing state-of-the-art database technology that is accessible to everyone.</strong> The Presto query engine has come a long way in the past few years. In particular, the community has developed key technical innovations that have made Presto an even more powerful SQL engine, notably: multi-level caching, disaggregated coordinators, ETL with Presto-on-Spark, and the upcoming native vectorized C++ worker, based on Velox, for blazing fast, efficient query execution. Such technology is unmatched and unparalleled in the open source industry.</p></li>
+<li><p><strong>In scalability, reliability, and performance.</strong> Presto was designed specifically for data warehousing and analytics workloads. It has a distributed architecture, which means it can scale to support any SQL workloads, working with very large data sets. Because Presto supports ANSI SQL, it can unify one SQL dialect for all types of engines. It is fast, it is reliable, and it is scalable. Companies like Meta (formerly Facebook), Uber, Twitter, Alibaba, ByteDance, and Twilio continue to use Presto to power their SQL workloads on large datasets.</p></li>
+<li><p><strong>In neutral governance.</strong> Presto Foundation, part of Linux Foundation, is a neutral, open source technology foundation that supports and maintains the development of the Presto technology. Our project bylaws, which prevent future licensing changes, provide guidelines for how the project operates and are followed, such as who gets to make decisions and how those decisions are made. This is why the Presto Foundation exists: so Presto can forever remain technology-driven and community-driven rather than vendor-driven.</p></li>
+<li><p><strong>In collaboration.</strong> We believe in the power of collaboration and the sharing of knowledge. Presto technology is built collaboratively by software engineers and database architects from around the globe. An industry consortium of end-user companies and technology vendors provide oversight over the Presto Foundation bylaws.</p></li>
+<li><p><strong>That the concept of openness also extends to who joins.</strong> We welcome all to the Presto Foundation. With bylaws preventing Presto from ever switching to a closed source license, we draw in not only developers and users, but also other vendors who want to support our mission. As the industry grows, we think that developers and users will increasingly choose software projects with reassuring, transparent bylaws.</p></li>
+</ul>
+<p>Finally, by adhering to all the points of this credo, we believe that Presto is the best distributed SQL query engine available today.</p>
+<p>The Presto Foundation hosted under Linux Foundation has neutrality, transparency, and an open governing board which anyone is welcome to join. Presto is here to stay, and the technology will continue to evolve and improve. If you haven’t already, please join us today.</p>
+<p>Thank You.</p>
+<p>Signed,</p>
+<ul>
+<li>Girish Baliga, Chair, Presto Foundation, Presto Foundation Member; Uber</li>
+<li>Steven Mih, Board member, Presto Foundation Treasurer; Ahana</li>
+<li>Rachel Pedreschi, Chair, Presto Foundation, Outreach, Presto Foundation Member; Ahana</li>
+<li>Tim Meehan, Chair, Presto Foundation TSC Presto Foundation Member; Meta</li>
+<li>Philip S Bell, Board Member, Presto Foundation; Meta Open Source</li>
+<li>Rohan Pednekar, Chair, Presto Foundation, Conformance, Presto Foundation Member; Ahana</li>
+</ul>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>

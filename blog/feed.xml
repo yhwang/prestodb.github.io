@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Wed, 30 Nov 2022 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 08 Dec 2022 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,23 @@
             <url>https://prestodb.io/img/logo-presto-white.svg</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Is PrestoDB the most popular Open Source Data Analytics project?]]></title>
+            <link>https://prestodb.io/blog/2022/12/08/presto-credo.html</link>
+            <guid>https://prestodb.io/blog/2022/12/08/presto-credo.html</guid>
+            <pubDate>Thu, 08 Dec 2022 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><strong>Co-authors:</strong></p>
+<ul>
+<li><p><a href="https://www.linkedin.com/in/girishbaliga/">Girish Baliga, Chair, Presto Foundation, Presto Foundation Member, Engineering at Uber</a></p></li>
+<li><p><a href="https://www.linkedin.com/in/timdmeehan/">Tim Meehan, Chair, Presto Foundation TSC and Software Engineer at Meta</a></p></li>
+</ul>
+<p>We believe that data analytics should be democratized—and is why we innovate Presto with state-of-the-art database technology. Trusted governance is important to us—and is why we model our project governance and bylaws after the Linux Foundation.</p>
+<p>TO OUR FELLOW DATA ENGINEERS, SOFTWARE DEVELOPERS, AND DATA PLATFORM ENTHUSIASTS:</p>
+<p>As the use of data analytics and SQL lakehouses grows, the open-forever Presto distributed SQL query engine has the enduring power to change the world with better data-driven decisions.</p>
+<p>We take this moment to reflect on the open source Presto query engine and especially why open source Presto, hosted by the Linux Foundation’s Presto Foundation, is the best choice for those who care about data platforms and state-of-the-art database technology.</p>
+<p>We believe:</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Is PrestoDB the most popular Open Source Data Analytics project?]]></title>
             <link>https://prestodb.io/blog/2022/11/30/datanami.html</link>
