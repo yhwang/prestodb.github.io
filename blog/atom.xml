@@ -8,7 +8,7 @@
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/logo-presto-white.svg</logo>
     <entry>
-        <title type="html"><![CDATA[Is PrestoDB the most popular Open Source Data Analytics project?]]></title>
+        <title type="html"><![CDATA[Our Presto Credo for the Truly Open Source SQL Query Engine.]]></title>
         <id>https://prestodb.io/blog/2022/12/08/presto-credo.html</id>
         <link href="https://prestodb.io/blog/2022/12/08/presto-credo.html"/>
         <updated>2022-12-08T06:00:00.000Z</updated>
