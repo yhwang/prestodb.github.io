@@ -1,5 +1,5 @@
 ---
-title: Is PrestoDB the most popular Open Source Data Analytics project?
+title: Our Presto Credo for the Truly Open Source SQL Query Engine
 author: Steven Mih, Board member & Treasurer Presto Foundation and Co-founder at Ahana
 authorURL: https://www.linkedin.com/in/stevenmih/
 ---
