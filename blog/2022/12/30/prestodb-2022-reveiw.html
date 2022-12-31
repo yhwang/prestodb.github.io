@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>2022 PrestoDB Community in Review · </title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Hello Presto enthusiasts!"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="2022 PrestoDB Community in Review · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2022/12/30/prestodb-2022-reveiw"/><meta property="og:description" content="Hello Presto enthusiasts!"/><meta property="og:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><link rel="shortcut icon" href="/img/icon-presto-dots-color.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/css/bootstrap.min.css"/><link rel="stylesheet" href="/css/custom.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/logo-presto-white.svg" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/getting-started.html" target="_self">Get Started</a></li><li class=""><a href="/what-is-presto.html" target="_self">What is Presto?</a></li><li class=""><a href="/community.html" target="_self">Community</a></li><li class=""><a href="/docs/current" target="_blank">Docs</a></li><li class=""><a href="https://communityinviter.com/apps/prestodb/prestodb" target="_blank">Slack</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_blank">GitHub</a></li><li class=""><a href="https://stackoverflow.com/questions/tagged/presto" target="_blank">Stackoverflow</a></li><li class=""><a href="https://twitter.com/prestodb" target="_blank">Twitter</a></li><li class=""><a href="https://www.linkedin.com/company/presto-foundation/" target="_blank">LinkedIn</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2022/12/30/prestodb-2022-reveiw">2022 PrestoDB Community in Review</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/12/28/presto-at-twilio">Presto on AWS at Twilio - Lesson Learned and Optimization</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/12/08/presto-credo">Our Presto Credo for the Truly Open Source SQL Query Engine.</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/11/30/datanami">Is PrestoDB the most popular Open Source Data Analytics project?</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/11/28/PrestoCon-2022">5 Reasons to attend PrestoCon 2022 on Dec. 7-8.</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2022/12/30/prestodb-2022-reveiw">2022 PrestoDB Community in Review</a></h1><p class="post-meta">December 30, 2022</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/alidodson/" target="_blank" rel="noreferrer noopener">Ali LeClerc</a></p></div></header><div><span><p>Hello Presto enthusiasts!</p>
+<p>We here at the Presto Outreach Committee are absolutely thrilled to be entering the new year of 2023. It's hard to believe that another year has passed, but as we reflect on the past year, we can't help but feel grateful for the amazing growth and progress we've seen in the Presto community in 2022.</p>
+<p><img src="/img/blog/2022-12-30-prestodb-2022-reveiw/Presto2022Review.png" alt="Presto2022Review"></p>
+<!--truncate-->
+<p>From the launch of new features and improvements to the expansion of our user base, it's been an incredible year for Presto. We're so grateful to each and every one of you who has been a part of this journey with us.  Check out some of the impressive stats that we have collected over the past year!</p>
+<p>As we look ahead to the new year, we're filled with excitement and anticipation for all that's to come. There's no telling what the future holds, but we have a feeling that 2023 is going to be even bigger and better for Presto. We are especially excited to see expanded support for the Lakehouse ecosystem, and all of the work around the Velox engine for even faster query speeds.</p>
+<p>So let's raise a glass (or a mug of our favorite beverage) to all that we've accomplished, and to the bright future ahead. Here's to a fantastic 2023!</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>

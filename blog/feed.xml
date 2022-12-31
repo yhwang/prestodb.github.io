@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Thu, 08 Dec 2022 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 30 Dec 2022 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,24 @@
             <url>https://prestodb.io/img/logo-presto-white.svg</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[2022 PrestoDB Community in Review]]></title>
+            <link>https://prestodb.io/blog/2022/12/30/prestodb-2022-reveiw.html</link>
+            <guid>https://prestodb.io/blog/2022/12/30/prestodb-2022-reveiw.html</guid>
+            <pubDate>Fri, 30 Dec 2022 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Hello Presto enthusiasts!</p>
+<p>We here at the Presto Outreach Committee are absolutely thrilled to be entering the new year of 2023. It's hard to believe that another year has passed, but as we reflect on the past year, we can't help but feel grateful for the amazing growth and progress we've seen in the Presto community in 2022.</p>
+<p><img src="/img/blog/2022-12-30-prestodb-2022-reveiw/Presto2022Review.png" alt="Presto2022Review"></p>
+]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Presto on AWS at Twilio - Lesson Learned and Optimization]]></title>
+            <link>https://prestodb.io/blog/2022/12/28/presto-at-twilio.html</link>
+            <guid>https://prestodb.io/blog/2022/12/28/presto-at-twilio.html</guid>
+            <pubDate>Wed, 28 Dec 2022 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Earlier this month we hosted PrestoCon, a fantastic in-person event that showcased the innovation around the Presto project. In this blog we’ll detail Twilio’s presentation on their Presto use case, including their architecture, key optimizations, and lessons learned. You can also check out their <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">full presentation here</a>.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Our Presto Credo for the Truly Open Source SQL Query Engine.]]></title>
             <link>https://prestodb.io/blog/2022/12/08/presto-credo.html</link>

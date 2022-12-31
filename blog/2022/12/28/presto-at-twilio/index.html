@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Presto on AWS at Twilio - Lesson Learned and Optimization · </title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Earlier this month we hosted PrestoCon, a fantastic in-person event that showcased the innovation around the Presto project. In this blog we’ll detail Twilio’s presentation on their Presto use case, including their architecture, key optimizations, and lessons learned. You can also check out their [full presentation here](https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3)."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Presto on AWS at Twilio - Lesson Learned and Optimization · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2022/12/28/presto-at-twilio"/><meta property="og:description" content="Earlier this month we hosted PrestoCon, a fantastic in-person event that showcased the innovation around the Presto project. In this blog we’ll detail Twilio’s presentation on their Presto use case, including their architecture, key optimizations, and lessons learned. You can also check out their [full presentation here](https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3)."/><meta property="og:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><link rel="shortcut icon" href="/img/icon-presto-dots-color.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/css/bootstrap.min.css"/><link rel="stylesheet" href="/css/custom.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/logo-presto-white.svg" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/getting-started.html" target="_self">Get Started</a></li><li class=""><a href="/what-is-presto.html" target="_self">What is Presto?</a></li><li class=""><a href="/community.html" target="_self">Community</a></li><li class=""><a href="/docs/current" target="_blank">Docs</a></li><li class=""><a href="https://communityinviter.com/apps/prestodb/prestodb" target="_blank">Slack</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_blank">GitHub</a></li><li class=""><a href="https://stackoverflow.com/questions/tagged/presto" target="_blank">Stackoverflow</a></li><li class=""><a href="https://twitter.com/prestodb" target="_blank">Twitter</a></li><li class=""><a href="https://www.linkedin.com/company/presto-foundation/" target="_blank">LinkedIn</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/blog/2022/12/30/prestodb-2022-reveiw">2022 PrestoDB Community in Review</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2022/12/28/presto-at-twilio">Presto on AWS at Twilio - Lesson Learned and Optimization</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/12/08/presto-credo">Our Presto Credo for the Truly Open Source SQL Query Engine.</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/11/30/datanami">Is PrestoDB the most popular Open Source Data Analytics project?</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/11/28/PrestoCon-2022">5 Reasons to attend PrestoCon 2022 on Dec. 7-8.</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2022/12/28/presto-at-twilio">Presto on AWS at Twilio - Lesson Learned and Optimization</a></h1><p class="post-meta">December 28, 2022</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/alidodson/" target="_blank" rel="noreferrer noopener">Ali LeClerc</a></p></div></header><div><span><p>Earlier this month we hosted PrestoCon, a fantastic in-person event that showcased the innovation around the Presto project. In this blog we’ll detail Twilio’s presentation on their Presto use case, including their architecture, key optimizations, and lessons learned. You can also check out their <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">full presentation here</a>.</p>
+<!--truncate-->
+<p>In their session, Twilio engineers <a href="https://www.linkedin.com/in/aakashpradeep">Aakash Pradeep</a> and <a href="https://www.linkedin.com/in/badri-narayana-tripathy-974a0596">Bardi Tripathy</a> covered their data lake evolution journey, the current data scale, the role of Presto in the data ecosystem at Twilio, the current query challenges, and optimization techniques.</p>
+<p><img src="/img/blog/2022-12-28-presto-at-twilio/Screen1.png" alt="Screen1"></p>
+<p>If you don’t know, Twilio is a customer engagement platform that allows businesses to connect with their customers through various APIs and channels of communication. Some of these channels include messaging, voice, and contact center APIs. One example of a company that uses Twilio's data platform for text messages and calls is Uber. In addition, many banking authentication and notification text messages are powered by Twilio. The large volume of data generated by these products is stored in a data lake and data warehouse for use in finance, marketing, and sales analytics.</p>
+<p>At Twilio, the data lake journey is a key part of the company's operations. Approximately 80% of Twilio's data comes from product teams that use Kafka or MySQL databases. In addition to this, the company receives data from external sources such as Salesforce, Zendesk, and Marketo, as well as internal CSV files generated by accounting and finance teams. This data is loaded into the S3 data lake using config-driven Python and Spark-based loaders. This process allows Twilio to store and process large amounts of data for various analytical use cases.</p>
+<p><strong><em>“we used to load this data into a Redshift data lake for analytical queries and business use cases, with Looker or other dashboarding BI tools on top. However, once our data grew beyond 5 petabytes, we began to face issues with managing Redshift at scale... which led to either capping our costs or experiencing a hit on performance. This is where Presto came in as a solution.”</em></strong></p>
+<p><img src="/img/blog/2022-12-28-presto-at-twilio/Screen2.png" alt="Screen2"></p>
+<p>Prior to 2021, Twilio loaded its data into a Redshift data lake for analytical queries and business use cases, using dashboarding BI tools such as Looker. However, as the data grew beyond 5 petabytes, the company encountered challenges in managing Redshift at scale. To address these issues, Twilio implemented Presto, which allowed it to decouple the storage and compute layers and scale without affecting performance. In addition to data exploration and ad-hoc analysis by data analysts, Presto has also been used as a data source for real-time dashboards and machine learning models.</p>
+<p>Currently, Twilio is operating at around 10 petabytes of data in its S3 data lake and serving around 500 million queries per day through Presto. This has helped the company significantly in terms of cost optimization, as it no longer has to maintain two copies of data (one in S3 and one in Redshift) and can scale Presto clusters as needed.</p>
+<p><img src="/img/blog/2022-12-28-presto-at-twilio/Screen3.png" alt="Screen3"></p>
+<p>As with any large-scale data platform, Twilio has implemented various optimization techniques to ensure efficient operation. These techniques include query scheduling and concurrency controls to prioritize high-impact queries and prevent overloading of the clusters, as well as query caching and data skip strategies to improve the performance of recurring and small queries. Twilio has also implemented hierarchical resource management in Presto, which allows it to define different groups and subgroups with limits on the amount of memory they can use, the number of queries they can run in parallel, and the number of queries they can queue. The company operates multiple clusters, each with different use cases, so it can tune them separately. Additionally, Twilio has implemented guardrails using event listeners in Presto to filter out or kill inefficient or duplicate queries, and to collect and store metadata about queries in a Presto table for further analysis.</p>
+<p>To further optimize the system, Twilio has enabled compression in Presto, which has resulted in a 30% reduction in cost and improved performance for some queries. The company has also evaluated the use of AWS transfer and found that deploying a single Presto cluster in one Availability Zone (AZ) is more stable and cost-effective than attempting to be AZ-agnostic. To ensure reliability, Twilio has implemented a load balancer with multiple clusters in separate AZs and has utilized AWS Auto Scaling Groups to monitor the performance of its clusters. It has also enabled Presto JMX metrics and custom metrics through event listeners to track the performance of its queries and has set up alerts for issues such as insufficient capacity or unhealthy nodes. These optimization techniques have helped Twilio maintain the performance and reliability of its data platform.</p>
+<p><img src="/img/blog/2022-12-28-presto-at-twilio/Screen4.png" alt="Screen4"></p>
+<p>We’re excited to see the innovation going on at Twilio with their Presto deployment, and we look forward to seeing what more they do! Thanks to Twilio for sharing their use case with the Presto community!</p>
+<p>Link to watch the full video: <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3</a></p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>

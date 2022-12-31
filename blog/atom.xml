@@ -2,11 +2,37 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2022-12-08T06:00:00.000Z</updated>
+    <updated>2022-12-30T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/logo-presto-white.svg</logo>
+    <entry>
+        <title type="html"><![CDATA[2022 PrestoDB Community in Review]]></title>
+        <id>https://prestodb.io/blog/2022/12/30/prestodb-2022-reveiw.html</id>
+        <link href="https://prestodb.io/blog/2022/12/30/prestodb-2022-reveiw.html"/>
+        <updated>2022-12-30T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>Hello Presto enthusiasts!</p>
+<p>We here at the Presto Outreach Committee are absolutely thrilled to be entering the new year of 2023. It's hard to believe that another year has passed, but as we reflect on the past year, we can't help but feel grateful for the amazing growth and progress we've seen in the Presto community in 2022.</p>
+<p><img src="/img/blog/2022-12-30-prestodb-2022-reveiw/Presto2022Review.png" alt="Presto2022Review"></p>
+]]></summary>
+        <author>
+            <name>Ali LeClerc</name>
+            <uri>https://www.linkedin.com/in/alidodson/</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Presto on AWS at Twilio - Lesson Learned and Optimization]]></title>
+        <id>https://prestodb.io/blog/2022/12/28/presto-at-twilio.html</id>
+        <link href="https://prestodb.io/blog/2022/12/28/presto-at-twilio.html"/>
+        <updated>2022-12-28T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>Earlier this month we hosted PrestoCon, a fantastic in-person event that showcased the innovation around the Presto project. In this blog we’ll detail Twilio’s presentation on their Presto use case, including their architecture, key optimizations, and lessons learned. You can also check out their <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">full presentation here</a>.</p>
+]]></summary>
+        <author>
+            <name>Ali LeClerc</name>
+            <uri>https://www.linkedin.com/in/alidodson/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Our Presto Credo for the Truly Open Source SQL Query Engine.]]></title>
         <id>https://prestodb.io/blog/2022/12/08/presto-credo.html</id>
