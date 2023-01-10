@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Fri, 30 Dec 2022 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 09 Jan 2023 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,14 @@
             <url>https://prestodb.io/img/logo-presto-white.svg</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Customer-Facing Presto at Rippling - Andy Li, Rippling]]></title>
+            <link>https://prestodb.io/blog/2023/01/09/presto-at-rippling.html</link>
+            <guid>https://prestodb.io/blog/2023/01/09/presto-at-rippling.html</guid>
+            <pubDate>Mon, 09 Jan 2023 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Last month we hosted PrestoCon, a return to in-person events that showcased the community development of Presto. In this blog we’ll detail Rippling’s presentation on their Presto use case, including their architecture, key optimizations, and hard earned lessons. You can also check out their <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">full presentation here</a>.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[2022 PrestoDB Community in Review]]></title>
             <link>https://prestodb.io/blog/2022/12/30/prestodb-2022-reveiw.html</link>

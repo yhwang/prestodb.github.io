@@ -2,11 +2,23 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2022-12-30T06:00:00.000Z</updated>
+    <updated>2023-01-09T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/logo-presto-white.svg</logo>
+    <entry>
+        <title type="html"><![CDATA[Customer-Facing Presto at Rippling - Andy Li, Rippling]]></title>
+        <id>https://prestodb.io/blog/2023/01/09/presto-at-rippling.html</id>
+        <link href="https://prestodb.io/blog/2023/01/09/presto-at-rippling.html"/>
+        <updated>2023-01-09T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>Last month we hosted PrestoCon, a return to in-person events that showcased the community development of Presto. In this blog we’ll detail Rippling’s presentation on their Presto use case, including their architecture, key optimizations, and hard earned lessons. You can also check out their <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">full presentation here</a>.</p>
+]]></summary>
+        <author>
+            <name>Ali LeClerc</name>
+            <uri>https://www.linkedin.com/in/alidodson/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[2022 PrestoDB Community in Review]]></title>
         <id>https://prestodb.io/blog/2022/12/30/prestodb-2022-reveiw.html</id>
