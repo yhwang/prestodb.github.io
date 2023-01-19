@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>A recap of PrestoCon 2022 - Bringing Data Lakehouse Analytics to Life (plus a special video recap) · </title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Last month the Computer History Museum in Mountain View, California, reverberated with “all things Presto,” at our PrestoCon 2022 conference. Back for the third time—and the first time post-pandemic—PrestoCon was ground zero for training, knowledge sharing, and inspiration about the open-source Presto for data analytics and lakehouses, as well as for the vibrant Presto community. This year was special however, as it was the first ever in-person PrestoCon event, and I couldn’t have been more thrilled to meet the community, hear how companies are using Presto in production, and learn  what’s coming up on the engineering roadmap."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="A recap of PrestoCon 2022 - Bringing Data Lakehouse Analytics to Life (plus a special video recap) · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2023/01/09/prestocon-recap"/><meta property="og:description" content="Last month the Computer History Museum in Mountain View, California, reverberated with “all things Presto,” at our PrestoCon 2022 conference. Back for the third time—and the first time post-pandemic—PrestoCon was ground zero for training, knowledge sharing, and inspiration about the open-source Presto for data analytics and lakehouses, as well as for the vibrant Presto community. This year was special however, as it was the first ever in-person PrestoCon event, and I couldn’t have been more thrilled to meet the community, hear how companies are using Presto in production, and learn  what’s coming up on the engineering roadmap."/><meta property="og:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><link rel="shortcut icon" href="/img/icon-presto-dots-color.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/css/bootstrap.min.css"/><link rel="stylesheet" href="/css/custom.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/logo-presto-white.svg" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/getting-started.html" target="_self">Get Started</a></li><li class=""><a href="/what-is-presto.html" target="_self">What is Presto?</a></li><li class=""><a href="/community.html" target="_self">Community</a></li><li class=""><a href="/docs/current" target="_blank">Docs</a></li><li class=""><a href="https://communityinviter.com/apps/prestodb/prestodb" target="_blank">Slack</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_blank">GitHub</a></li><li class=""><a href="https://stackoverflow.com/questions/tagged/presto" target="_blank">Stackoverflow</a></li><li class=""><a href="https://twitter.com/prestodb" target="_blank">Twitter</a></li><li class=""><a href="https://www.linkedin.com/company/presto-foundation/" target="_blank">LinkedIn</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2023/01/09/prestocon-recap">A recap of PrestoCon 2022 - Bringing Data Lakehouse Analytics to Life (plus a special video recap)</a></li><li class="navListItem"><a class="navItem" href="/blog/2023/01/09/presto-at-rippling">Customer-Facing Presto at Rippling - Andy Li, Rippling</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/12/30/prestodb-2022-reveiw">2022 PrestoDB Community in Review</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/12/28/presto-at-twilio">Presto on AWS at Twilio - Lesson Learned and Optimization</a></li><li class="navListItem"><a class="navItem" href="/blog/2022/12/08/presto-credo">Our Presto Credo for the Truly Open Source SQL Query Engine.</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2023/01/09/prestocon-recap">A recap of PrestoCon 2022 - Bringing Data Lakehouse Analytics to Life (plus a special video recap)</a></h1><p class="post-meta">January 9, 2023</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/alidodson/" target="_blank" rel="noreferrer noopener">Ali LeClerc</a></p></div></header><div><span><p>Last month the Computer History Museum in Mountain View, California, reverberated with “all things Presto,” at our PrestoCon 2022 conference. Back for the third time—and the first time post-pandemic—PrestoCon was ground zero for training, knowledge sharing, and inspiration about the open-source Presto for data analytics and lakehouses, as well as for the vibrant Presto community. This year was special however, as it was the first ever in-person PrestoCon event, and I couldn’t have been more thrilled to meet the community, hear how companies are using Presto in production, and learn  what’s coming up on the engineering roadmap.</p>
+<p>To memorialize this awesome event, we put together <a href="https://youtu.be/sKYy_PwaGYA">a quick 3 minute video of PrestoCon</a>! Check it out, and we hope you enjoy it 🙂</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sKYy_PwaGYA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<!--truncate-->
+<p>We kicked off PrestoCon with three incredible keynotes:
+<strong>Girish Baliga</strong>, Chair of Presto Foundation and Senior Engineering Manager at Uber, provided <a href="https://youtu.be/8-BvFyhn8CI?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;t=72">an overview of how Presto delivers fast and reliable SQL for data analytics and the open lakehouse.</a> Girish outlined:</p>
+<ul>
+<li>The challenges facing today’s data engineers.</li>
+<li>How Presto addresses those challenges—with one language: SQL, one interface, and fast, reliable, efficient operation.</li>
+<li>The principles and goals of the open, community-driven Presto Foundation.</li>
+<li>A peek into how Uber uses Presto for its own data analytics.</li>
+</ul>
+<p><strong>Tim Meehan</strong>, Chair of the Presto Technical Steering Committee and Software Engineer at Meta, outlined <a href="https://www.youtube.com/watch?v=ihAjlLGi7zY&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=3">how Presto is like a Swiss army knife for the data lakehouse</a>, able to use a single consistent language to bridge together multiple sources of data. Calling Presto “auto-awesome,” Tim explained how Presto provides:</p>
+<ul>
+<li>Native integration to move JVM off the data path, with Velox for streaming, and with Velox + Sapphire for fast batch execution.</li>
+<li>Interactive fault tolerance.</li>
+<li>Support for large clusters.
+After outlining how code owners can become Presto committers, as well as the characteristics of good open source endeavors, he previewed some future direction and initiatives that will make Presto even more convenient, reliable, and efficient for the lakehouse.</li>
+</ul>
+<p><strong>Steven Mih</strong>, Presto Foundation board member, and Co-founder and CEO of Ahana, drew on his experience with various open source distributed systems in his talk on <a href="https://www.youtube.com/watch?v=aZsgdEBCKqc&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=12">“Data Lakehouse: Country Club or Community Center?”</a> He explored the five shades of openness within the open data lakehouse ecosystem:</p>
+<ul>
+<li>Open spec, format, and standards</li>
+<li>Open (source) code</li>
+<li>Open development</li>
+<li>Open community</li>
+<li>Open governance
+Steven explained how Presto checks the boxes in all five of these categories.</li>
+</ul>
+<p>A couple of the presentations provided in-depth, case study-style discussions of how companies are using Presto in their own operations:</p>
+<ul>
+<li><p><strong>Andy Li</strong>, Senior Software Engineer at Rippling, an employee management platform, described <a href="https://www.youtube.com/watch?v=Wy_KGKb3alQ&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=2">how his company is using Presto for larger-scale analytical queries</a> and for powering its data platform and customer-facing scripting language, RQL (Rippling Query Language). Presto provides a core query layer in Rippling’s ecosystem.</p></li>
+<li><p><strong>Aakash Pradeep</strong>, Principal Software Engineer, and <strong>Badri Tripathy</strong>, Senior Engineering Manager, talked about their journey with <strong><a href="https://www.youtube.com/watch?v=PyATuQDixdQ&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=1">Presto at Twilio</a></strong>, a leader in cloud communication platforms. Focusing heavily on data and data-based decision-making, Twilio has scaled its Presto-powered system to a multi-PB data lakehouse supporting more than 75,000 queries per day.</p></li>
+</ul>
+<p>A panel on <strong><a href="https://www.youtube.com/watch?v=-9R3qdLOP5A&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=11">“Women in Open Source &amp; Presto”</a></strong> featured a discussion among RongRong Zhong, Staff Software Engineer at Celonis; Dipti Borkar, Vice President and General Manager at Microsoft; Neha Pawar, Founding Engineer at StarTree; and Rebecca Schlussel, Software Engineer at Meta.</p>
+<p>Two Ahana representatives—<strong>Bill McKenna</strong>, Principal Software Engineer, and <strong>Aditi Pandit</strong>, Principal Software Engineer—gave deep technical presentations about, respectively, the <a href="https://www.youtube.com/watch?v=6wZF6odzi2k&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=6">future of Presto’s query optimizer</a> and building large-scale query operators and <a href="https://www.youtube.com/watch?v=WN6BvKwdP-A&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=5">window functions for Prestissimo using Velox</a>.</p>
+<p><strong>Biswapesh Chattopadhyay</strong>, Distinguished Engineer at Google (and previously with Meta) and a highly regarded expert in data and distributed systems, spoke about the <a href="https://www.youtube.com/watch?v=V59GpmYdhFY&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=4">shared foundations of composable data systems.</a></p>
+<p><strong>Philip Bell</strong>, Developer Advocate at Meta, closed out the day’s presentation with <a href="https://www.youtube.com/watch?v=FP29mDKG1pA&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=18">insights into the past, present, and future of Presto</a>, including encouragement of Presto Foundation members to become more involved in Presto’s evolution.</p>
+<p><strong><em>Other technical breakout sessions and lightning talks included:</em></strong></p>
+<ul>
+<li><p><strong>Chunxu Tang</strong>, an open source advocate, and <strong>Beinan Wang</strong>, Software Engineer at Alluxio, talked about <a href="https://www.youtube.com/watch?v=S-ru0uXfgy0&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=13">scaling cache for the Presto Iceberg connector.</a></p></li>
+<li><p><strong>Satish Ramakrishnan</strong>, a senior technical executive at MinIO, discussed <a href="https://www.youtube.com/watch?v=dAAprvTbz18&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=9">building modern data lakes for analytics using object storage.</a></p></li>
+<li><p><strong>Vinodhini Sivakami Duraisamy</strong>, Developer Advocate for Treeverse explained how chaos engineering principles apply to distributed data systems and <a href="https://www.youtube.com/watch?v=DEi0KD420hw&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=19">how to use a Git-like repository for a data lake.</a></p></li>
+<li><p><strong>Sivabalan Narayanan</strong>, Software Engineer at Onehouse and a distributed systems enthusiast, talked about <a href="https://www.youtube.com/watch?v=RVnsxj26ekY&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=8">how to speed up lakehouse queries by an order of magnitude</a> with a multimodal index subsystem using Apache Hudi and Presto.</p></li>
+<li><p>Two Collate executives—<strong>Suresh Srinivas</strong>, Co-founder, and <strong>Sriharsha Chinatalapani</strong>, CTO—discussed <a href="https://www.youtube.com/watch?v=lbE3dNuJF48&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=10">how to get the most from Presto by connecting to OpenMetadata.</a></p></li>
+<li><p><strong>Derek Salama</strong>, Product Manager at Tecton, covered <a href="https://www.youtube.com/watch?v=QnoXDq5jtg0&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=14">scalable feature engineering with Tecton on Athena.</a></p></li>
+<li><p><strong>Jared Zhao</strong>, CEO and founder of AskEdith, gave <a href="https://www.youtube.com/watch?v=aiDC6QZgSSI&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=15">five reasons why AI is the future of SQL.</a></p></li>
+<li><p><strong>Roy Hasson</strong>, Head of Product for Upsolver, spoke about ending DAG distress by building <a href="https://www.youtube.com/watch?v=CH2jlYhy1qI&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=16">self-orchestrating pipelines for Presto.</a></p></li>
+<li><p><strong>Pavel Tiunov</strong>, CTO of Cube Dev, discussed the <a href="https://www.youtube.com/watch?v=Z6Yy1xxWQ_0&amp;list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3&amp;index=17">tradeoffs of headless BI architecture</a>, which injects a component between data warehouses and other data sources and tools on the other side of the stack.</p></li>
+</ul>
+<p>It was fantastic to get everyone in a room, in person, to immerse ourselves in the world of Presto. Thanks to everyone who helped make PrestoCon 2022 a success—and we can’t wait to see what unfolds in our industry by the time PrestoCon 2023 rolls around!</p>
+<p>You can check out some of our more in-depth blogs that cover the <a href="https://prestodb.io/blog/2023/01/09/presto-at-rippling">Rippling</a> and <a href="https://prestodb.io/blog/2022/12/28/presto-at-twilio">Twilio</a> sessions as well.</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>
