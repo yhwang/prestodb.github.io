@@ -67,7 +67,7 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     { href: prestoBaseUrl + "getting-started.html", label: "Get Started" },
-    { href: prestoBaseUrl + "what-is-presto.html", label: "Learn&nbsp;&nbsp;" },
+    { href: prestoBaseUrl + "what-is-presto.html", label: "Learn" },
     { href: prestoBaseUrl + "community.html", label: "Community" },
     {
       href: "/blog",
