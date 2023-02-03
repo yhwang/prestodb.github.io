@@ -59,7 +59,7 @@
 </script>
   
   
-    <title>Release 0.254.1 &#8212; Presto 0.279 Documentation</title>
+    <title>Release 0.279 &#8212; Presto 0.279 Documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -73,8 +73,8 @@
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Release 0.254" href="release-0.254.html" />
-    <link rel="prev" title="Release 0.255" href="release-0.255.html" />
+    <link rel="next" title="Release 0.278.1" href="release-0.278.1.html" />
+    <link rel="prev" title="Release Notes" href="../release.html" />
   
    
 
@@ -93,7 +93,7 @@
   <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer">
   <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search">
   <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
-  <a href="#release/release-0.254.1" tabindex="1" class="md-skip"> Skip to content </a>
+  <a href="#release/release-0.279" tabindex="1" class="md-skip"> Skip to content </a>
   <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
@@ -112,7 +112,7 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           <span class="md-header-nav__topic">Presto 0.279 Documentation</span>
-          <span class="md-header-nav__topic"> Release 0.254.1 </span>
+          <span class="md-header-nav__topic"> Release 0.279 </span>
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
@@ -316,7 +316,47 @@
     <li class="md-nav__item">
     
     
-      <a href="release-0.279.html" class="md-nav__link">Release 0.279</a>
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    <label class="md-nav__link md-nav__link--active" for="__toc"> Release 0.279 </label>
+    
+      <a href="#" class="md-nav__link md-nav__link--active">Release 0.279</a>
+      
+        
+<nav class="md-nav md-nav--secondary">
+    <label class="md-nav__title" for="__toc">Contents</label>
+  <ul class="md-nav__list" data-md-scrollfix="">
+        <li class="md-nav__item"><a href="#release-release-0-279--page-root" class="md-nav__link">Release 0.279</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#details" class="md-nav__link"><strong>Details</strong></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#general-changes" class="md-nav__link">General Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#elasticsearch-connector-changes" class="md-nav__link">Elasticsearch Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#hive-connector-changes" class="md-nav__link">Hive Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#iceberg-connector-changes" class="md-nav__link">Iceberg Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#pinot-connector-changes" class="md-nav__link">Pinot Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#postgresql-connector-changes" class="md-nav__link">PostgreSQL Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#delta-lake-changes" class="md-nav__link">Delta Lake Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#spark-changes" class="md-nav__link">Spark Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#open-telemetry-changes" class="md-nav__link">Open Telemetry Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#spi-changes" class="md-nav__link">SPI Changes</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#credits" class="md-nav__link"><strong>Credits</strong></a>
+        </li></ul>
+            </nav>
+        </li>
+  </ul>
+</nav>
       
     
     </li>
@@ -547,23 +587,7 @@
     <li class="md-nav__item">
     
     
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    <label class="md-nav__link md-nav__link--active" for="__toc"> Release 0.254.1 </label>
-    
-      <a href="#" class="md-nav__link md-nav__link--active">Release 0.254.1</a>
-      
-        
-<nav class="md-nav md-nav--secondary">
-    <label class="md-nav__title" for="__toc">Contents</label>
-  <ul class="md-nav__list" data-md-scrollfix="">
-        <li class="md-nav__item"><a href="#release-release-0-254-1--page-root" class="md-nav__link">Release 0.254.1</a><nav class="md-nav">
-              <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#hive-changes" class="md-nav__link">Hive Changes</a>
-        </li></ul>
-            </nav>
-        </li>
-  </ul>
-</nav>
+      <a href="release-0.254.1.html" class="md-nav__link">Release 0.254.1</a>
       
     
     </li>
@@ -2207,9 +2231,33 @@
 <nav class="md-nav md-nav--secondary">
     <label class="md-nav__title" for="__toc">Contents</label>
   <ul class="md-nav__list" data-md-scrollfix="">
-        <li class="md-nav__item"><a href="#release-release-0-254-1--page-root" class="md-nav__link">Release 0.254.1</a><nav class="md-nav">
+        <li class="md-nav__item"><a href="#release-release-0-279--page-root" class="md-nav__link">Release 0.279</a><nav class="md-nav">
               <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#hive-changes" class="md-nav__link">Hive Changes</a>
+        <li class="md-nav__item"><a href="#details" class="md-nav__link"><strong>Details</strong></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#general-changes" class="md-nav__link">General Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#elasticsearch-connector-changes" class="md-nav__link">Elasticsearch Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#hive-connector-changes" class="md-nav__link">Hive Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#iceberg-connector-changes" class="md-nav__link">Iceberg Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#pinot-connector-changes" class="md-nav__link">Pinot Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#postgresql-connector-changes" class="md-nav__link">PostgreSQL Connector Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#delta-lake-changes" class="md-nav__link">Delta Lake Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#spark-changes" class="md-nav__link">Spark Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#open-telemetry-changes" class="md-nav__link">Open Telemetry Changes</a>
+        </li>
+        <li class="md-nav__item"><a href="#spi-changes" class="md-nav__link">SPI Changes</a>
+        </li></ul>
+            </nav>
+        </li>
+        <li class="md-nav__item"><a href="#credits" class="md-nav__link"><strong>Credits</strong></a>
         </li></ul>
             </nav>
         </li>
@@ -2222,13 +2270,90 @@
         <div class="md-content">
           <article class="md-content__inner md-typeset" role="main">
             
-  <section id="release-0-254-1">
-<h1 id="release-release-0-254-1--page-root">Release 0.254.1<a class="headerlink" href="#release-release-0-254-1--page-root" title="Permalink to this headline">#</a></h1>
-<section id="hive-changes">
-<h2 id="hive-changes">Hive Changes<a class="headerlink" href="#hive-changes" title="Permalink to this headline">#</a></h2>
+  <section id="release-0-279">
+<h1 id="release-release-0-279--page-root">Release 0.279<a class="headerlink" href="#release-release-0-279--page-root" title="Permalink to this headline">#</a></h1>
+<section id="details">
+<h2 id="details"><strong>Details</strong><a class="headerlink" href="#details" title="Permalink to this headline">#</a></h2>
+<section id="general-changes">
+<h3 id="general-changes">General Changes<a class="headerlink" href="#general-changes" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
-<li><p>Revert non-backward-compatible DWRF writer updates (<a class="reference external" href="https://github.com/prestodb/presto/pull/16037">#16037</a>)</p></li>
+<li><p>Fix a bug in <code class="docutils literal notranslate"><span class="pre">CombineApproxPercentileFunctions</span></code> optimization that caused query failures when there were duplicate aggregation expressions.</p></li>
+<li><p>Fix disaggregated coordinator task limit enforcement.</p></li>
+<li><p>Fix weighted fair scheduling in disaggregated coordinator.</p></li>
+<li><p>Fix max(x, n) and min(x, n) returning NULL on window aggregations.</p></li>
+<li><p>Add an optimization that removes redundant distinct if the output is already distinct after a group by operation. The optimization is controlled by session property <code class="docutils literal notranslate"><span class="pre">remove_redundant_distinct_aggregation</span></code> which is default to false.</p></li>
+<li><p>Add function <a class="reference internal" href="../functions/array.html#array_sort_desc" title="array_sort_desc"><code class="xref py py-func docutils literal notranslate"><span class="pre">array_sort_desc()</span></code></a> to sort an array in the descending order.</p></li>
+<li><p>Add function <a class="reference internal" href="../functions/map.html#map_remove_null_values" title="map_remove_null_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">map_remove_null_values()</span></code></a> to remove all the entries where the value is null from a given map.</p></li>
+<li><p>Add function <a class="reference internal" href="../functions/map.html#id1" title="map_top_n_keys"><code class="xref py py-func docutils literal notranslate"><span class="pre">map_top_n_keys()</span></code></a> to returns an array of the top N keys of the provided map. An optional lambda comparator can also be passed to perform a custom comparison of the keys. Returns all the keys if the value N is greater than or equal to size of the map. For N &lt; 0, the function returns keys in the reverse order. For N = 0, the function returns empty array.</p></li>
+<li><p>Add function <a class="reference internal" href="../functions/map.html#id2" title="map_top_n_values"><code class="xref py py-func docutils literal notranslate"><span class="pre">map_top_n_values()</span></code></a> to return top N values of the provided map. An optional lambda comparator can also be passed as parameter for custom sorting of the values.</p></li>
+<li><p>Add function <a class="reference internal" href="../functions/map.html#map_top_n" title="map_top_n"><code class="xref py py-func docutils literal notranslate"><span class="pre">map_top_n()</span></code></a> to truncate map items, keeping only the top N elements by value.</p></li>
+<li><p>Add function <a class="reference internal" href="../functions/array.html#remove_nulls" title="remove_nulls"><code class="xref py py-func docutils literal notranslate"><span class="pre">remove_nulls()</span></code></a> to remove null elements from an array.</p></li>
+<li><p>Add functions <a class="reference internal" href="../functions/array.html#array_min_by" title="array_min_by"><code class="xref py py-func docutils literal notranslate"><span class="pre">array_min_by()</span></code></a>, <a class="reference internal" href="../functions/array.html#array_max_by" title="array_max_by"><code class="xref py py-func docutils literal notranslate"><span class="pre">array_max_by()</span></code></a>, to find the smallest or largest element of an array when applying a custom measuring function.</p></li>
+<li><p>Extend functions <a class="reference internal" href="../functions/array.html#array_frequency" title="array_frequency"><code class="xref py py-func docutils literal notranslate"><span class="pre">array_frequency()</span></code></a>, <a class="reference internal" href="../functions/array.html#array_duplicates" title="array_duplicates"><code class="xref py py-func docutils literal notranslate"><span class="pre">array_duplicates()</span></code></a>, <a class="reference internal" href="../functions/array.html#array_has_duplicates" title="array_has_duplicates"><code class="xref py py-func docutils literal notranslate"><span class="pre">array_has_duplicates()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">array_intersect(array(array(E))()</span></code> to accept any type as input instead of only varchar/double.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CONTROL</span></code> as a new <code class="docutils literal notranslate"><span class="pre">QueryType</span></code>. The <code class="docutils literal notranslate"><span class="pre">CONTROL</span></code> queryType represents statements of session control and transaction control types.</p></li>
+<li><p>Remove two unused session parameters - <code class="docutils literal notranslate"><span class="pre">hash_based_distinct_limit_enabled</span></code> and <code class="docutils literal notranslate"><span class="pre">hash_based_distinct_limit_threshold</span></code> and the corresponding implementation in favor of the <code class="docutils literal notranslate"><span class="pre">quick_distinct_limit_enabled</span></code> feature.</p></li>
 </ul>
+</section>
+<section id="elasticsearch-connector-changes">
+<h3 id="elasticsearch-connector-changes">Elasticsearch Connector Changes<a class="headerlink" href="#elasticsearch-connector-changes" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Add support for Elasticsearch user and password authentication. <a class="reference external" href="https://github.com/prestodb/presto/issues/15909">#15909</a>.</p></li>
+</ul>
+</section>
+<section id="hive-connector-changes">
+<h3 id="hive-connector-changes">Hive Connector Changes<a class="headerlink" href="#hive-connector-changes" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Fix a bug when <code class="docutils literal notranslate"><span class="pre">optimize_metadata_queries</span></code> is set to true where queries with aggregations on partition columns and filters on row subfields could return wrong results.</p></li>
+<li><p>Disable S3 Select pushdown when the query does not have a predicate or projection.</p></li>
+</ul>
+</section>
+<section id="iceberg-connector-changes">
+<h3 id="iceberg-connector-changes">Iceberg Connector Changes<a class="headerlink" href="#iceberg-connector-changes" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Update Iceberg from 0.14.1 to 1.0.0.</p></li>
+</ul>
+</section>
+<section id="pinot-connector-changes">
+<h3 id="pinot-connector-changes">Pinot Connector Changes<a class="headerlink" href="#pinot-connector-changes" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Add pushdown support for function <code class="xref py py-func docutils literal notranslate"><span class="pre">STRPOS()</span></code>.</p></li>
+</ul>
+</section>
+<section id="postgresql-connector-changes">
+<h3 id="postgresql-connector-changes">PostgreSQL Connector Changes<a class="headerlink" href="#postgresql-connector-changes" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Add support for PostgreSQL UUID Data type.</p></li>
+</ul>
+</section>
+<section id="delta-lake-changes">
+<h3 id="delta-lake-changes">Delta Lake Changes<a class="headerlink" href="#delta-lake-changes" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Upgrade Delta Standalone to 0.6.0.</p></li>
+</ul>
+</section>
+<section id="spark-changes">
+<h3 id="spark-changes">Spark Changes<a class="headerlink" href="#spark-changes" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Add property <code class="docutils literal notranslate"><span class="pre">spark_executor_allocation_strategy_enabled</span></code> to auto-tune spark max executor count (<code class="docutils literal notranslate"><span class="pre">spark.dynamicAllocation.maxExecutors</span></code>)  based on input data. Only required if <code class="docutils literal notranslate"><span class="pre">spark_resource_allocation_strategy_enabled</span></code> is not already enabled.</p></li>
+<li><p>Add property <code class="docutils literal notranslate"><span class="pre">spark_hash_partition_count_allocation_strategy_enabled</span></code> to auto-tune hash partition count (<code class="docutils literal notranslate"><span class="pre">hash_partition_count</span></code>) based on input data. Only required if <code class="docutils literal notranslate"><span class="pre">spark_SPI_allocation_strategy_enabled</span></code> is not already enabled.</p></li>
+</ul>
+</section>
+<section id="open-telemetry-changes">
+<h3 id="open-telemetry-changes">Open Telemetry Changes<a class="headerlink" href="#open-telemetry-changes" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Introduce a new Open Telemetry tracer implementation. The legacy tracer module can be replaced by the new plugin for loading customized tracing infrastructure. Users are able to enable the tracer by installing the <code class="docutils literal notranslate"><span class="pre">presto-open-telemetry</span></code> plugin and updating the application configuration (<code class="docutils literal notranslate"><span class="pre">config.properties</span></code>). Open Telemetry tracer can take in propagated context (only B3 specification currently supported) and baggage (W3C specification) headers, if provided, and inject into new traces / spans. Traces can be exported to any specified backend with the <code class="docutils literal notranslate"><span class="pre">OTEL_EXPORTER_OTLP_ENDPOINT</span></code> environment variable.</p></li>
+</ul>
+</section>
+<section id="spi-changes">
+<h3 id="spi-changes">SPI Changes<a class="headerlink" href="#spi-changes" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">ConnectorMaterializedViewDefinition</span></code> to  <code class="docutils literal notranslate"><span class="pre">MaterializedViewDefinition</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="credits">
+<h2 id="credits"><strong>Credits</strong><a class="headerlink" href="#credits" title="Permalink to this headline">#</a></h2>
+<p>Aditi Pandit, Alex Chen, Amit Dutta, Anant Aneja, Arjun Gupta, Arunachalam Thirupathi, Asjad Syed, Avinash Jain, Beinan, Christopher Graves, Deepak Majeti, Devesh Agrawal, Eduard Tudenhoefner, Feilong Liu, Ge Gao, George Wang, Guy Moore, Hope Wang, James Petty, James Sun, Jaromir Vanek, Jingmei Huang, Jon Janzen, Josh Soref, JoshuaTang, Karteek Murthy Samba Murthy, Krishna Pai, Linkiewicz, Milosz, Linsong Wang, Lyublena Antova, MJ Deng, Masha Basmanova, Michael Shang, Nizar Hejazi, Pramod, Pranjal Shankhdhar, Pratyaksh Sharma, Pratyush Verma, Rebecca Schlussel, Reetika Agrawal, Rohit Jain, Sacha Viscaino, Sergey Pershin, Sergii Druzkin, Sreeni Viswanadha, Swapnil Tailor, Timothy Meehan, Vivek, Ying, Zac, Zhenxiao Luo, abhiseksaikia, ajantha-bhat, dnnanuti, dnskr, pen4, singcha, suheng, tanjialiang, v-jizhang, wangd, xiaoxmeng</p>
 </section>
 </section>
 
@@ -2242,7 +2367,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
           
-            <a href="release-0.255.html" title="Release 0.255"
+            <a href="../release.html" title="Release Notes"
                class="md-flex md-footer-nav__link md-footer-nav__link--prev"
                rel="prev">
               <div class="md-flex__cell md-flex__cell--shrink">
@@ -2251,17 +2376,17 @@
               <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
                 <span class="md-flex__ellipsis">
                   <span
-                      class="md-footer-nav__direction"> Previous </span> Release 0.255 </span>
+                      class="md-footer-nav__direction"> Previous </span> Release Notes </span>
               </div>
             </a>
           
           
-            <a href="release-0.254.html" title="Release 0.254"
+            <a href="release-0.278.1.html" title="Release 0.278.1"
                class="md-flex md-footer-nav__link md-footer-nav__link--next"
                rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title"><span
                 class="md-flex__ellipsis"> <span
-                class="md-footer-nav__direction"> Next </span> Release 0.254 </span>
+                class="md-footer-nav__direction"> Next </span> Release 0.278.1 </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink"><i
                 class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
