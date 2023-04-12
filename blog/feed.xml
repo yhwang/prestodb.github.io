@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Mon, 09 Jan 2023 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 12 Apr 2023 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,16 @@
             <url>https://prestodb.io/img/logo-presto-white.svg</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[IBM joins the Presto Foundation through acquisition of Ahana]]></title>
+            <link>https://prestodb.io/blog/2023/04/12/IBM-joins-presto-foundation.html</link>
+            <guid>https://prestodb.io/blog/2023/04/12/IBM-joins-presto-foundation.html</guid>
+            <pubDate>Wed, 12 Apr 2023 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><strong>Co-authors</strong>
+<a href="https://www.linkedin.com/in/stevenmih/">Steven Mih</a>, Co-Founder and CEO of Ahana</p>
+<p>Today we’re thrilled to share that IBM has acquired Ahana, the venture-backed SaaS for Presto startup company, and we want to write more about our belief in Open Source and why IBM and Ahana are joining forces for the benefit of Presto.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[A recap of PrestoCon 2022 - Bringing Data Lakehouse Analytics to Life (plus a special video recap)]]></title>
             <link>https://prestodb.io/blog/2023/01/09/prestocon-recap.html</link>
@@ -123,16 +133,6 @@
 <li>A single coordinator is a single point of failure for the Presto cluster.</li>
 </ul>
 <p>To overcome these challenges, we came up with a new design with a disaggregated coordinator that allows the coordinator to be horizontally scaled out across a single pool of workers.</p>
-]]></description>
-        </item>
-        <item>
-            <title><![CDATA[IBM joins the Presto Foundation through acquisition of Ahana]]></title>
-            <link>https://prestodb.io/blog/2022/04/12/IBM-joins-presto-foundation.html</link>
-            <guid>https://prestodb.io/blog/2022/04/12/IBM-joins-presto-foundation.html</guid>
-            <pubDate>Tue, 12 Apr 2022 06:00:00 GMT</pubDate>
-            <description><![CDATA[<p><strong>Co-authors</strong>
-<a href="https://www.linkedin.com/in/stevenmih/">Steven Mih</a>, Co-Founder and CEO of Ahana</p>
-<p>Today we’re thrilled to share that IBM has acquired Ahana, the venture-backed SaaS for Presto startup company, and we want to write more about our belief in Open Source and why IBM and Ahana are joining forces for the benefit of Presto.</p>
 ]]></description>
         </item>
         <item>
