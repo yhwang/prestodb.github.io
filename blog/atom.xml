@@ -161,6 +161,20 @@
         </author>
     </entry>
     <entry>
+        <title type="html"><![CDATA[IBM joins the Presto Foundation through acquisition of Ahana]]></title>
+        <id>https://prestodb.io/blog/2022/04/12/IBM-joins-presto-foundation.html</id>
+        <link href="https://prestodb.io/blog/2022/04/12/IBM-joins-presto-foundation.html"/>
+        <updated>2022-04-12T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p><strong>Co-authors</strong>
+<a href="https://www.linkedin.com/in/stevenmih/">Steven Mih</a>, Co-Founder and CEO of Ahana</p>
+<p>Today we’re thrilled to share that IBM has acquired Ahana, the venture-backed SaaS for Presto startup company, and we want to write more about our belief in Open Source and why IBM and Ahana are joining forces for the benefit of Presto.</p>
+]]></summary>
+        <author>
+            <name>Vikram Murali, VP Hybrid Data Management at IBM</name>
+            <uri>https://www.linkedin.com/in/vikram-murali-40878112</uri>
+        </author>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Native Delta Lake Connector for Presto]]></title>
         <id>https://prestodb.io/blog/2022/03/15/native-delta-lake-connector-for-presto.html</id>
         <link href="https://prestodb.io/blog/2022/03/15/native-delta-lake-connector-for-presto.html"/>
