@@ -6,7 +6,7 @@ authorURL: https://www.linkedin.com/in/alidodson/
 
 Last month the Computer History Museum in Mountain View, California, reverberated with “all things Presto,” at our PrestoCon 2022 conference. Back for the third time—and the first time post-pandemic—PrestoCon was ground zero for training, knowledge sharing, and inspiration about the open-source Presto for data analytics and lakehouses, as well as for the vibrant Presto community. This year was special however, as it was the first ever in-person PrestoCon event, and I couldn’t have been more thrilled to meet the community, hear how companies are using Presto in production, and learn  what’s coming up on the engineering roadmap.
 
-To memorialize this awesome event, we put together [a quick 3 minute video of PrestoCon](https://youtu.be/sKYy_PwaGYA)! Check it out, and we hope you enjoy it 🙂
+To memorialize this awesome event, we put together <a href="https://youtu.be/sKYy_PwaGYA" style="color:blue;">a quick 3 minute video of PrestoCon</a>! Check it out, and we hope you enjoy it 🙂
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/sKYy_PwaGYA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
