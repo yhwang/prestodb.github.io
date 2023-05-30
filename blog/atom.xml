@@ -2,11 +2,23 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2023-04-12T06:00:00.000Z</updated>
+    <updated>2023-05-30T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/logo-presto-white.svg</logo>
+    <entry>
+        <title type="html"><![CDATA[Hudi tables via Presto-Hive connector: A Deep Dive]]></title>
+        <id>https://prestodb.io/blog/2023/05/30/presto-hudi-deep-dive.html</id>
+        <link href="https://prestodb.io/blog/2023/05/30/presto-hudi-deep-dive.html"/>
+        <updated>2023-05-30T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>With the growing popularity of the lakehouse approach, it has become increasingly important for query engines to support these new formats such as Hudi. A <a href="https://prestodb.io/blog/2020/08/04/prestodb-and-hudi">previous blog</a> discusses the evolution of presto-hudi integration via hive connector at a high level. With the latest community developments, a <a href="https://github.com/prestodb/presto/issues/17006">separate presto-hudi connector</a> has come up but it is not at par with the hive connector in terms of security features, caching and cost-based optimization. Hive connector has <a href="https://github.com/prestodb/presto/blob/master/presto-hive/src/main/java/com/facebook/presto/hive/CachingDirectoryLister.java">CachingDirectoryLister</a> which can be used for caching the splits for a given table for a configurable period of time. It also supports <a href="https://prestodb.io/docs/current/sql/analyze.html">analyze command</a> which helps in better planning during optimization phase. In this blog, we dive deeper into presto-hudi integration supported via hive connector from a developer's perspective and list down the various checkpoints where the query execution moves from presto to hudi library.</p>
+]]></summary>
+        <author>
+            <name>Pratyaksh Sharma</name>
+            <uri>https://www.linkedin.com/in/pratyaksh-sharma-60593769/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[IBM joins the Presto Foundation through acquisition of Ahana]]></title>
         <id>https://prestodb.io/blog/2023/04/12/IBM-joins-presto-foundation.html</id>
@@ -22,13 +34,11 @@
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[A recap of PrestoCon 2022 - Bringing Data Lakehouse Analytics to Life (plus a special video recap)]]></title>
-        <id>https://prestodb.io/blog/2023/01/09/prestocon-recap.html</id>
-        <link href="https://prestodb.io/blog/2023/01/09/prestocon-recap.html"/>
+        <title type="html"><![CDATA[Customer-Facing Presto at Rippling - Andy Li, Rippling]]></title>
+        <id>https://prestodb.io/blog/2023/01/09/presto-at-rippling.html</id>
+        <link href="https://prestodb.io/blog/2023/01/09/presto-at-rippling.html"/>
         <updated>2023-01-09T06:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>Last month the Computer History Museum in Mountain View, California, reverberated with “all things Presto,” at our PrestoCon 2022 conference. Back for the third time—and the first time post-pandemic—PrestoCon was ground zero for training, knowledge sharing, and inspiration about the open-source Presto for data analytics and lakehouses, as well as for the vibrant Presto community. This year was special however, as it was the first ever in-person PrestoCon event, and I couldn’t have been more thrilled to meet the community, hear how companies are using Presto in production, and learn  what’s coming up on the engineering roadmap.</p>
-<p>To memorialize this awesome event, we put together <a href="https://youtu.be/sKYy_PwaGYA" style="color:blue;">a quick 3 minute video of PrestoCon</a>! Check it out, and we hope you enjoy it 🙂</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/sKYy_PwaGYA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <summary type="html"><![CDATA[<p>Last month we hosted PrestoCon, a return to in-person events that showcased the community development of Presto. In this blog we’ll detail Rippling’s presentation on their Presto use case, including their architecture, key optimizations, and hard earned lessons. You can also check out their <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">full presentation here</a>.</p>
 ]]></summary>
         <author>
             <name>Ali LeClerc</name>
@@ -36,11 +46,13 @@
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Customer-Facing Presto at Rippling - Andy Li, Rippling]]></title>
-        <id>https://prestodb.io/blog/2023/01/09/presto-at-rippling.html</id>
-        <link href="https://prestodb.io/blog/2023/01/09/presto-at-rippling.html"/>
+        <title type="html"><![CDATA[A recap of PrestoCon 2022 - Bringing Data Lakehouse Analytics to Life (plus a special video recap)]]></title>
+        <id>https://prestodb.io/blog/2023/01/09/prestocon-recap.html</id>
+        <link href="https://prestodb.io/blog/2023/01/09/prestocon-recap.html"/>
         <updated>2023-01-09T06:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>Last month we hosted PrestoCon, a return to in-person events that showcased the community development of Presto. In this blog we’ll detail Rippling’s presentation on their Presto use case, including their architecture, key optimizations, and hard earned lessons. You can also check out their <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">full presentation here</a>.</p>
+        <summary type="html"><![CDATA[<p>Last month the Computer History Museum in Mountain View, California, reverberated with “all things Presto,” at our PrestoCon 2022 conference. Back for the third time—and the first time post-pandemic—PrestoCon was ground zero for training, knowledge sharing, and inspiration about the open-source Presto for data analytics and lakehouses, as well as for the vibrant Presto community. This year was special however, as it was the first ever in-person PrestoCon event, and I couldn’t have been more thrilled to meet the community, hear how companies are using Presto in production, and learn  what’s coming up on the engineering roadmap.</p>
+<p>To memorialize this awesome event, we put together <a href="https://youtu.be/sKYy_PwaGYA" style="color:blue;">a quick 3 minute video of PrestoCon</a>! Check it out, and we hope you enjoy it 🙂</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sKYy_PwaGYA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 ]]></summary>
         <author>
             <name>Ali LeClerc</name>
