@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Thu, 29 Jun 2023 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 11 Jul 2023 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,16 @@
             <url>https://prestodb.io/img/logo-presto-white.svg</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[IBM watsonx.data - a modern open data lakehouse architecture, built on Presto!]]></title>
+            <link>https://prestodb.io/blog/2023/07/11/announcing-watsonxdata-presto-lakehouse.html</link>
+            <guid>https://prestodb.io/blog/2023/07/11/announcing-watsonxdata-presto-lakehouse.html</guid>
+            <pubDate>Tue, 11 Jul 2023 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p><strong>Co-authors</strong>
+<a href="https://www.linkedin.com/in/stevenmih/">Steven Mih</a>, Co-Founder and CEO of Ahana, an IBM Company</p>
+<p>Today we are happy to share that IBM watsonx.data, a Presto-based Open Data Lakehouse architecture, is now generally available. Back in April we shared that <a href="https://prestodb.io/blog/2023/04/12/IBM-joins-presto-foundation" style="color:blue;">IBM had joined the Presto Foundation</a> through the acquisition of Ahana. To reiterate what we talked about then, we believe that this is an exciting time for the Presto open source project.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Harnessing Presto - A Deep Dive into Adobe Advertising's Three Use Cases]]></title>
             <link>https://prestodb.io/blog/2023/06/29/presto-at-adobe-prestocon-day.html</link>
@@ -55,6 +65,14 @@
 ]]></description>
         </item>
         <item>
+            <title><![CDATA[Customer-Facing Presto at Rippling - Andy Li, Rippling]]></title>
+            <link>https://prestodb.io/blog/2023/01/09/presto-at-rippling.html</link>
+            <guid>https://prestodb.io/blog/2023/01/09/presto-at-rippling.html</guid>
+            <pubDate>Mon, 09 Jan 2023 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Last month we hosted PrestoCon, a return to in-person events that showcased the community development of Presto. In this blog we’ll detail Rippling’s presentation on their Presto use case, including their architecture, key optimizations, and hard earned lessons. You can also check out their <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">full presentation here</a>.</p>
+]]></description>
+        </item>
+        <item>
             <title><![CDATA[A recap of PrestoCon 2022 - Bringing Data Lakehouse Analytics to Life (plus a special video recap)]]></title>
             <link>https://prestodb.io/blog/2023/01/09/prestocon-recap.html</link>
             <guid>https://prestodb.io/blog/2023/01/09/prestocon-recap.html</guid>
@@ -62,14 +80,6 @@
             <description><![CDATA[<p>Last month the Computer History Museum in Mountain View, California, reverberated with “all things Presto,” at our PrestoCon 2022 conference. Back for the third time—and the first time post-pandemic—PrestoCon was ground zero for training, knowledge sharing, and inspiration about the open-source Presto for data analytics and lakehouses, as well as for the vibrant Presto community. This year was special however, as it was the first ever in-person PrestoCon event, and I couldn’t have been more thrilled to meet the community, hear how companies are using Presto in production, and learn  what’s coming up on the engineering roadmap.</p>
 <p>To memorialize this awesome event, we put together <a href="https://youtu.be/sKYy_PwaGYA" style="color:blue;">a quick 3 minute video of PrestoCon</a>! Check it out, and we hope you enjoy it 🙂</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/sKYy_PwaGYA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Customer-Facing Presto at Rippling - Andy Li, Rippling]]></title>
-            <link>https://prestodb.io/blog/2023/01/09/presto-at-rippling.html</link>
-            <guid>https://prestodb.io/blog/2023/01/09/presto-at-rippling.html</guid>
-            <pubDate>Mon, 09 Jan 2023 06:00:00 GMT</pubDate>
-            <description><![CDATA[<p>Last month we hosted PrestoCon, a return to in-person events that showcased the community development of Presto. In this blog we’ll detail Rippling’s presentation on their Presto use case, including their architecture, key optimizations, and hard earned lessons. You can also check out their <a href="https://www.youtube.com/playlist?list=PLJVeO1NMmyqXvoKFad0_SJ9C9AlqtVaQ3">full presentation here</a>.</p>
 ]]></description>
         </item>
         <item>
