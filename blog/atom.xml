@@ -2,11 +2,23 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://prestodb.io/blog</id>
     <title> Blog</title>
-    <updated>2023-07-13T06:00:00.000Z</updated>
+    <updated>2023-07-20T06:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://prestodb.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest  news and events.</subtitle>
     <logo>https://prestodb.io/img/logo-presto-white.svg</logo>
+    <entry>
+        <title type="html"><![CDATA[Quick Stats - Runtime ANALYZE for Better Query Plans with Presto]]></title>
+        <id>https://prestodb.io/blog/2023/07/20/quick-stats-presto-blog.html</id>
+        <link href="https://prestodb.io/blog/2023/07/20/quick-stats-presto-blog.html"/>
+        <updated>2023-07-20T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>At PrestoCon Day, Anant Aneja of Ahana, an IBM Company introduced a new feature for Presto called Quick Stats which aims to enhance query optimization by providing up-to-date statistics for the query optimizer. This enables more accurate cost-based decisions and better selectivity for non-trivial queries. In this blog post we’ll recap the details and benefits of Quick Stats for Presto and how it can help improve query optimization.</p>
+]]></summary>
+        <author>
+            <name>Ali LeClerc, Chair of Presto Foundation Outreach Team</name>
+            <uri>https://www.linkedin.com/in/alidodson/</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Migrating to Presto - How Bolt Built a Data Platform Architecture for Scalability and Cost Efficiency]]></title>
         <id>https://prestodb.io/blog/2023/07/13/presto-at-bolt.html</id>

@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Thu, 13 Jul 2023 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 20 Jul 2023 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,14 @@
             <url>https://prestodb.io/img/logo-presto-white.svg</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Quick Stats - Runtime ANALYZE for Better Query Plans with Presto]]></title>
+            <link>https://prestodb.io/blog/2023/07/20/quick-stats-presto-blog.html</link>
+            <guid>https://prestodb.io/blog/2023/07/20/quick-stats-presto-blog.html</guid>
+            <pubDate>Thu, 20 Jul 2023 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>At PrestoCon Day, Anant Aneja of Ahana, an IBM Company introduced a new feature for Presto called Quick Stats which aims to enhance query optimization by providing up-to-date statistics for the query optimizer. This enables more accurate cost-based decisions and better selectivity for non-trivial queries. In this blog post we’ll recap the details and benefits of Quick Stats for Presto and how it can help improve query optimization.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Migrating to Presto - How Bolt Built a Data Platform Architecture for Scalability and Cost Efficiency]]></title>
             <link>https://prestodb.io/blog/2023/07/13/presto-at-bolt.html</link>
