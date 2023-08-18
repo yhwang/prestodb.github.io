@@ -4,7 +4,7 @@
         <title> Blog</title>
         <link>https://prestodb.io/blog</link>
         <description>The best place to stay up-to-date with the latest  news and events.</description>
-        <lastBuildDate>Wed, 02 Aug 2023 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 17 Aug 2023 06:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -12,6 +12,14 @@
             <url>https://prestodb.io/img/logo-presto-white.svg</url>
             <link>https://prestodb.io/blog</link>
         </image>
+        <item>
+            <title><![CDATA[Scaling Presto for Data Analytics - Insights from Meta, Uber, and Intuit]]></title>
+            <link>https://prestodb.io/blog/2023/08/17/scaling-presto-panel-blog.html</link>
+            <guid>https://prestodb.io/blog/2023/08/17/scaling-presto-panel-blog.html</guid>
+            <pubDate>Thu, 17 Aug 2023 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>At PrestoCon Day 2023, we had a fantastic panel discussion with speakers from Meta, Uber, and Intuit. Each shared their experiences and use cases of scaling Presto in their respective companies. Let’s take a look at the key points discussed by each panelist, including use cases, key metrics, and future plans for Presto.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Simplifying Presto on Kubernetes - Introducing the Presto Helm Chart]]></title>
             <link>https://prestodb.io/blog/2023/08/02/presto-on-kubernetes-with-helm-prestocon-day.html</link>
