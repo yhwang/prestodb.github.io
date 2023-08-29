@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Introducing Presto Working Groups · </title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Recently we introduced some new working groups within the Presto open-source project. Before sharing more about those groups, I wanted to give a perspective on why working groups in open-source projects like Presto are important and will help move the project forward at a faster and more effective pace. Below you’ll see an FAQ that shares that perspective, as well as how to join. "/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Introducing Presto Working Groups · "/><meta property="og:type" content="website"/><meta property="og:url" content="https://prestodb.io/blog/2023/08/29/presto-working-groups"/><meta property="og:description" content="Recently we introduced some new working groups within the Presto open-source project. Before sharing more about those groups, I wanted to give a perspective on why working groups in open-source projects like Presto are important and will help move the project forward at a faster and more effective pace. Below you’ll see an FAQ that shares that perspective, as well as how to join. "/><meta property="og:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://prestodb.io/img/presto-logo-stacked.png"/><link rel="shortcut icon" href="/img/icon-presto-dots-color.svg"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/css/bootstrap.min.css"/><link rel="stylesheet" href="/css/custom.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://js.hs-scripts.com/39785153.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/logo-presto-white.svg" alt=""/><h2 class="headerTitleWithLogo"></h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/getting-started.html" target="_self">Get Started</a></li><li class=""><a href="/what-is-presto.html" target="_self">Learn</a></li><li class=""><a href="/community.html" target="_self">Community</a></li><li class=""><a href="/blog" target="_self">Blog</a></li><li class=""><a href="/docs/current" target="_blank">Docs</a></li><li class=""><a href="https://communityinviter.com/apps/prestodb/prestodb" target="_blank">Slack</a></li><li class=""><a href="https://github.com/prestodb/presto" target="_blank">GitHub</a></li><li class=""><a href="https://stackoverflow.com/questions/tagged/presto" target="_blank">Stackoverflow</a></li><li class=""><a href="https://twitter.com/prestodb" target="_blank">Twitter</a></li><li class=""><a href="https://www.linkedin.com/company/presto-foundation/" target="_blank">LinkedIn</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/blog/2023/08/29/presto-working-groups">Introducing Presto Working Groups</a></li><li class="navListItem"><a class="navItem" href="/blog/2023/08/17/scaling-presto-panel-blog">Scaling Presto for Data Analytics - Insights from Meta, Uber, and Intuit</a></li><li class="navListItem"><a class="navItem" href="/blog/2023/08/02/presto-on-kubernetes-with-helm-prestocon-day">Simplifying Presto on Kubernetes - Introducing the Presto Helm Chart</a></li><li class="navListItem"><a class="navItem" href="/blog/2023/07/20/quick-stats-presto-blog">Quick Stats - Runtime ANALYZE for Better Query Plans with Presto</a></li><li class="navListItem"><a class="navItem" href="/blog/2023/07/13/presto-at-bolt">Migrating to Presto - How Bolt Built a Data Platform Architecture for Scalability and Cost Efficiency</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/blog/2023/08/29/presto-working-groups">Introducing Presto Working Groups</a></h1><p class="post-meta">August 29, 2023</p><div class="authorBlock"><p class="post-authorName"><a href="https://www.linkedin.com/in/timdmeehan/" target="_blank" rel="noreferrer noopener">Tim Meehan, Chair of Presto TSC</a></p></div></header><div><span><p>Recently we introduced some new working groups within the Presto open-source project. Before sharing more about those groups, I wanted to give a perspective on why working groups in open-source projects like Presto are important and will help move the project forward at a faster and more effective pace. Below you’ll see an FAQ that shares that perspective, as well as how to join.</p>
+<!--truncate-->
+The technical community is extremely important to the Presto project—the technical product is what gets shipped, and having more contributors means we have more people to support, grow and improve Presto itself. The trouble is, when someone wants to get involved, it can often feel overwhelming—there's huge initiatives that are ongoing, and it’s not always clear who to connect with to ask questions, even if you’re deeply involved in the project. 
+<p>We looked at how other open source projects solve this problem, and came across working groups as a really nice framework.</p>
+<h2><a class="anchor" aria-hidden="true" id="what-are-working-groups"></a><a href="#what-are-working-groups" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What are working groups?</h2>
+<p>Working groups help to create focus around specific areas of the project to advance that part of the project more effectively. Each group will have a leader who will call meetings and help facilitate discussions. Members are encouraged to attend these meetings to help determine priorities and roadmap as well as work on delivering on that roadmap.</p>
+<h2><a class="anchor" aria-hidden="true" id="who-are-working-groups-for"></a><a href="#who-are-working-groups-for" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Who are working groups for?</h2>
+<p>Whether you’re new to Presto or a seasoned vet who has been working on Presto for a long time, working groups are for anyone in the technical community!</p>
+<p>If you’re brand new to the Presto community and don’t know where to get started, working groups are a <em>great</em> way to meet other Presto engineers and start contributing to the project.</p>
+<p>If you’re a Presto user and want to see more features built within a specific area of Presto, joining that working group will enable you to influence the roadmap in addition to contributing to the project.</p>
+<p>If you’re a Presto engineer and want to work on a lot of the next-generation of Presto, there’s a working group for you too.</p>
+<p>I’ll say it again – working groups are for anyone who wants to get involved in the Presto technical community!</p>
+<h2><a class="anchor" aria-hidden="true" id="what-are-the-working-groups-and-how-do-i-join"></a><a href="#what-are-the-working-groups-and-how-do-i-join" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What are the working groups and how do I join?</h2>
+<p>Today, we have four working groups and I’ll link each one:</p>
+<ul>
+<li><p>Join the <a href="https://lists.prestodb.io/g/architecture-wg" style="color:blue;">Architecture</a> working group | Read the <a href="https://github.com/prestodb/tsc/blob/master/working-groups/architecture-wg.md" style="color:blue;">charter</a></p></li>
+<li><p>Join the <a href="https://lists.prestodb.io/g/optimizer-wg" style="color:blue;">Optimizer</a> working group | Read the <a href="https://github.com/prestodb/tsc/blob/master/working-groups/optimizer-wg.md" style="color:blue;">charter</a></p></li>
+<li><p>Join the <a href="https://lists.prestodb.io/g/native-worker-wg" style="color:blue;">Native Worker</a>working group | Read the <a href="https://github.com/prestodb/tsc/blob/master/working-groups/native-worker-wg.md" style="color:blue;">charter</a></p></li>
+<li><p>Join the <a href="https://lists.prestodb.io/g/presto-security-wg" style="color:blue;">Security</a>working group | Read the <a href="https://github.com/prestodb/tsc/blob/master/working-groups/security-wg.md" style="color:blue;">charter</a></p></li>
+</ul>
+<p>To join, all you need to do is create a Linux Foundation account (if you haven’t already) and click “+ Join This Group”. Once you do that, you’ll be subscribed to the mailing list and added to the calendar invites.</p>
+<p>We encourage anyone in the Presto community to join a group they’re interested in – working groups are open to all!</p>
+<h2><a class="anchor" aria-hidden="true" id="whats-next"></a><a href="#whats-next" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What’s next</h2>
+<p>We’re looking forward to everything you do in the working groups! If there’s a particular area you’re interested in and there’s not yet a working group formed, ask in the <a href="https://communityinviter.com/apps/prestodb/prestodb" style="color:blue;">#dev channel in Presto Slack</a> and let us know.</p>
+<p>We have a lot more exciting things coming in the community this year, including a new community leaderboard (more to come!) and <a href="https://events.linuxfoundation.org/prestocon/" style="color:blue;">PrestoCon</a>, our annual in-person community conference in December (early bird passes are on sale now!). Stay tuned!</p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#what-are-working-groups">What are working groups?</a></li><li><a href="#who-are-working-groups-for">Who are working groups for?</a></li><li><a href="#what-are-the-working-groups-and-how-do-i-join">What are the working groups and how do I join?</a></li><li><a href="#whats-next">What’s next</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © The Presto Foundation.<br/>All rights reserved. Presto is a registered trademark of LF Projects, LLC. <br/>Please see our<a href="https://lfprojects.org/policies/trademark-policy/">Trademark Policy</a> for more information.<br/><a href="https://lfprojects.org/policies/privacy-policy/">Privacy Policy</a> |<a href="https://lfprojects.org/policies/terms-of-use/">Terms of Use</a>.</section></footer></div></body></html>
