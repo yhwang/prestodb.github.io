@@ -8,4 +8,6 @@ you can access the REST API on the coordinator using the `/v1/resourceGroupState
 to retrieve the resource group information. More easily, you can access the resource groups
 information by accessing the `RESOURCE GROUPS` page on the Presto Console. On the top banner
 of the Presto Console, you can find the `RESOURCE GROUPS` page:
-![resource-group-tab](https://github.com/user-attachments/assets/d6cb8814-23e9-4c2c-9965-c97d5d7fffd9)
+![resource-group-tab](./images/resource-group-page.png)
+The link leads you to the `root` resource group and shows its statistics. Or you can click
+on the
