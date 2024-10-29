@@ -13,11 +13,11 @@ The link leads you to the `root` resource group and shows its statistics. Or you
 on the resource group link of a query in the `Query Details` section on the `CLUSTER OVERVIEW` page:
 ![query-details](./images/query-details.png)
 
-The links in the `Query Details` section show the resource group's hierarchical structure. You can
-click on the root node or leaf node of the resource group that the query belongs to. For example,
-the query in the screenshot above belongs to the `console` subgroup under the `adhoc` subgroup.
-And `adhoc` subgroup belongs to the `global` resource group. You can click on the individual node
-to check the statistics of the subgroup. Here is an example of a subgroup's statistics:
+The links in the “Query Details” section provide a hierarchical view of the resource group. You can click
+on either the root node or a leaf node of the resource group that the query belongs to. For instance,
+the query in the screenshot above is associated with the “console” subgroup, which falls under the “adhoc” subgroup.
+The “adhoc” subgroup is a part of the “global” resource group. By clicking on each individual node,
+you can access the statistics for the respective subgroup. Here’s an example of a subgroup’s statistics:
 ![show-resource-group](./images/show-resource-group.png)
 
 You can use the `Resource Group` links at the top to navigate to the parent group. In the `Information`
@@ -27,10 +27,11 @@ section, you can check the real-time statistics, including `State`, `Schedule Po
 are the details of each item. The `Timeline` section presents the historical statistics within 5 minutes.
 At the very bottom, it lists current running queries if any.
 
-The `Resource Groups` page provides an easier way to monitor and check the resource usage in different
-resource groups on the cluster. You can know how many resources are used or any queuing queries in a resource group.
-Then use this information to adjust the resource group configuration if needed and prevent resource exhaustion, meanwhile,
-preserve enough resources for critical users or groups.
+The `Resource Groups` page offers a more convenient way to monitor and verify the resource utilization across
+various resource groups on the cluster. You can easily determine the number of resources being used or the
+number of queuing queries in a specific resource group. Based on this information, you can make necessary
+adjustments to the resource group configuration to prevent resource exhaustion while ensuring that sufficient
+resources are allocated for critical users or groups.
 
 Be sure to check out the [documentation](https://prestodb.io/docs/current/admin/resource-groups.html) of the resource group,
 set up file-based or database-based resource management, and use the `RESOURCE GROUPS` page to monitor the resource usage.
