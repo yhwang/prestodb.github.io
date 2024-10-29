@@ -20,12 +20,12 @@ The “adhoc” subgroup is a part of the “global” resource group. By clicki
 you can access the statistics for the respective subgroup. Here’s an example of a subgroup’s statistics:
 ![show-resource-group](./images/show-resource-group.png)
 
-You can use the `Resource Group` links at the top to navigate to the parent group. In the `Information`
-section, you can check the real-time statistics, including `State`, `Schedule Policy`, `Schedule Weight`,
-`Soft Memory Limit`, `Soft Concurrency Limit`, `Hard Concurrency Limit`, `Max Queued Queries`,
-`Eligible SubGroups`, `Query Limit`, and `Sub-Groups`. [Here](https://prestodb.io/docs/current/admin/resource-groups.html#resource-group-properties)
-are the details of each item. The `Timeline` section presents the historical statistics within 5 minutes.
-At the very bottom, it lists current running queries if any.
+You can navigate to the parent group by clicking the `Resource Group` links at the top. In the `Information` section,
+you can view real-time statistics, including `State`, `Schedule Policy`, `Schedule Weight`, `Soft Memory Limit`,
+`Soft Concurrency Limit`, `Hard Concurrency Limit`, `Max Queued Queries`, `Eligible SubGroups`, `Query Limit`, and
+`Sub-Groups`. For more details about each item, refer to [here](https://prestodb.io/docs/current/admin/resource-groups.html#resource-group-properties).
+The `Timeline` section displays historical statistics within the last 5 minutes. Additionally, it lists the current
+running queries at the very bottom.
 
 The `Resource Groups` page offers a more convenient way to monitor and verify the resource utilization across
 various resource groups on the cluster. You can easily determine the number of resources being used or the
